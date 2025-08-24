@@ -1,6 +1,6 @@
-FROM python:3.11-slim
+FROM python:3.11-slim-bullseye
 
-# Install system dependencies required for dbt-bigquery
+# Install system dependencies needed by dbt-bigquery
 RUN apt-get update && apt-get install -y \
     git \
     gcc \
@@ -8,10 +8,20 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
-COPY . .
-ENV PYTHONPATH="${PYTHONPATH}:/app"
 
+# Copy everything (dbt project + profiles + configs)
+COPY . .
+
+# Install dbt dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["python"]
+# Point dbt to bundled profiles directory
+ENV DBT_PROFILES_DIR=/app/profiles
+
+# Healthcheck for dbt
+HEALTHCHECK CMD dbt --version || exit 1
+
+# Default entrypoint
+ENTRYPOINT ["bash", "-c"]
