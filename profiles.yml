@@ -1,0 +1,11 @@
+advantage_point:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: advantage-point-465313
+      dataset: advpoint__dbt
+      threads: 4
+      location: US
+      job_execution_timeout_seconds: 300
