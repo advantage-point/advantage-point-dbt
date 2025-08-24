@@ -1,17 +1,17 @@
-# Use official Python slim image
 FROM python:3.11-slim
 
-# Set working directory
+# Install system dependencies required for dbt-bigquery
+RUN apt-get update && apt-get install -y \
+    git \
+    gcc \
+    g++ \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-
-# Copy all files into container
 COPY . .
-
-# Set PYTHONPATH to allow absolute imports like `from utils...`
 ENV PYTHONPATH="${PYTHONPATH}:/app"
 
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Keep entry flexible to allow script args from Cloud Run Jobs
 ENTRYPOINT ["python"]
