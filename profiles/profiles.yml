@@ -1,11 +1,11 @@
 advantage_point:
-  target: dev
+  target: prod
   outputs:
-    dev:
+    prod:
       type: bigquery
       method: service-account
       project: advantage-point-465313
       dataset: advpoint__dbt
-      threads: 4
+      threads: 8
       location: US
-      job_execution_timeout_seconds: 300
+      job_execution_timeout_seconds: 1800
