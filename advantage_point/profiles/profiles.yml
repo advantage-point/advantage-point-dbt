@@ -3,7 +3,7 @@ advantage_point:
   outputs:
     prod:
       type: bigquery
-      method: service-account
+      method: oauth
       project: advantage-point-465313
       dataset: advpoint__dbt
       threads: 8
