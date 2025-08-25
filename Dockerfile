@@ -9,25 +9,22 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory to the dbt project folder
-# Ensures dbt finds dbt_project.yml at /app/advantage_point/dbt_project.yml
 WORKDIR /app/advantage_point
 
-# Copy requirements.txt first so Docker can cache this layer
+# Copy requirements.txt first for Docker layer caching
 COPY requirements.txt /app/requirements.txt
 
-# Install dbt dependencies (dbt-core, dbt-bigquery, etc.)
+# Install dbt dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the rest of the repo (dbt project + profiles + configs)
+# Copy the rest of the repo (project + profiles + configs)
 COPY . .
 
-# Point dbt to the profiles directory inside the project
+# Point dbt to the profiles directory INSIDE the project
 ENV DBT_PROFILES_DIR=/app/advantage_point/profiles
 
 # Healthcheck for dbt
 HEALTHCHECK CMD dbt --version || exit 1
 
-# Default entrypoint: bash -c
-# Cloud Run arguments will be passed as a single string after -c
-# Example: args: ["dbt debug"] -> runs `bash -c "dbt debug"`
+# Default entrypoint
 ENTRYPOINT ["bash", "-c"]
