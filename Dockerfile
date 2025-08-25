@@ -8,23 +8,24 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory to the dbt project folder
-WORKDIR /app/advantage_point
-
 # Copy requirements.txt first for Docker layer caching
 COPY requirements.txt /app/requirements.txt
 
 # Install dbt dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the rest of the repo (project + profiles + configs)
-COPY . .
+# Copy the rest of the repo into /app
+COPY . /app
 
-# Point dbt to the profiles directory INSIDE the project
+# Set working directory to the dbt project folder
+WORKDIR /app/advantage_point
+
+# Point dbt to the profiles directory inside the project
 ENV DBT_PROFILES_DIR=/app/advantage_point/profiles
 
 # Healthcheck for dbt
 HEALTHCHECK CMD dbt --version || exit 1
 
-# Default entrypoint
+# Default entrypoint: bash -c
+# Cloud Run args will be passed as a single string after -c
 ENTRYPOINT ["bash", "-c"]
