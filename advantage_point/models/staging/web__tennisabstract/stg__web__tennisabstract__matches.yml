@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: stg__web__tennisabstract__matches
+    description: Staging model for tennisabstract match data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - match_url
+              - audit_column__start_datetime_utc
+      - one_true_per_id:
+          arguments:
+            id_column: match_url
+            active_flag_column: audit_column__active_flag
+    columns:
+      - name: match_url
+        data_type: string
+        description: Link to the match data.
+        data_tests:
+          - not_null
+
+      - name: match_date
+        data_type: date
+        description: Date when match took place.
+        data_tests:
+          - not_null
+        
+      - name: match_gender
+        data_type: string
+        description: Gender of the match.
+        data_tests:
+          - not_null
+
+      - name: match_tournament
+        data_type: string
+        description: Tournament where match took place.
+        data_tests:
+          - not_null
+
+      - name: match_round
+        data_type: string
+        description: Round within tournament when match took place.
+        data_tests:
+          - not_null
+
+      - name: match_player_one
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: match_player_two
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: match_title
+        data_type: string
+        description: Name of the match. Includes tournament, players, and round.
+
+      - name: match_result
+        data_type: string
+        description: Outcome of the match. Includes winner, loser, and score.
+
+      - name: match_pointlog
+        data_type: array
+        description: Points within the match. Contain shot-by-shot descriptions.
+
+      - name: audit_column__active_flag
+        data_type: boolean
+        description: Audit column denoting if record is active or not.
+        data_tests:
+          - not_null
+      
+      - name: audit_column__start_datetime_utc
+        data_type: datetime
+        description: Audit column denoting when record was first active.
+        data_tests:
+          - not_null
+      
+      - name: audit_column__end_datetime_utc
+        data_type: datetime
+        description: Audit column denoting when record was last active (null meaning 'still active')

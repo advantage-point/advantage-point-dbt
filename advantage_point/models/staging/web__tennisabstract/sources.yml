@@ -5,7 +5,6 @@ sources:
     schema: advpoint__ingest
     description: Data obtained from tennisabstract.com via web scraping.
     tables:
-
       - name: matches
         identifier: raw__web__tennisabstract__matches
         description: Contain matches that exist on the site.
