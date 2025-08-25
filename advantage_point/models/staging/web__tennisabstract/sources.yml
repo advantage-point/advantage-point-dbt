@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: web__tennisabstract
+    schema: advpoint__ingest
+    description: Data obtained from tennisabstract.com via web scraping.
+    tables:
+
+      - name: matches
+        identifier: raw__web__tennisabstract__matches
+        description: Contain matches that exist on the site.
+
+      - name: players
+        identifier: raw__web__tennisabstract__players
+        description: Contain players that exist on the site.
+        
+      - name: tournaments
+        identifier: raw__web__tennisabstract__tournaments
+        description: Contain tournaments that exist on the site.
