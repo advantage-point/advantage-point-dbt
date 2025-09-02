@@ -1,0 +1,159 @@
+version: 2
+
+models:
+  - name: stg__tennisabstract__players
+    description: Staging model for tennisabstract match data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - player_url
+              - audit_column__start_datetime_utc
+      - one_true_per_id:
+          arguments:
+            id_column: player_url
+            active_flag_column: audit_column__active_flag
+    columns:
+      - name: player_name
+        data_type: string
+        description: Player name
+        data_tests:
+          - not_null
+      
+      - name: player_gender
+        data_type: string
+        description: Gender of the player.
+        data_tests:
+          - not_null
+
+      - name: player_url
+        data_type: string
+        description: Link to the match data.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: player_full_name
+        data_type: string
+        description: Player full name.
+
+      - name: player_last_name
+        data_type: string
+        description: Player's last name.
+
+      - name: player_current_singles_rank
+        data_type: integer
+        description: Current singles ranking.
+
+      - name: player_peak_singles_ranking
+        data_type: integer
+        description: Player's highest singles ranking.
+
+      - name: player_first_peak_singles_ranking_date
+        data_type: date
+        description: Date when player first achieved highest singles ranking.
+
+      - name: player_last_peak_singles_ranking_date
+        data_type: date
+        description: Date when player last achieved highest singles ranking.
+
+      - name: player_date_of_birth
+        data_type: date
+        description: Player date of birth.
+
+      - name: player_height_in_cm
+        data_type: integer
+        description: Player height (in centimeters).
+
+      - name: player_hand
+        data_type: string
+        description: Denotes if player is right or left handed.
+
+      - name: player_backhand
+        data_type: string
+        description: Denotes if player uses one-handed or two-handed backhand.
+
+      - name: player_country
+        data_type: string
+        description: Player's country (abbreviated).
+
+      - name: shortlist
+        description: ""
+
+      - name: careerjs
+        description: ""
+
+      - name: is_player_active
+        data_type: boolean
+        description: Denotes if player is active.
+
+      - name: player_last_match_played_date
+        date_type: date
+        description: Date on which player's last match took place.
+
+      - name: player_twitter_handle
+        data_type: string
+        description: Player Twitter handle.
+
+      - name: player_current_doubles_ranking
+        data_type: integer
+        description: Current doubles ranking.
+
+      - name: player_peak_doubles_ranking
+        data_type: integer
+        description: Player's peak doubles ranking.
+
+      - name: player_first_peak_doubles_ranking_date
+        data_type: date
+        description: Date when player first achieved highest doubles ranking.
+
+      - name: liverank
+        data_type: integer
+        description: ""
+
+      - name: chartagg
+        description: ""
+
+      - name: photog
+        data_type: string
+        description: ""
+
+      - name: photog_credit
+        data_type: string
+        description: ""
+
+      - name: photog_link
+        data_type: string
+        description: ""
+
+      - name: player_itf_id
+        data_type: string
+        description: Player's ITF (International Tennis Foundation) ID.
+
+      - name: player_tour_id
+        data_type: string
+        description: Player ID for tour/organization.
+
+      - name: player_team_cup_id
+        data_type: string
+        description: Player ID for team cup play.
+      
+      - name: player_wikipedia_id
+        data_type: string
+        description: Player's Wikipedia ID.
+
+      - name: audit_column__active_flag
+        data_type: boolean
+        description: Audit column denoting if record is active or not.
+        data_tests:
+          - not_null
+      
+      - name: audit_column__start_datetime_utc
+        data_type: datetime
+        description: Audit column denoting when record was first active.
+        data_tests:
+          - not_null
+      
+      - name: audit_column__end_datetime_utc
+        data_type: datetime
+        description: Audit column denoting when record was last active (null meaning 'still active')
