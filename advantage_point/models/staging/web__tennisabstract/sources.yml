@@ -12,6 +12,10 @@ sources:
       - name: players
         identifier: raw__web__tennisabstract__players
         description: Contain players that exist on the site.
+
+      - name: players_classic
+        identifier: raw__web__tennisabstract__players_classic
+        description: Contain players that exist on the site via the 'player classic page'.
         
       - name: tournaments
         identifier: raw__web__tennisabstract__tournaments

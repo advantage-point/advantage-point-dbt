@@ -1,17 +1,17 @@
 version: 2
 
 models:
-  - name: stg__tennisabstract__players
-    description: Staging model for tennisabstract player data.
+  - name: stg__tennisabstract__players_classic
+    description: Staging model for tennisabstract player classic data.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - player_url
+              - player_classic_url
               - audit_column__start_datetime_utc
       - one_true_per_id:
           arguments:
-            id_column: player_url
+            id_column: player_classic_url
             active_flag_column: audit_column__active_flag
     columns:
       - name: player_name
@@ -26,7 +26,7 @@ models:
         data_tests:
           - not_null
 
-      - name: player_url
+      - name: player_classic_url
         data_type: string
         description: Link to the match data.
         data_tests:
@@ -141,6 +141,18 @@ models:
       - name: player_wikipedia_id
         data_type: string
         description: Player's Wikipedia ID.
+      
+      - name: elo_rating
+        data_type: integer
+        description: ""
+
+      - name: elo_rank
+        data_type: integer
+        description: ""
+
+      - name: match_stats
+        data_type: array
+        description: Player match stats.
 
       - name: audit_column__active_flag
         data_type: boolean
