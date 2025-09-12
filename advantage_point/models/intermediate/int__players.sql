@@ -15,27 +15,26 @@ tennisabstract_matches as (
     where audit_column__active_flag = true
 ),
 
--- create player id
-tennisabstract_players_player_id as (
+-- create bk_player
+tennisabstract_players_bk_player as (
     select
         *,
-        concat(
-            player_name,
-            '||',
-            player_gender
-        ) as player_id
+        {{ generate_bk_player(
+            player_name_col='player_name',
+            player_gender_col='player_gender'
+        )}} as bk_player
     from tennisabstract_players
 ),
 
--- create player id
-tennisabstract_players_classic_player_id as (
+-- create bk_player
+tennisabstract_players_classic_bk_player as (
     select
         *,
         concat(
             player_name,
             '||',
             player_gender
-        ) as player_id
+        ) as bk_player
     from tennisabstract_players_classic
 ),
 
@@ -60,15 +59,15 @@ tennisabstract_matches_players as (
     ) as p
 ),
 
--- create player id
-tennisabstract_matches_players_player_id as (
+-- create bk_player
+tennisabstract_matches_players_bk_player as (
     select
         *,
         concat(
             player_name,
             '||',
             player_gender
-        ) as player_id
+        ) as bk_player
     from tennisabstract_matches_players
 ),
 
@@ -79,26 +78,26 @@ players_union as (
     from (
         (
             select
-                player_id,
+                bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_players_player_id
+            from tennisabstract_players_bk_player
         )
         union all
         (
             select
-                player_id,
+                bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_players_classic_player_id
+            from tennisabstract_players_classic_bk_player
         )
         union all
         (
             select
-                player_id,
+                bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_matches_players_player_id
+            from tennisabstract_matches_players_bk_player
         )
     ) as p
 ),
@@ -106,7 +105,7 @@ players_union as (
 -- join data to players
 players_joined as (
     select
-        p.player_id,
+        p.bk_player,
         p.player_name,
         p.player_gender,
 
@@ -231,9 +230,9 @@ players_joined as (
         ) as player_wikipedia_id
 
     from players_union as p
-    left join tennisabstract_players_player_id as p_ta on p.player_id = p_ta.player_id
-    left join tennisabstract_players_classic_player_id as pc_ta on p.player_id = pc_ta.player_id
-    left join tennisabstract_matches_players_player_id as mp_ta on p.player_id = mp_ta.player_id
+    left join tennisabstract_players_bk_player as p_ta on p.bk_player = p_ta.bk_player
+    left join tennisabstract_players_classic_bk_player as pc_ta on p.bk_player = pc_ta.bk_player
+    left join tennisabstract_matches_players_bk_player as mp_ta on p.bk_player = mp_ta.bk_player
 ),
 
 -- add logic from tennisabstract pages

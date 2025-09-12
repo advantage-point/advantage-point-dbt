@@ -4,7 +4,7 @@ models:
   - name: int__players
     description: Intermediate model for player data.
     columns:
-      - name: player_id
+      - name: bk_player
         data_type: string
         description: Unique identifier for players (name, gender).
         data_tests:
