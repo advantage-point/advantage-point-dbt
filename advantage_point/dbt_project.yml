@@ -35,3 +35,5 @@ models:
     staging:
       +materialized: view
       +schema: advpoint__stg
+    intermediate:
+      +materialized: ephemeral
