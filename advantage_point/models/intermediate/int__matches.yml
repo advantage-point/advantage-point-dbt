@@ -4,7 +4,7 @@ models:
   - name: int__matches
     description: Intermediate model for match data.
     columns:
-      - name: match_id
+      - name: bk_match
         data_type: string
         description: Unique identifier for matches (date, gender, tournament, round, players).
         data_tests:

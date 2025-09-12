@@ -52,21 +52,17 @@ tennisabstract_matches_match_players as (
     from tennisabstract_matches_match_score
 ),
 
--- create match id
-tennisabstract_matches_match_id as (
+-- create bk_match
+tennisabstract_matches_bk_match as (
     select
         *,
-        concat(
-            cast(match_date as string),
-            '||',
-            match_gender,
-            '||',
-            match_tournament,
-            '||',
-            match_round,
-            '||',
-            array_to_string(match_players, ', ')
-        ) as match_id
+        {{ generate_bk_match(
+            match_date_col='match_date',
+            match_gender_col='match_gender',
+            match_tournament_col='match_tournament',
+            match_round_col='match_round',
+            match_players_col='match_players'
+        ) }} as bk_match
     from tennisabstract_matches_match_players
 ),
 
@@ -74,13 +70,13 @@ tennisabstract_matches_match_id as (
 matches_union as (
     (
         select
-            match_id,
+            bk_match,
             match_date,
             match_gender,
             match_tournament,
             match_round,
             match_players
-        from tennisabstract_matches_match_id
+        from tennisabstract_matches_bk_match
     )
 ),
 
@@ -105,7 +101,7 @@ matches_title as (
 -- join data to matches
 matches_joined as (
     select
-        m.match_id,
+        m.bk_match,
         m.match_date,
         m.match_gender,
         m.match_tournament,
@@ -119,7 +115,7 @@ matches_joined as (
             m.match_title
         ) as match_title
     from matches_title as m
-    left join tennisabstract_matches_match_id as m_ta on m.match_id = m_ta.match_id
+    left join tennisabstract_matches_bk_match as m_ta on m.bk_match = m_ta.bk_match
 )
 
 select * from matches_joined
