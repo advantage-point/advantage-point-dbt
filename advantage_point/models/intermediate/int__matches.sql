@@ -79,7 +79,8 @@ matches_union as (
             match_gender,
             match_tournament,
             match_round,
-            match_players
+            match_players,
+            'tennisabstract__matches' as data_source_id
         from tennisabstract_matches_match_id
     )
 ),
@@ -111,6 +112,7 @@ matches_joined as (
         m.match_tournament,
         m.match_round,
         m.match_players,
+        m.data_source_id,
         m_ta.match_winner,
         m_ta.match_loser,
         m_ta.match_score,
