@@ -41,10 +41,6 @@ models:
         data_tests:
           - not_null
 
-      - name: data_source_id
-        data_type: string
-        description: Data source from which ID originates.
-
       - name: match_winner
         data_type: string
         description: Match winner.
