@@ -135,13 +135,13 @@ models:
         data_type: string
         description: Player handedness (expressed as a phrase)
 
-      - name: player_tour_id_type
+      - name: player_tour_id_name
         data_type: string
         description: Tour to which tour ID belongs.
         data_tests:
           - not_null
       
-      - name: player_team_cup_id_type
+      - name: player_team_cup_id_name
         data_type: string
         description: Team cup to which team cup ID belongs.
         data_tests:

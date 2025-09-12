@@ -274,13 +274,13 @@ players_tennisabstract_logic as (
             when player_gender = 'M' then 'ATP'
             when player_gender = 'W' then 'WTA'
             else null
-        end as player_tour_id_type,
+        end as player_tour_id_name,
 
         case
             when player_gender = 'M' then 'Davis Cup'
             when player_gender = 'W' then 'Billie Jean King Cup'
             else null
-        end as player_team_cup_id_type,
+        end as player_team_cup_id_name,
 
         concat(
             'https://en.wikipedia.org/wiki/',
