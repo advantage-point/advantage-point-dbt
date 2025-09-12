@@ -94,10 +94,17 @@ tournaments_joined as (
         t_ta.tournament_start_date,
         t_ta.tournament_surface,
         t_ta.tournament_draw_size,
+
         coalesce(
             t_ta.tournament_title,
             t.tournament_title
-        ) as tournament_title
+        ) as tournament_title,
+
+        case
+            when t.tournament_gender = 'M' then 'ATP'
+            when t.tournament_gender = 'W' then 'WTA'
+            else null
+        end as tournament_tour_name
     from tournaments_title as t
     left join tennisabstract_tournaments_tournament_id as t_ta on t.tournament_id = t_ta.tournament_id
     left join tennisabstract_matches_tournaments_tournament_id as m_ta on t.tournament_id = m_ta.tournament_id

@@ -44,3 +44,9 @@ models:
       - name: tournament_title
         data_type: string
         description: Title of the tournament (includes year, name).
+
+      - name: tournament_tour_name
+        data_type: string
+        description: Tournament tour name.
+        data_tests:
+          - not_null
