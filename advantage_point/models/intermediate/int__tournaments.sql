@@ -10,8 +10,8 @@ tennisabstract_matches as (
     where audit_column__active_flag = true
 ),
 
--- create tournament id
-tennisabstract_tournaments_tournament_id as (
+-- create bk_tournament
+tennisabstract_tournaments_bk_tournament as (
     select
         *,
         concat(
@@ -20,7 +20,7 @@ tennisabstract_tournaments_tournament_id as (
             tournament_gender,
             '||',
             tournament_name
-        ) as tournament_id
+        ) as bk_tournament
     from tennisabstract_tournaments
 ),
 
@@ -33,8 +33,8 @@ tennisabstract_matches_tournaments as (
     from tennisabstract_matches
 ),
 
--- create tournament id
-tennisabstract_matches_tournaments_tournament_id as (
+-- create bk_tournament
+tennisabstract_matches_tournaments_bk_tournament as (
     select
         *,
         concat(
@@ -43,7 +43,7 @@ tennisabstract_matches_tournaments_tournament_id as (
             tournament_gender,
             '||',
             tournament_name
-        ) as tournament_id
+        ) as bk_tournament
     from tennisabstract_matches_tournaments
 ),
 
@@ -54,20 +54,20 @@ tournaments_union as (
     from (
         (
             select
-                tournament_id,
+                bk_tournament,
                 tournament_year,
                 tournament_gender,
                 tournament_name
-            from tennisabstract_tournaments_tournament_id
+            from tennisabstract_tournaments_bk_tournament
         )
         union all
         (
             select
-                tournament_id,
+                bk_tournament,
                 tournament_year,
                 tournament_gender,
                 tournament_name
-            from tennisabstract_matches_tournaments_tournament_id
+            from tennisabstract_matches_tournaments_bk_tournament
         )
     ) as t
 ),
@@ -87,7 +87,7 @@ tournaments_title as (
 -- join data to tournaments
 tournaments_joined as (
     select
-        t.tournament_id,
+        t.bk_tournament,
         t.tournament_year,
         t.tournament_gender,
         t.tournament_name,
@@ -106,8 +106,8 @@ tournaments_joined as (
             else null
         end as tournament_tour_name
     from tournaments_title as t
-    left join tennisabstract_tournaments_tournament_id as t_ta on t.tournament_id = t_ta.tournament_id
-    left join tennisabstract_matches_tournaments_tournament_id as m_ta on t.tournament_id = m_ta.tournament_id
+    left join tennisabstract_tournaments_bk_tournament as t_ta on t.bk_tournament = t_ta.bk_tournament
+    left join tennisabstract_matches_tournaments_bk_tournament as m_ta on t.bk_tournament = m_ta.bk_tournament
 )
 
 select * from tournaments_joined

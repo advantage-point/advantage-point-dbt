@@ -4,7 +4,7 @@ models:
   - name: int__tournaments
     description: Intermediate model for tournament data.
     columns:
-      - name: tournament_id
+      - name: bk_tournament
         data_type: string
         description: Unique identifier for tournaments (year, gender, name).
         data_tests:
