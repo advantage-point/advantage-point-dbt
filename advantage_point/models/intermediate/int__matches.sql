@@ -10,6 +10,7 @@ tennisabstract_matches as (
 tennisabstract_matches_match_winner as (
     select
         *,
+        -- match_result: {match_winner} d. {match_loser} {match_score}
         split(match_result, ' d.')[0] as match_winner
     from tennisabstract_matches
     where match_url not in (
@@ -36,6 +37,7 @@ tennisabstract_matches_match_loser as (
 tennisabstract_matches_match_score as (
     select
         *,
+        -- match_result: {match_winner} d. {match_loser} {match_score}
         split(match_result, match_loser || ' ')[1] as match_score
     from tennisabstract_matches_match_loser
 ),
