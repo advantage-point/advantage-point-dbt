@@ -36,10 +36,7 @@ tennisabstract_matches_match_loser as (
 tennisabstract_matches_match_score as (
     select
         *,
-        case
-            when match_result is not null and match_loser is not null then split(match_result, match_loser || ' ')[1]
-            else null
-        end as match_score
+        split(match_result, match_loser || ' ')[1] as match_score
     from tennisabstract_matches_match_loser
 ),
 -- create player array string (for use in unique id)
