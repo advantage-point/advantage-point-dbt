@@ -1,19 +1,16 @@
 version: 2
 
 models:
-  - name: stg__tennisabstract__players_classic
-    description: Staging model for tennisabstract player classic data.
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - player_classic_url
-              - audit_column__start_datetime_utc
-      - one_true_per_id:
-          arguments:
-            id_column: player_classic_url
-            active_flag_column: audit_column__active_flag
+  - name: int__players
+    description: Intermediate model for player data.
     columns:
+      - name: player_id
+        data_type: string
+        description: Unique identifier for players (name, gender).
+        data_tests:
+          - unique
+          - not_null
+
       - name: player_name
         data_type: string
         description: Player name
@@ -24,13 +21,6 @@ models:
         data_type: string
         description: Gender of the player.
         data_tests:
-          - not_null
-
-      - name: player_classic_url
-        data_type: string
-        description: Link to the match data.
-        data_tests:
-          - unique
           - not_null
 
       - name: player_full_name
@@ -77,12 +67,6 @@ models:
         data_type: string
         description: Player's country (abbreviated).
 
-      - name: shortlist
-        description: ""
-
-      - name: careerjs
-        description: ""
-
       - name: is_player_active
         data_type: boolean
         description: Denotes if player is active.
@@ -105,24 +89,17 @@ models:
 
       - name: player_first_peak_doubles_ranking_date
         data_type: date
-        description: Date when player first achieved highest doubles ranking.
+        description: Date when player first achieved highest doubles ranking.    
 
-      - name: liverank
-        data_type: integer
-        description: ""
-
-      - name: chartagg
-        description: ""
-
-      - name: photograph
+      - name: player_tennisabstract_photograph
         data_type: string
         description: ""
 
-      - name: photograph_credit
+      - name: player_tennisabstract_photograph_credit
         data_type: string
         description: ""
 
-      - name: photograph_link
+      - name: player_tennisabstract_photograph_link
         data_type: string
         description: ""
 
@@ -140,32 +117,36 @@ models:
       
       - name: player_wikipedia_id
         data_type: string
-        description: Player's Wikipedia ID.
-      
-      - name: elo_rating
-        data_type: integer
-        description: ""
+        description: Player Wikipedia ID.
 
-      - name: elo_ranking
-        data_type: integer
-        description: ""
+      - name: player_backhand_plays
+        data_type: string
+        description: Player backhand (expressed as a phrase)
 
-      - name: match_stats
-        data_type: array
-        description: Player match stats.
+      - name: player_tennisabstract_photograph_url
+        data_type: string
+        description: Player TennisAbstract photograph url.
 
-      - name: audit_column__active_flag
-        data_type: boolean
-        description: Audit column denoting if record is active or not.
+      - name: player_twitter_x_url
+        data_type: string
+        description: Player Twitter/X url.
+
+      - name: player_hand_plays
+        data_type: string
+        description: Player handedness (expressed as a phrase)
+
+      - name: player_tour_id_type
+        data_type: string
+        description: Tour to which tour ID belongs.
         data_tests:
           - not_null
       
-      - name: audit_column__start_datetime_utc
-        data_type: datetime
-        description: Audit column denoting when record was first active.
+      - name: player_team_cup_id_type
+        data_type: string
+        description: Team cup to which team cup ID belongs.
         data_tests:
           - not_null
-      
-      - name: audit_column__end_datetime_utc
-        data_type: datetime
-        description: Audit column denoting when record was last active (null meaning 'still active')
+
+      - name: player_wikipedia_id
+        data_type: string
+        description: Player Wikipedia url

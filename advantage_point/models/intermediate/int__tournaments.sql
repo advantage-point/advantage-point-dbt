@@ -24,7 +24,7 @@ tennisabstract_tournaments_tournament_id as (
     from tennisabstract_tournaments
 ),
 
-
+-- get tournaments from match data
 tennisabstract_matches_tournaments as (
     select distinct
         extract(year from match_date) as tournament_year,

@@ -70,7 +70,7 @@ tennisabstract_matches_match_id as (
     from tennisabstract_matches_match_players
 ),
 
--- union matches, create id in process
+-- union matches
 matches_union as (
     (
         select

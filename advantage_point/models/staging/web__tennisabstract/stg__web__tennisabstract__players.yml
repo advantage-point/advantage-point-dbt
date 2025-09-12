@@ -41,7 +41,7 @@ models:
         data_type: string
         description: Player's last name.
 
-      - name: player_current_singles_rank
+      - name: player_current_singles_ranking
         data_type: integer
         description: Current singles ranking.
 
@@ -114,15 +114,15 @@ models:
       - name: chartagg
         description: ""
 
-      - name: photog
+      - name: photograph
         data_type: string
         description: ""
 
-      - name: photog_credit
+      - name: photograph_credit
         data_type: string
         description: ""
 
-      - name: photog_link
+      - name: photograph_link
         data_type: string
         description: ""
 
