@@ -1,74 +1,15 @@
 with
 
 tennisabstract_players as (
-    select * from {{ ref('stg__web__tennisabstract__players') }}
-    where audit_column__active_flag = true
+    select * from {{ ref('int__web__tennisabstract__players') }}
 ),
 
 tennisabstract_players_classic as (
-    select * from {{ ref('stg__web__tennisabstract__players_classic') }}
-    where audit_column__active_flag = true
+    select * from {{ ref('int__web__tennisabstract__players_classic') }}
 ),
 
-tennisabstract_matches as (
-    select * from {{ ref('stg__web__tennisabstract__matches') }}
-    where audit_column__active_flag = true
-),
-
--- create bk_player
-tennisabstract_players_bk_player as (
-    select
-        *,
-        {{ generate_bk_player(
-            player_name_col='player_name',
-            player_gender_col='player_gender'
-        )}} as bk_player
-    from tennisabstract_players
-),
-
--- create bk_player
-tennisabstract_players_classic_bk_player as (
-    select
-        *,
-        concat(
-            player_name,
-            '||',
-            player_gender
-        ) as bk_player
-    from tennisabstract_players_classic
-),
-
--- get players from match data
 tennisabstract_matches_players as (
-    select distinct
-        *
-    from (
-        (
-            select
-                match_player_one as player_name,
-                match_gender as player_gender
-            from tennisabstract_matches
-        )
-        union all
-        (
-            select
-                match_player_two as player_name,
-                match_gender as player_gender
-            from tennisabstract_matches
-        )
-    ) as p
-),
-
--- create bk_player
-tennisabstract_matches_players_bk_player as (
-    select
-        *,
-        concat(
-            player_name,
-            '||',
-            player_gender
-        ) as bk_player
-    from tennisabstract_matches_players
+    select * from {{ ref('int__web__tennisabstract__matches__players') }}
 ),
 
 -- union players
@@ -81,7 +22,7 @@ players_union as (
                 bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_players_bk_player
+            from tennisabstract_players
         )
         union all
         (
@@ -89,7 +30,7 @@ players_union as (
                 bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_players_classic_bk_player
+            from tennisabstract_players_classic
         )
         union all
         (
@@ -97,13 +38,33 @@ players_union as (
                 bk_player,
                 player_name,
                 player_gender
-            from tennisabstract_matches_players_bk_player
+            from tennisabstract_matches_players
         )
     ) as p
 ),
 
+-- create default tour values
+players_tour_values as (
+    select
+        *,
+        -- since 'atp_id' was recoded in staging model to 'tour_id' (more generalizable), this denotes the tour name of the id
+        case
+            when player_gender = 'M' then 'ATP'
+            when player_gender = 'W' then 'WTA'
+            else null
+        end as player_tour_id_name,
+
+        -- since 'dc_id' was recoded in staging model to 'team_cup_id' (more generalizable), this denotes the team event name of the id
+        case
+            when player_gender = 'M' then 'Davis Cup'
+            when player_gender = 'W' then 'Billie Jean King Cup'
+            else null
+        end as player_team_cup_id_name,
+    from players_union
+),
+
 -- join data to players
-players_joined as (
+final as (
     select
         p.bk_player,
         p.player_name,
@@ -175,8 +136,8 @@ players_joined as (
         ) as player_last_match_played_date,
 
         coalesce(
-            p_ta.player_twitter_handle,
-            pc_ta.player_twitter_handle
+            p_ta.player_twitter_x_handle,
+            pc_ta.player_twitter_x_handle
         ) as player_twitter_x_handle,
 
         coalesce(
@@ -195,18 +156,18 @@ players_joined as (
         ) as player_first_peak_doubles_ranking_date,
 
         coalesce(
-            p_ta.photograph,
-            pc_ta.photograph
+            p_ta.player_tennisabstract_photograph,
+            pc_ta.player_tennisabstract_photograph
         ) as player_tennisabstract_photograph,
 
         coalesce(
-            p_ta.photograph_credit,
-            pc_ta.photograph_credit
+            p_ta.player_tennisabstract_photograph_credit,
+            pc_ta.player_tennisabstract_photograph_credit
         ) as player_tennisabstract_photograph_credit,
 
         coalesce(
-            p_ta.photograph_link,
-            pc_ta.photograph_link
+            p_ta.player_tennisabstract_photograph_link,
+            pc_ta.player_tennisabstract_photograph_link
         ) as player_tennisabstract_photograph_link,
 
         coalesce(
@@ -227,66 +188,49 @@ players_joined as (
         coalesce(
             p_ta.player_wikipedia_id,
             pc_ta.player_wikipedia_id
-        ) as player_wikipedia_id
+        ) as player_wikipedia_id,
 
-    from players_union as p
-    left join tennisabstract_players_bk_player as p_ta on p.bk_player = p_ta.bk_player
-    left join tennisabstract_players_classic_bk_player as pc_ta on p.bk_player = pc_ta.bk_player
-    left join tennisabstract_matches_players_bk_player as mp_ta on p.bk_player = mp_ta.bk_player
-),
+        coalesce(
+            p_ta.player_backhand_plays,
+            pc_ta.player_backhand_plays
+        ) as player_backhand_plays,
 
--- add logic from tennisabstract pages
-players_tennisabstract_logic as (
-    select
-        *,
-
-        case
-            when player_backhand = '1' then 'one-handed'
-            when player_backhand = '2' then 'two-handed'
-            else null
-        end as player_backhand_plays,
-
-        concat(
-            'https://www.tennisabstract.com/photos/',
-            replace(
-                lower(player_full_name),
-                ' ',
-                '_'
-            ),
-            '-',
-            player_tennisabstract_photograph,
-            '.jpg'
+        coalesce(
+            p_ta.player_tennisabstract_photograph_url,
+            pc_ta.player_tennisabstract_photograph_url
         ) as player_tennisabstract_photograph_url,
 
-        concat(
-            'https://www.x.com/',
-            player_twitter_x_handle
+        coalesce(
+            p_ta.player_twitter_x_url,
+            pc_ta.player_twitter_x_url
         ) as player_twitter_x_url,
 
-        case
-            when lower(player_hand) = 'r' then 'right-handed'
-            when lower(player_hand) = 'l' then 'left-handed'
-            else null
-        end as player_hand_plays,
+        coalesce(
+            p_ta.player_hand_plays,
+            pc_ta.player_hand_plays
+        ) as player_hand_plays,
 
-        case
-            when player_gender = 'M' then 'ATP'
-            when player_gender = 'W' then 'WTA'
-            else null
-        end as player_tour_id_name,
+        coalesce(
+            p_ta.player_tour_id_name,
+            pc_ta.player_tour_id_name,
+            p.player_tour_id_name
+        ) as player_tour_id_name,
 
-        case
-            when player_gender = 'M' then 'Davis Cup'
-            when player_gender = 'W' then 'Billie Jean King Cup'
-            else null
-        end as player_team_cup_id_name,
+        coalesce(
+            p_ta.player_team_cup_id_name,
+            pc_ta.player_team_cup_id_name,
+            p.player_team_cup_id_name
+        ) as player_team_cup_id_name,
 
-        concat(
-            'https://en.wikipedia.org/wiki/',
-            player_wikipedia_id
-        ) as player_wikipedia_url
+        coalesce(
+            p_ta.player_wikipedia_url,
+            pc_ta.player_wikipedia_url
+        ) as player_wikipedia_url,
 
-    from players_joined
+    from players_tour_values as p
+    left join tennisabstract_players as p_ta on p.bk_player = p_ta.bk_player
+    left join tennisabstract_players_classic as pc_ta on p.bk_player = pc_ta.bk_player
+    left join tennisabstract_matches_players as mp_ta on p.bk_player = mp_ta.bk_player
 )
 
-select * from players_tennisabstract_logic
+select * from final

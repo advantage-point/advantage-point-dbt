@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg__tennisabstract__players_classic
+  - name: stg__web__tennisabstract__players_classic
     description: Staging model for tennisabstract player classic data.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
@@ -30,7 +30,6 @@ models:
         data_type: string
         description: Link to the match data.
         data_tests:
-          - unique
           - not_null
 
       - name: player_full_name
@@ -150,7 +149,7 @@ models:
         data_type: integer
         description: ""
 
-      - name: match_stats
+      - name: player_matchlog
         data_type: array
         description: Player match stats.
 

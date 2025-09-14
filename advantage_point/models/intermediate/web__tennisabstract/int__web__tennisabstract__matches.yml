@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: int__web__tennisabstract__matches
+    description: Intermediate model for tennisabstract match data.
+    columns:
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches (date, gender, tournament, round, players).
+        data_tests:
+          - unique
+          - not_null
+          
+      - name: match_url
+        data_type: string
+        description: Link to the match data.
+        data_tests:
+          - not_null
+
+      - name: match_date
+        data_type: date
+        description: Date when match took place.
+        data_tests:
+          - not_null
+        
+      - name: match_gender
+        data_type: string
+        description: Gender of the match.
+        data_tests:
+          - not_null
+
+      - name: match_tournament
+        data_type: string
+        description: Tournament where match took place.
+        data_tests:
+          - not_null
+
+      - name: match_round
+        data_type: string
+        description: Round within tournament when match took place.
+        data_tests:
+          - not_null
+
+      - name: match_player_one
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: match_player_two
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: match_title
+        data_type: string
+        description: Name of the match. Includes tournament, players, and round.
+
+      - name: match_result
+        data_type: string
+        description: Outcome of the match. Includes winner, loser, and score.
+
+      - name: match_pointlog
+        data_type: array
+        description: Points within the match. Contain shot-by-shot descriptions.
+
+      - name: match_winner
+        data_type: string
+        description: Match winner.
+
+      - name: match_loser
+        data_type: string
+        description: Match loser.
+
+      - name: match_score
+        data_type: string
+        description: Match score (from winner's perspective).
+
+      - name: match_players
+        data_type: array
+        description: Players in the match.
+        data_tests:
+          - not_null

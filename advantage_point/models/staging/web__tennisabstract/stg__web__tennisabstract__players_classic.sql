@@ -57,7 +57,7 @@ renamed as (
         {{ remove_empty_string_from_source('wiki_id') }} as player_wikipedia_id,
         {{ convert_rank_to_integer('elo_rating') }} as elo_rating,
         {{ convert_rank_to_integer('elo_rank') }} as elo_ranking,
-        json_extract_array(matchmx) as match_stats,
+        json_extract_array(matchmx) as player_matchlog,
         audit_column__active_flag,
         audit_column__start_datetime_utc,
         audit_column__end_datetime_utc

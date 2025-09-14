@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: int__web__tennisabstract__matches__tournaments
+    description: Intermediate model for tournament data taken from match data.
+    columns:
+      - name: bk_tournament
+        data_type: string
+        description: Unique identifier for tournaments (year, gender, name).
+        data_tests:
+          - unique
+          - not_null
+
+      - name: tournament_year
+        data_type: integer
+        description: Year of the tournament. May not correspond to tournament start date.
+        data_tests:
+          - not_null
+      
+      - name: tournament_gender
+        data_type: string
+        description: Gender of the tournament.
+        data_tests:
+          - not_null
+
+      - name: tournament_name
+        data_type: string
+        description: Tournament name.
+        data_tests:
+          - not_null
+
+      - name: tournament_title
+        data_type: string
+        description: Title of the tournament (includes year, name).
+
+      - name: tournament_tour_name
+        data_type: string
+        description: Tournament tour name.
+        data_tests:
+          - not_null
