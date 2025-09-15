@@ -1,85 +1,64 @@
+
 with
 
-tennisabstract_matches as (
-    select * from {{ ref('stg__web__tennisabstract__matches') }}
-    where audit_column__active_flag = true
-),
-
--- parse out points into own rows
 tennisabstract_matches_points as (
-    select
-        *,
+    select * from {{ ref('int__web__tennisabstract__matches__points') }}
+),
+
+-- union points
+points_union as (
+    select distinct
+        *
+    from (
         (
-            select array_agg(player order by player)
-            from unnest(array[match_player_one, match_player_two]) as player
-        ) as match_players,
-        cast(json_value(point_dict, '$.point_number') as integer) as point_number_in_match,
-        json_value(point_dict, '$.server') as point_server,
-        json_value(point_dict, '$.sets') as set_score_in_match,
-        json_value(point_dict, '$.games') as game_score_in_set,
-        json_value(point_dict, '$.points') as point_score_in_game,
-    from tennisabstract_matches,
-    unnest(tennisabstract_matches.match_pointlog) as point_dict
+            select
+                bk_point,
+                bk_match,
+                point_number_in_match
+            from tennisabstract_matches_points
+        )
+    ) as p
 ),
 
--- parse out scores
-tennisabstract_matches_points_parse_scores as (
+final as (
     select
-        *,
-        cast(split_part(set_score_in_match, '-', 1) as int) as set_score_in_match_server,
-        cast(split_part(set_score_in_match, '-', 2) as int) as set_score_in_match_receiver,
-        cast(split_part(game_score_in_set, '-', 1) as int) as game_score_in_set_server,
-        cast(split_part(game_score_in_set, '-', 2) as int) as game_score_in_set_receiver,
-        split_part(point_score_in_game, '-', 1) as point_score_in_game_server,
-        split_part(point_score_in_game, '-', 2) as point_score_in_game_receiver,
-    from tennisabstract_matches_points
-),
+        p.bk_point,
+        p.bk_match,
+        p.point_number_in_match,
 
--- add scores
-tennisabstract_matches_points_add_scores as (
-    select
-        *,
-        set_score_in_match_server + set_score_in_match_receiver + 1 as set_number_in_match,
-        game_score_in_set_server + game_score_in_set_receiver + 1 as game_number_in_set,
+        p_ta.point_server,
+        p_ta.point_receiver,
 
-        -- convert 'AD' to numeric
-        cast(replace(point_score_in_game_server, 'AD', '41') as int) as point_score_in_game_server_int,
-        cast(replace(point_score_in_game_receiver, 'AD', '41') as int) as point_score_in_game_receiver_int,
-    from tennisabstract_matches_points_parse_scores
-),
+        p_ta.set_score_in_match,
+        p_ta.set_score_in_match_server,
+        p_ta.set_score_in_match_receiver,
 
--- add bk_match
-tennisabstract_matches_points_bk_match as (
-    select
-        *,
-        {{ generate_bk_match(
-            match_date_col='match_date',
-            match_gender_col='match_gender',
-            match_tournament_col='match_tournament',
-            match_round_col='match_round',
-            match_players_col='match_players'
-        ) }} as bk_match,
-    from tennisabstract_matches_points_add_scores
-),
+        p_ta.game_score_in_set,
+        p_ta.game_score_in_set_server,
+        p_ta.game_score_in_set_receiver,
 
--- get running counts for determining <match_unit> # within <match_unit>
-tennisabstract_matches_points_running_numbers as (
-    select
-        *,
-        dense_rank() over (
-            partition by bk_match
-            order by set_number_in_match, game_number_in_set
-        ) as game_number_in_match,
-        row_number() over (
-            partition by bk_match, set_number_in_match
-            order by game_number_in_set, point_number_in_match
-        ) as point_number_in_set,
-        row_number() over (
-            partition by bk_match, set_number_in_match, game_number_in_set
-            order by point_number_in_match
-        ) as point_number_in_game
-    from tennisabstract_matches_points_bk_match
+        p_ta.point_score_in_game,
+        p_ta.point_score_in_game_server,
+        p_ta.point_score_in_game_receiver,
+
+        p_ta.set_number_in_match,
+
+        p_ta.game_number_in_match,
+        p_ta.game_number_in_set,
+
+        p_ta.point_number_in_set,
+        p_ta.point_number_in_game,
+
+        p_ta.point_side,
+        p_ta.point_result,
+        p_ta.number_of_shots,
+        p_ta.rally_length,
+
+        p_ta.is_break_point,
+        p_ta.is_game_point,
+
+    from points_union as p
+    left join tennisabstract_matches_points as p_ta on p.bk_point = p_ta.bk_point
 )
 
-
-select * from tennisabstract_matches_points_running_numbers
+select * from final

@@ -36,4 +36,5 @@ models:
       +materialized: view
       +schema: advpoint__stg
     intermediate:
-      +materialized: ephemeral
+      +materialized: view
+      +schema: advpoint__int

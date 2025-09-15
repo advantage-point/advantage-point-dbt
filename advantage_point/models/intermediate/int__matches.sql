@@ -7,16 +7,20 @@ tennisabstract_matches as (
 
 -- union matches
 matches_union as (
-    (
-        select
-            bk_match,
-            match_date,
-            match_gender,
-            match_tournament,
-            match_round,
-            match_players,
-        from tennisabstract_matches
-    )
+    select distinct
+        *
+    from (
+        (
+            select
+                bk_match,
+                match_date,
+                match_gender,
+                match_tournament,
+                match_round,
+                match_players,
+            from tennisabstract_matches
+        )
+    ) as m
 ),
 
 -- create match title from id columns (used as default title value during joins)
