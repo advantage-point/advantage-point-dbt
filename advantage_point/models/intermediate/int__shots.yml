@@ -85,3 +85,9 @@ models:
       - name: shot_type
         data_type: string
         description: Type of shot.
+
+      - name: bk_shot_player
+        data_type: string
+        description: Unique identifer for player who hit shot.
+        data_tests:
+          - not_null

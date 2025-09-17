@@ -118,6 +118,22 @@ tennisabstract_matches_points_shot_type as (
   from tennisabstract_matches_points_shot_attributes
 ),
 
+-- get person who hit shot
+tennisabstract_matches_points_shot_by as (
+  select
+    *,
+
+    case
+      -- if odd number shot (1st, 3rd, etc.) --> server hit shot
+      when mod(shot_number, 2) != 0 then bk_point_server
+      -- if even number shot (2nd, 4th, etc.) --> receiver hit shot
+      when mod(shot_number, 2) = 0 then bk_point_receiver
+      else null
+    end as bk_shot_player,
+
+  from tennisabstract_matches_points_shot_type
+),
+
 final as (
   select
     {{generate_bk_shot(
@@ -140,8 +156,9 @@ final as (
     shot_direction,
     shot_result,
     shot_type,
+    bk_shot_player,
   
-  from tennisabstract_matches_points_shot_type
+  from tennisabstract_matches_points_shot_by
 )
 
 select * from final

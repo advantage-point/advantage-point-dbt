@@ -36,6 +36,8 @@ final as (
 
         p_ta.point_server,
         p_ta.point_receiver,
+        p_ta.bk_server,
+        p_ta.bk_receiver,
 
         p_ta.set_score_in_match,
         p_ta.set_score_in_match_server,

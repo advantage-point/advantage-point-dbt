@@ -7,7 +7,7 @@ tennisabstract_matches as (
 -- get tournaments from match data
 tennisabstract_matches_tournaments as (
     select distinct
-        extract(year from match_date) as tournament_year,
+        match_year as tournament_year,
         match_gender as tournament_gender,
         match_tournament as tournament_name
     from tennisabstract_matches

@@ -360,6 +360,14 @@ final as (
 
         point_server,
         point_receiver,
+        {{ generate_bk_player(
+            player_name_col='point_server',
+            player_gender_col='match_gender'
+        ) }} as bk_point_server,
+        {{ generate_bk_player(
+            player_name_col='point_receiver',
+            player_gender_col='match_gender'
+        ) }} as bk_point_receiver,
 
         set_score_in_match,
         game_score_in_set,

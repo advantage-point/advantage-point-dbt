@@ -47,6 +47,18 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_server
+        data_type: string
+        description: Unique identifier for point server (name, gender).
+        data_tests:
+          - not_null
+
+      - name: bk_receiver
+        data_type: string
+        description: Unique identifier for point receiver (name, gender).
+        data_tests:
+          - not_null
+
       - name: set_score_in_match
         data_type: string
         description: Set score string at the time of the point (e.g. '1-0') from server's perspective.

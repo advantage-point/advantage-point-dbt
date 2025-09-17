@@ -38,6 +38,7 @@ final as (
         s_ta.shot_direction,
         s_ta.shot_result,
         s_ta.shot_type,
+        s_ta.bk_shot_player,
 
     from shots_union as s
     left join tennisabstract_matches_points_shots as s_ta on s.bk_shot = s_ta.bk_shot
