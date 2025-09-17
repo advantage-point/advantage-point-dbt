@@ -120,6 +120,22 @@ tennisabstract_matches_points_clean_scores as (
     from tennisabstract_matches_points
 ),
 
+-- get point receiver
+tennisabstract_matches_points_point_receiver as (
+    select
+        *,
+
+        -- get receiver
+        -- compare lower case in case weird capitalization in names like 'McHale'
+        case
+            when lower(point_server) = lower(match_player_one) then match_player_two
+            when lower(point_server) = lower(match_player_two) then match_player_one
+            else null
+        end as point_receiver,
+
+    from tennisabstract_matches_points_clean_scores
+),
+
 -- parse out scores
 -- scores split by '–' (en dash, versus '-' typical dash)
 tennisabstract_matches_points_parse_scores as (
@@ -135,7 +151,7 @@ tennisabstract_matches_points_parse_scores as (
         split(point_score_in_game, '-')[0] as point_score_in_game_server,
         split(point_score_in_game, '-')[1] as point_score_in_game_receiver,
     
-    from tennisabstract_matches_points_clean_scores
+    from tennisabstract_matches_points_point_receiver
 ),
 
 -- convert scores to int
@@ -216,12 +232,6 @@ tennisabstract_matches_points_point_result as (
     select
         *,
 
-        -- -- result is is in last element of shot log: {shot},{optional space}{point result}{optional period}
-        -- regexp_extract(
-        --     array_last(point_shotlog),
-        --     r',\s*([^.]+)\.?'
-        -- ) as point_result,
-
         -- order matters
         case
             when regexp_contains(lower(array_last(point_shotlog)), r'ace') then 'ace'
@@ -257,6 +267,52 @@ tennisabstract_matches_points_rally as (
     from tennisabstract_matches_points_point_result
 ),
 
+-- get point winner
+tennisabstract_matches_points_point_winner as (
+    select
+        *,
+
+        case
+            -- when server hit last shot (1st, 3rd, etc.)
+            when mod(number_of_shots, 2) != 0 then
+                case
+                    -- when 'winner'-like shot
+                    when point_result in ('ace', 'service winner', 'winner') then point_server
+                    -- when 'error'-like shot
+                    when point_result in ('double fault', 'forced error', 'unforced error') then point_receiver
+                    else null
+                end
+            
+            -- when receiver hit last shot (2nd, 4th, etc.)
+            when mod(number_of_shots, 2) = 0 then
+                case
+                    -- when 'winner'-like shot
+                    when point_result in ('ace', 'service winner', 'winner') then point_receiver
+                    -- when 'error'-like shot
+                    when point_result in ('double fault', 'forced error', 'unforced error') then point_server
+                    else null
+                end
+
+            else null
+        end as point_winner,
+
+    from tennisabstract_matches_points_rally
+),
+
+-- get point loser
+tennisabstract_matches_points_point_loser as (
+    select
+        *,
+
+        case
+            when point_winner = point_server then point_receiver
+            when point_winner = point_receiver then point_server
+            else null
+        end as point_loser,
+
+    from tennisabstract_matches_points_point_winner
+),
+
 -- determine game/break points
 tennisabstract_matches_points_game_point_type as (
     select
@@ -278,7 +334,7 @@ tennisabstract_matches_points_game_point_type as (
             else false
         end as is_game_point,
 
-    from tennisabstract_matches_points_rally
+    from tennisabstract_matches_points_point_loser
 ),
 
 final as (
@@ -291,15 +347,9 @@ final as (
         point_number_in_match,
         match_url,
         point_dict,
-        point_server,
 
-        -- get receiver
-        -- compare lower case in case weird capitalization in names like 'McHale'
-        case
-                when lower(point_server) = lower(match_player_one) then match_player_two
-                when lower(point_server) = lower(match_player_two) then match_player_one
-                else null
-            end as point_receiver,
+        point_server,
+        point_receiver,
 
         set_score_in_match,
         game_score_in_set,
@@ -326,6 +376,8 @@ final as (
         point_result,
         number_of_shots,
         rally_length,
+        point_winner,
+        point_loser,
         is_break_point,
         is_game_point,
     from tennisabstract_matches_points_game_point_type

@@ -59,6 +59,9 @@ final as (
         p_ta.number_of_shots,
         p_ta.rally_length,
 
+        p_ta.point_winner,
+        p_ta.point_loser,
+
         p_ta.is_break_point,
         p_ta.is_game_point,
 

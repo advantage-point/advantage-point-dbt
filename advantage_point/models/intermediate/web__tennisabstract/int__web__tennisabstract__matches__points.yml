@@ -198,6 +198,14 @@ models:
         data_type: integer
         description: Rally length based on point result logic.
 
+      - name: point_winner
+        data_type: string
+        description: Player who won the point.
+
+      - name: point_loser
+        data_type: string
+        description: Player who lost the point.
+       
       - name: is_break_point
         data_type: boolean
         description: Flag for whether this point was a break point.
