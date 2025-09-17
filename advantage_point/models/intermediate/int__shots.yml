@@ -1,0 +1,251 @@
+version: 2
+
+models:
+  - name: int__shots
+    description: Intermediate model for shot data.
+    columns:
+
+      - name: bk_shot
+        data_type: string
+        description: Business key for the shot (generated from bk_point + shot_number_in_point).
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_point
+        data_type: string
+        description: Business key for the point (generated from bk_match + point_number_in_match).
+        data_tests:
+          - not_null
+
+      - name: shot_number_in_point
+        data_type: integer
+        description: Shot number within point (including 2nd serves)
+        data_tests:
+          - not_null
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches (date, gender, tournament, round, players).
+        data_tests:
+          - not_null
+
+      - name: point_number_in_match
+        data_type: integer
+        description: Sequential point number within the match.
+        data_tests:
+          - not_null
+
+      - name: match_url
+        data_type: string
+        description: Link to the match data.
+        data_tests:
+          - not_null
+
+      - name: point_dict
+        data_type: string
+        description: Raw JSON object for this point, before parsing.
+        data_tests:
+          - not_null
+
+      - name: point_server
+        data_type: string
+        description: Player serving the point.
+        data_tests:
+          - not_null
+
+      - name: point_receiver
+        data_type: string
+        description: Player returning serve for the point.
+        data_tests:
+          - not_null
+
+      - name: set_score_in_match
+        data_type: string
+        description: Set score string at the time of the point (e.g. '1-0') from server's perspective.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set
+        data_type: string
+        description: Game score string within the set (e.g. '40-15') from server's perspective.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game
+        data_type: string
+        description: Point score string within the game (e.g. '30-15') from server's perspective.
+        data_tests:
+          - not_null
+          
+      - name: point_shotlog
+        data_type: array
+        description: Array of shot descriptions for the point.
+        data_tests:
+          - not_null
+          
+      - name: set_score_in_match_server
+        data_type: string
+        description: Set score for the server at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: set_score_in_match_receiver
+        data_type: string
+        description: Set score for the receiver at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_server
+        data_type: string
+        description: Game score for the server at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_receiver
+        data_type: string
+        description: Game score for the receiver at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game_server
+        data_type: string
+        description: Point score for the server at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game_receiver
+        data_type: string
+        description: Point score for the receiver at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: set_score_in_match_server_int
+        data_type: integer
+        description: Set score (server) as integer.
+        data_tests:
+          - not_null
+          
+      - name: set_score_in_match_receiver_int
+        data_type: integer
+        description: Set score (receiver) as integer.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_server_int
+        data_type: integer
+        description: Game score (server) as integer.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_receiver_int
+        data_type: integer
+        description: Game score (receiver) as integer.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game_server_int
+        data_type: integer
+        description: Point score (server) as integer. AD converted to 41.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game_receiver_int
+        data_type: integer
+        description: Point score (receiver) as integer. AD converted to 41.
+        data_tests:
+          - not_null
+          
+      - name: set_number_in_match
+        data_type: integer
+        description: Ordinal number of the set within the match (1 = first set).
+        data_tests:
+          - not_null
+          
+      - name: game_number_in_set
+        data_type: integer
+        description: Ordinal number of the game within the set.
+        data_tests:
+          - not_null
+          
+      - name: game_number_in_match
+        data_type: integer
+        description: Ordinal number of the game within the match.
+        data_tests:
+          - not_null
+          
+      - name: point_number_in_set
+        data_type: integer
+        description: Ordinal number of the point within the set.
+        data_tests:
+          - not_null
+          
+      - name: point_number_in_game
+        data_type: integer
+        description: Ordinal number of the point within the game.
+        data_tests:
+          - not_null
+          
+      - name: point_side
+        data_type: string
+        description: Side of the court (ad or deuce) for the point.
+        data_tests:
+          - not_null
+          
+      - name: point_result
+        data_type: string
+        description: Result of the point (ace, winner, forced error, etc.).
+
+      - name: number_of_shots
+        data_type: integer
+        description: Total number of shots in the point rally. Does NOT factor in 2nd serves (1st and 2nd serve count as 1 serve attempt/shot) or point result.
+
+      - name: rally_length
+        data_type: integer
+        description: Rally length based on point result logic.
+
+      - name: point_winner
+        data_type: string
+        description: Player who won the point.
+
+      - name: point_loser
+        data_type: string
+        description: Player who lost the point.
+       
+      - name: is_break_point
+        data_type: boolean
+        description: Flag for whether this point was a break point.
+        data_tests:
+          - not_null
+          
+      - name: is_game_point
+        data_type: boolean
+        description: Flag for whether this point was a game point.
+        data_tests:
+          - not_null
+
+      - name: shot_number
+        data_type: integer
+        description: Shot number within point (groups 1st and 2nd serve together).
+        data_tests:
+          - not_null
+
+      - name: shot_text
+        data_type: string
+        description: Shot description (includes stroke, direction, result).
+
+      - name: serve_sort
+        data_type: integer
+        description: Integer to sort serve shots (1st serve, 2nd serve) from non-serve shots.
+        
+      - name: shot_direction
+        data_type: string
+        description: Direction of the shot.
+
+      - name: shot_result
+        data_type: string
+        description: Outcome of the shot.
+        
+      - name: shot_type
+        data_type: string
+        description: Type of shot.
