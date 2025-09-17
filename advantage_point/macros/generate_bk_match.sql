@@ -9,13 +9,13 @@
     concat(
         cast({{ match_date_col }} as string),
         '||',
-        {{ match_gender_col }},
+        lower({{ match_gender_col }}),
         '||',
-        {{ match_tournament_col }},
+        lower({{ match_tournament_col }}),
         '||',
-        {{ match_round_col }},
+        lower({{ match_round_col }}),
         '||',
-        array_to_string({{ match_players_col }}, ', ')
+        lower(array_to_string({{ match_players_col }}, ', '))
     )
     
 {% endmacro %}

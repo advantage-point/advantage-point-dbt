@@ -4,9 +4,9 @@
 ) %}
 
     concat(
-        {{ player_name_col }},
+        lower({{ player_name_col }}),
         '||',
-        {{ player_gender_col }}
+        lower({{ player_gender_col }})
     )
     
 {% endmacro %}

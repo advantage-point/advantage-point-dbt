@@ -26,77 +26,115 @@ models:
       - name: point_server
         data_type: string
         description: Player serving the point.
+        data_tests:
+          - not_null
 
       - name: point_receiver
         data_type: string
         description: Player returning serve for the point.
+        data_tests:
+          - not_null
 
       - name: set_score_in_match
         data_type: string
         description: Set score string at the time of the point (e.g. '1-0') from server's perspective.
+        data_tests:
+          - not_null
 
       - name: set_score_in_match_server
         data_type: string
         description: Set score for the server at the time of the point.
+        data_tests:
+          - not_null
 
       - name: set_score_in_match_receiver
         data_type: string
         description: Set score for the receiver at the time of the point.
+        data_tests:
+          - not_null
 
       - name: game_score_in_set
         data_type: string
         description: Game score string within the set (e.g. '40-15') from server's perspective.
+        data_tests:
+          - not_null
 
       - name: game_score_in_set_server
         data_type: string
         description: Game score for the server at the time of the point.
+        data_tests:
+          - not_null
 
       - name: game_score_in_set_receiver
         data_type: string
         description: Game score for the receiver at the time of the point.
+        data_tests:
+          - not_null
 
       - name: point_score_in_game
         data_type: string
         description: Point score string within the game (e.g. '30-15') from server's perspective.
+        data_tests:
+          - not_null
 
       - name: point_score_in_game_server
         data_type: string
         description: Point score for the server at the time of the point.
+        data_tests:
+          - not_null
 
       - name: point_score_in_game_receiver
         data_type: string
         description: Point score for the receiver at the time of the point.
+        data_tests:
+          - not_null
 
       - name: set_number_in_match
         data_type: integer
         description: Ordinal number of the set within the match (1 = first set).
+        data_tests:
+          - not_null
 
       - name: game_number_in_match
         data_type: integer
         description: Ordinal number of the game within the match.
+        data_tests:
+          - not_null
 
       - name: game_number_in_set
         data_type: integer
         description: Ordinal number of the game within the set.
+        data_tests:
+          - not_null
 
       - name: point_number_in_set
         data_type: integer
         description: Ordinal number of the point within the set.
+        data_tests:
+          - not_null
 
       - name: point_number_in_game
         data_type: integer
         description: Ordinal number of the point within the game.
+        data_tests:
+          - not_null
 
       - name: point_side
         data_type: string
         description: Side of the court (ad or deuce) for the point.
+        data_tests:
+        - not_null
+        - accepted_values:
+            arguments:
+              values: ['ad', 'deuce']
 
       - name: point_result
         data_type: string
         description: Result of the point (ace, winner, forced error, etc.).
         data_tests:
           - accepted_values:
-              values: ['ace', 'double fault', 'forced error', 'service winner', 'unforced error', 'winner']
+              arguments:
+                values: ['ace', 'double fault', 'forced error', 'service winner', 'unforced error', 'winner']
 
       - name: number_of_shots
         data_type: integer
@@ -109,7 +147,11 @@ models:
       - name: is_break_point
         data_type: boolean
         description: Flag for whether this point was a break point.
+        data_tests:
+          - not_null
 
       - name: is_game_point
         data_type: boolean
         description: Flag for whether this point was a game point.
+        data_tests:
+          - not_null

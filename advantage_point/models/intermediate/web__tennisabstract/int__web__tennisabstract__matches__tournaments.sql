@@ -25,6 +25,20 @@ tennisabstract_matches_tournaments_bk_tournament as (
     from tennisabstract_matches_tournaments
 ),
 
+-- add a row number
+-- in the example where there are 2 rows:
+    -- Rio de Janeiro
+    -- Rio De Janeiro
+-- filtered out in next cte
+tennisabstract_matches_tournament_row_num as (
+    select
+        *,
+
+        -- order by tournament DESC so that the 'more capitalized' version captured
+        row_number() over (partition by bk_tournament order by tournament_name desc) as bk_tournament_row_num
+    from tennisabstract_matches_tournaments_bk_tournament
+),
+
 final as (
     select
         bk_tournament,
@@ -44,7 +58,8 @@ final as (
             when tournament_gender = 'W' then 'WTA'
             else null
         end as tournament_tour_name,
-    from tennisabstract_matches_tournaments_bk_tournament
+    from tennisabstract_matches_tournament_row_num
+    where bk_tournament_row_num = 1
 )
 
 select * from final
