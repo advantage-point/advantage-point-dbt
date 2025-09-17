@@ -48,6 +48,7 @@ matches_joined as (
         m.match_date,
         m.match_gender,
         m.match_tournament,
+        m_ta.bk_match_tournament,
         m.match_round,
         m.match_players,
         m_ta.match_winner,

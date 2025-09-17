@@ -50,15 +50,31 @@ tennisabstract_matches_match_score as (
         split(match_result, match_loser || ' ')[1] as match_score
     from tennisabstract_matches_match_loser
 ),
+
+-- create bk for players
+tennisabstract_matches_players_bk as (
+    select
+        *,
+        {{ generate_bk_player(
+            player_name_col='match_player_one',
+            player_gender_col='match_gender'
+        ) }} as bk_match_player_one,
+        {{ generate_bk_player(
+            player_name_col='match_player_two',
+            player_gender_col='match_gender'
+        ) }} as bk_match_player_two,
+    from tennisabstract_matches_match_score
+)
+
 -- create player array string (for use in unique id)
 tennisabstract_matches_match_players as (
     select
         *,
         (
             select array_agg(player order by player)
-            from unnest(array[match_player_one, match_player_two]) as player
+            from unnest(array[bk_match_player_one, bk_match_player_two]) as player
         ) as match_players
-    from tennisabstract_matches_match_score
+    from tennisabstract_matches_players_bk
 ),
 
 -- create bk_match
@@ -91,19 +107,22 @@ final as (
         match_round,
         match_player_one,
         match_player_two,
-        {{ generate_bk_player(
-            player_name_col='match_player_one',
-            player_gender_col='match_gender'
-        ) }} as bk_match_player_one,
-        {{ generate_bk_player(
-            player_name_col='match_player_two',
-            player_gender_col='match_gender'
-        ) }} as bk_match_player_two,
+        bk_match_player_one,
+        bk_match_player_two,
         match_title,
         match_result,
         match_pointlog,
         match_winner,
         match_loser,
+        match_player_two,
+        {{ generate_bk_player(
+            player_name_col='match_winner',
+            player_gender_col='match_gender'
+        ) }} as bk_match_winner,
+        {{ generate_bk_player(
+            player_name_col='match_loser',
+            player_gender_col='match_gender'
+        ) }} as bk_match_loser,
         match_score,
         match_players,
     from tennisabstract_matches_bk_match

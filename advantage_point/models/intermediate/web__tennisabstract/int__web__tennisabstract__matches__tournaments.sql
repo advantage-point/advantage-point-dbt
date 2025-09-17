@@ -7,22 +7,12 @@ tennisabstract_matches as (
 -- get tournaments from match data
 tennisabstract_matches_tournaments as (
     select distinct
+        bk_match_tournament as bk_tournament,
         match_year as tournament_year,
         match_gender as tournament_gender,
-        match_tournament as tournament_name
+        match_tournament as tournament_name,
+        tournament_title,
     from tennisabstract_matches
-),
-
--- create bk_tournament
-tennisabstract_matches_tournaments_bk_tournament as (
-    select
-        *,
-        {{ generate_bk_tournament(
-            tournament_year_col='tournament_year',
-            tournament_gender_col='tournament_gender',
-            tournament_name_col='tournament_name'
-        )}} as bk_tournament
-    from tennisabstract_matches_tournaments
 ),
 
 -- add a row number
@@ -36,7 +26,7 @@ tennisabstract_matches_tournament_row_num as (
 
         -- order by tournament DESC so that the 'more capitalized' version captured
         row_number() over (partition by bk_tournament order by tournament_name desc) as bk_tournament_row_num
-    from tennisabstract_matches_tournaments_bk_tournament
+    from tennisabstract_matches_tournaments
 ),
 
 final as (

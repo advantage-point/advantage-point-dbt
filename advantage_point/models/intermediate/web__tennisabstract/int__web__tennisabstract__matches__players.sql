@@ -7,14 +7,11 @@ tennisabstract_matches as (
 -- get players from match data
 tennisabstract_matches_players as (
     select distinct
-        {{ generate_bk_player(
-            player_name_col='player_name',
-            player_gender_col='player_gender'
-        )}} as bk_player,
         *
     from (
         (
             select
+                bk_match_player_one as bk_player,
                 match_player_one as player_name,
                 match_gender as player_gender
             from tennisabstract_matches
@@ -22,6 +19,7 @@ tennisabstract_matches_players as (
         union all
         (
             select
+                bk_match_player_two as bk_player,
                 match_player_two as player_name,
                 match_gender as player_gender
             from tennisabstract_matches

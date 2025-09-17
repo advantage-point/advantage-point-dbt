@@ -97,6 +97,18 @@ models:
         data_type: string
         description: Match loser.
 
+      - name: bk_match_winner
+        data_type: string
+        description: Unique identifier for match winner (name, gender).
+        data_tests:
+          - not_null
+
+      - name: bk_match_loser
+        data_type: string
+        description: Unique identifier for match loser (name, gender).
+        data_tests:
+          - not_null
+
       - name: match_score
         data_type: string
         description: Match score (from winner's perspective).

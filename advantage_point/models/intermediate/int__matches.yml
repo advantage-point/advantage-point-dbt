@@ -29,6 +29,12 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_match_tournament
+        data_type: string
+        description: Unique identifier for tournament (year, gender, name).
+        data_tests:
+          - not_null
+
       - name: match_round
         data_type: string
         description: Round within tournament when match took place.
