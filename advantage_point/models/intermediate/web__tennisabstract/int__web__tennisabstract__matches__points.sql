@@ -348,6 +348,16 @@ final as (
         match_url,
         point_dict,
 
+        {{ generate_bk_game(
+            bk_match_col='bk_match',
+            game_number_col='game_number_in_match'
+        )}} as bk_game,
+
+        {{ generate_bk_set(
+            bk_match_col='bk_match',
+            set_number_col='set_number_in_match'
+        )}} as bk_set,        
+
         point_server,
         point_receiver,
 

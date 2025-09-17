@@ -30,6 +30,8 @@ final as (
         s_ta.match_url,
 
         s_ta.point_dict,
+        s_ta.bk_game,
+        s_ta.bk_set,
         s_ta.point_server,
         s_ta.point_receiver,
         s_ta.set_score_in_match,

@@ -31,6 +31,9 @@ final as (
         p.bk_match,
         p.point_number_in_match,
 
+        p_ta.bk_game,
+        p_ta.bk_set,
+
         p_ta.point_server,
         p_ta.point_receiver,
 

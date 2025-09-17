@@ -132,6 +132,8 @@ final as (
     match_url,
 
     point_dict,
+    bk_game,
+    bk_set,
     point_server,
     point_receiver,
     set_score_in_match,

@@ -23,6 +23,18 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_game
+        data_type: string
+        description: Unique identifier for games (game number in match).
+        data_tests:
+          - not_null
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets (set number in match).
+        data_tests:
+          - not_null
+
       - name: point_server
         data_type: string
         description: Player serving the point.
