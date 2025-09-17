@@ -16,6 +16,12 @@ models:
         description: Date when match took place.
         data_tests:
           - not_null
+
+      - name: match_year
+        data_type: integer
+        description: Year when match took place.
+        data_tests:
+          - not_null
         
       - name: match_gender
         data_type: string
@@ -47,6 +53,38 @@ models:
         data_tests:
           - not_null
 
+      - name: match_player_one
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: match_player_two
+        data_type: string
+        description: One of the players in the match.
+        data_tests:
+          - not_null
+
+      - name: bk_match_player_one
+        data_type: string
+        description: Unique identifier for player one (name, gender).
+        data_tests:
+          - not_null
+
+      - name: bk_match_player_two
+        data_type: string
+        description: Unique identifier for player two (name, gender).
+        data_tests:
+          - not_null
+
+      - name: match_title
+        data_type: string
+        description: Match title.
+
+      - name: match_result
+        data_type: string
+        description: Outcome of the match. Includes winner, loser, and score.
+
       - name: match_winner
         data_type: string
         description: Match winner.
@@ -55,10 +93,16 @@ models:
         data_type: string
         description: Match loser.
 
+      - name: bk_match_winner
+        data_type: string
+        description: Unique identifier for match winner (name, gender).
+
+      - name: bk_match_loser
+        data_type: string
+        description: Unique identifier for match loser (name, gender).
+
       - name: match_score
         data_type: string
         description: Match score (from winner's perspective).
 
-      - name: match_title
-        data_type: string
-        description: Match title.
+      

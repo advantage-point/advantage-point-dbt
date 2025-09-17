@@ -53,6 +53,12 @@ models:
         data_tests:
           - not_null
 
+      - name: match_players
+        data_type: array
+        description: Players in the match.
+        data_tests:
+          - not_null
+
       - name: match_player_one
         data_type: string
         description: One of the players in the match.
@@ -100,21 +106,11 @@ models:
       - name: bk_match_winner
         data_type: string
         description: Unique identifier for match winner (name, gender).
-        data_tests:
-          - not_null
 
       - name: bk_match_loser
         data_type: string
         description: Unique identifier for match loser (name, gender).
-        data_tests:
-          - not_null
 
       - name: match_score
         data_type: string
         description: Match score (from winner's perspective).
-
-      - name: match_players
-        data_type: array
-        description: Players in the match.
-        data_tests:
-          - not_null

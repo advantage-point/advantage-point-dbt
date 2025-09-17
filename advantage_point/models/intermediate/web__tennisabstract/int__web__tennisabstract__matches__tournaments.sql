@@ -11,7 +11,6 @@ tennisabstract_matches_tournaments as (
         match_year as tournament_year,
         match_gender as tournament_gender,
         match_tournament as tournament_name,
-        tournament_title,
     from tennisabstract_matches
 ),
 

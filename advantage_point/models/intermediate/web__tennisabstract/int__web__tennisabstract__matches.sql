@@ -64,7 +64,7 @@ tennisabstract_matches_players_bk as (
             player_gender_col='match_gender'
         ) }} as bk_match_player_two,
     from tennisabstract_matches_match_score
-)
+),
 
 -- create player array string (for use in unique id)
 tennisabstract_matches_match_players as (
@@ -77,23 +77,41 @@ tennisabstract_matches_match_players as (
     from tennisabstract_matches_players_bk
 ),
 
--- create bk_match
-tennisabstract_matches_bk_match as (
+-- override match title
+tennisabstract_matches_match_title as (
     select
-        *,
+        * replace (
+            (
+                case
+                    when contains_substr(match_title, '404 Not Found') then
+                        concat(
+                            cast(match_year as string),
+                            ' ',
+                            match_tournament,
+                            ' ',
+                            match_round,
+                            ': ',
+                            match_players[0],
+                            ' vs ',
+                            match_players[1]
+                        )
+                    else match_title
+                end
+            ) as match_title
+        )
+
+    from tennisabstract_matches_match_players
+),
+
+final as (
+    select
         {{ generate_bk_match(
             match_date_col='match_date',
             match_gender_col='match_gender',
             match_tournament_col='match_tournament',
             match_round_col='match_round',
             match_players_col='match_players'
-        ) }} as bk_match
-    from tennisabstract_matches_match_players
-),
-
-final as (
-    select
-        bk_match,
+        ) }} as bk_match,
         match_url,
         match_date,
         match_year,
@@ -105,6 +123,7 @@ final as (
             tournament_name_col='match_tournament'
         )}} as bk_match_tournament,
         match_round,
+        match_players,
         match_player_one,
         match_player_two,
         bk_match_player_one,
@@ -114,7 +133,6 @@ final as (
         match_pointlog,
         match_winner,
         match_loser,
-        match_player_two,
         {{ generate_bk_player(
             player_name_col='match_winner',
             player_gender_col='match_gender'
@@ -124,8 +142,7 @@ final as (
             player_gender_col='match_gender'
         ) }} as bk_match_loser,
         match_score,
-        match_players,
-    from tennisabstract_matches_bk_match
+    from tennisabstract_matches_match_title
 )
 
 select * from final

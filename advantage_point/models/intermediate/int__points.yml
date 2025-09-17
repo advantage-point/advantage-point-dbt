@@ -47,13 +47,13 @@ models:
         data_tests:
           - not_null
 
-      - name: bk_server
+      - name: bk_point_server
         data_type: string
         description: Unique identifier for point server (name, gender).
         data_tests:
           - not_null
 
-      - name: bk_receiver
+      - name: bk_point_receiver
         data_type: string
         description: Unique identifier for point receiver (name, gender).
         data_tests:
