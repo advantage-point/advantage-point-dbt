@@ -15,13 +15,29 @@ tennisabstract_matches_match_year as (
     from tennisabstract_matches
 ),
 
+-- fix some match result values
+tennisabstract_matches_match_result as (
+    select
+        * replace (
+            (
+                case
+                    when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
+                    then 'Nicolai Budkov Kjaer d. Francesco Passaro 7-6(4) 4-6 6-0'
+                    else match_result
+                end
+            ) as match_result
+        )
+
+    from tennisabstract_matches_match_year
+),
+
 -- parse match winner
 tennisabstract_matches_match_winner as (
     select
         *,
         -- match_result: {match_winner} d. {match_loser} {match_score}
         split(match_result, ' d.')[0] as match_winner
-    from tennisabstract_matches_match_year
+    from tennisabstract_matches_match_result
     where match_url not in (
         -- there are 2 urls for this match
         -- this one has an incorrect date that I fixed in the staging model

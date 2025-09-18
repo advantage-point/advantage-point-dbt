@@ -81,11 +81,28 @@ tennisabstract_matches_points_clean_scores as (
                     then '0-0'
 
                     when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
-                    and point_number_in_match = 161
+                    and point_number_in_match between 161 and 165
                     and set_score_in_match = '1-1'
-                    and game_score_in_set = '-0'
-                    and point_score_in_game = '0-0'
-                    then '0-0'
+                    and point_server = 'Nicolai Budkov Kjaer'
+                    then '2-0'
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
+                    and point_number_in_match between 166 and 169
+                    and set_score_in_match = '1-1'
+                    and point_server = 'Francesco Passaro'
+                    then '0-3'
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
+                    and point_number_in_match between 170 and 174
+                    and set_score_in_match = '1-1'
+                    and point_server = 'Nicolai Budkov Kjaer'
+                    then '4-0'
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
+                    and point_number_in_match between 175 and 178
+                    and set_score_in_match = '1-1'
+                    and point_server = 'Francesco Passaro'
+                    then '0-5'
 
                     else game_score_in_set
 
