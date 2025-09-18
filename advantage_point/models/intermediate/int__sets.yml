@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int__sets
+    description: Intermediate model for set data.
+    columns:
+      - name: bk_set
+        data_type: string
+        description: Business key for the set.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+        data_tests:
+          - not_null
+          
+      - name: set_number_in_match
+        data_type: integer
+        description: Sequential set number within the match.
+        data_tests:
+          - not_null

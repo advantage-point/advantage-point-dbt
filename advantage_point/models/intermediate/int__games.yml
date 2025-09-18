@@ -19,7 +19,7 @@ models:
           
       - name: game_number_in_match
         data_type: integer
-        description: Sequential point number within the match.
+        description: Sequential game number within the match.
         data_tests:
           - not_null
 
