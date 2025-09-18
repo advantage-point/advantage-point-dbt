@@ -67,18 +67,21 @@ tennisabstract_matches_points_clean_scores as (
                 case
 
                     when match_url = 'https://www.tennisabstract.com/charting/19931107-M-Paris_Masters-SF-Stefan_Edberg-Goran_Ivanisevic.html'
+                    and point_number_in_match = 3
                     and set_score_in_match = '0-0'
                     and game_score_in_set = '-0'
                     and point_score_in_game = '15-15'
                     then '0-0'
 
                     when match_url = 'https://www.tennisabstract.com/charting/20160123-M-Australian_Open-R32-Stan_Wawrinka-Lukas_Rosol.html'
+                    and point_number_in_match = 59
                     and set_score_in_match = '1-0'
                     and game_score_in_set = '0-'
                     and point_score_in_game = '30-15'
                     then '0-0'
 
                     when match_url = 'https://www.tennisabstract.com/charting/20241119-M-Montemar_CH-R32-Francesco_Passaro-Nicolai_Budkov_Kjaer.html'
+                    and point_number_in_match = 161
                     and set_score_in_match = '1-1'
                     and game_score_in_set = '-0'
                     and point_score_in_game = '0-0'
