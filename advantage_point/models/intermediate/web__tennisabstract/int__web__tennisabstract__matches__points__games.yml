@@ -94,61 +94,9 @@ models:
         description: Game score (receiver) as integer.
         data_tests:
           - not_null
-      
-          
-      - name: game_number_in_match
-        data_type: integer
-        description: Ordinal number of the game within the match.
-        data_tests:
-          - not_null
-          
-      - name: point_number_in_set
-        data_type: integer
-        description: Ordinal number of the point within the set.
-        data_tests:
-          - not_null
-          
-      - name: point_number_in_game
-        data_type: integer
-        description: Ordinal number of the point within the game.
-        data_tests:
-          - not_null
-          
-      - name: point_side
-        data_type: string
-        description: Side of the court (ad or deuce) for the point.
-        data_tests:
-          - not_null
-          
-      - name: point_result
-        data_type: string
-        description: Result of the point (ace, winner, forced error, etc.).
 
-      - name: number_of_shots
-        data_type: integer
-        description: Total number of shots in the point rally. Does NOT factor in 2nd serves (1st and 2nd serve count as 1 serve attempt/shot) or point result.
-
-      - name: rally_length
-        data_type: integer
-        description: Rally length based on point result logic.
-
-      - name: point_winner
-        data_type: string
-        description: Player who won the point.
-
-      - name: point_loser
-        data_type: string
-        description: Player who lost the point.
-       
-      - name: is_break_point
+      - name: is_tiebreaker
         data_type: boolean
-        description: Flag for whether this point was a break point.
+        description: Flag denoting if game is a tiebreaker.
         data_tests:
-          - not_null
-          
-      - name: is_game_point
-        data_type: boolean
-        description: Flag for whether this point was a game point.
-        data_tests:
-          - not_null
-          
+          - not_null          
