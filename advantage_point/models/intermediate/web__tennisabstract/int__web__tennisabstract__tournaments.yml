@@ -6,7 +6,7 @@ models:
     columns:
       - name: bk_tournament
         data_type: string
-        description: Unique identifier for tournaments (year, gender, name).
+        description: Unique identifier for tournaments.
         data_tests:
           - unique
           - not_null

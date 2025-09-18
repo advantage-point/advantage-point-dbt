@@ -31,7 +31,7 @@ models:
 
       - name: bk_match_tournament
         data_type: string
-        description: Unique identifier for tournament (year, gender, name).
+        description: Unique identifier for tournament.
         data_tests:
           - not_null
 

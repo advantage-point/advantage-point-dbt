@@ -6,7 +6,7 @@ models:
     columns:
       - name: bk_player
         data_type: string
-        description: Unique identifier for players (name, gender).
+        description: Unique identifier for players.
         data_tests:
           - unique
           - not_null

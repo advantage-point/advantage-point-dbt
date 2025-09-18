@@ -43,7 +43,7 @@ models:
 
       - name: bk_match_tournament
         data_type: string
-        description: Unique identifier for tournament (year, gender, name).
+        description: Unique identifier for tournament.
         data_tests:
           - not_null
 
@@ -73,13 +73,13 @@ models:
 
       - name: bk_match_player_one
         data_type: string
-        description: Unique identifier for player one (name, gender).
+        description: Unique identifier for player one.
         data_tests:
           - not_null
 
       - name: bk_match_player_two
         data_type: string
-        description: Unique identifier for player two (name, gender).
+        description: Unique identifier for player two.
         data_tests:
           - not_null
 
@@ -105,11 +105,11 @@ models:
 
       - name: bk_match_winner
         data_type: string
-        description: Unique identifier for match winner (name, gender).
+        description: Unique identifier for match winner.
 
       - name: bk_match_loser
         data_type: string
-        description: Unique identifier for match loser (name, gender).
+        description: Unique identifier for match loser.
 
       - name: match_score
         data_type: string

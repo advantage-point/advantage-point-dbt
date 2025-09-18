@@ -1,12 +1,12 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__matches__points
-    description: Intermediate model for tennisabstract point data (one row per point). Parsed from match_pointlog JSON.
+  - name: int__web__tennisabstract__matches__points_games
+    description: Intermediate model for tennisabstract game data (taken from point data).
     columns:
-      - name: bk_point
+      - name: bk_game
         data_type: string
-        description: Business key for the point (generated from bk_match + point_number_in_match).
+        description: Business key for the game (generated from bk_match + game_number_in_match).
         data_tests:
           - unique
           - not_null
@@ -17,9 +17,9 @@ models:
         data_tests:
           - not_null
           
-      - name: point_number_in_match
+      - name: game_number_in_match
         data_type: integer
-        description: Sequential point number within the match.
+        description: Sequential game number within the match.
         data_tests:
           - not_null
 
@@ -29,51 +29,39 @@ models:
         data_tests:
           - not_null
 
-      - name: point_dict
-        data_type: string
-        description: Raw JSON object for this point, before parsing.
-        data_tests:
-          - not_null
-
-      - name: bk_game
-        data_type: string
-        description: Unique identifier for games (game number in match).
-        data_tests:
-          - not_null
-
       - name: bk_set
         data_type: string
         description: Unique identifier for sets (set number in match).
         data_tests:
           - not_null
 
-      - name: point_server
-        data_type: string
-        description: Player serving the point.
+      - name: game_number_in_set
+        data_type: integer
+        description: Ordinal number of the game within the set.
         data_tests:
           - not_null
 
-      - name: point_receiver
+      - name: game_server
         data_type: string
-        description: Player returning serve for the point.
+        description: Player who began serving the game (does NOT factor in tiebreakers).
         data_tests:
           - not_null
 
-      - name: bk_point_server
+      - name: game_receiver
         data_type: string
-        description: Unique identifier for point server.
+        description: Player who began returning serve for the game (does NOT factor in tiebreakers).
         data_tests:
           - not_null
 
-      - name: bk_point_receiver
+      - name: bk_game_server
         data_type: string
-        description: Unique identifier for point receiver.
+        description: Unique identifier for game server.
         data_tests:
           - not_null
 
-      - name: set_score_in_match
+      - name: bk_game_receiver
         data_type: string
-        description: Set score string at the time of the point from server's perspective.
+        description: Unique identifier for game receiver.
         data_tests:
           - not_null
 
@@ -173,11 +161,7 @@ models:
         data_tests:
           - not_null
           
-      - name: game_number_in_set
-        data_type: integer
-        description: Ordinal number of the game within the set.
-        data_tests:
-          - not_null
+      
           
       - name: game_number_in_match
         data_type: integer
