@@ -13,7 +13,7 @@ models:
 
       - name: bk_match
         data_type: string
-        description: Unique identifier for matches (date, gender, tournament, round, players).
+        description: Unique identifier for matches.
         data_tests:
           - not_null
           

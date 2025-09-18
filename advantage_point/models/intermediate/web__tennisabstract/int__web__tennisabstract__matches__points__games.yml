@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__matches__points_games
+  - name: int__web__tennisabstract__matches__points__games
     description: Intermediate model for tennisabstract game data (taken from point data).
     columns:
       - name: bk_game
@@ -13,7 +13,7 @@ models:
 
       - name: bk_match
         data_type: string
-        description: Unique identifier for matches (date, gender, tournament, round, players).
+        description: Unique identifier for matches.
         data_tests:
           - not_null
           
@@ -99,4 +99,4 @@ models:
         data_type: boolean
         description: Flag denoting if game is a tiebreaker.
         data_tests:
-          - not_null          
+          - not_null
