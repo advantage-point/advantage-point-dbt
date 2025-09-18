@@ -6,7 +6,7 @@ models:
     columns:
       - name: bk_point
         data_type: string
-        description: Business key for the point (generated from bk_match + point_number_in_match).
+        description: Business key for the point.
         data_tests:
           - unique
           - not_null

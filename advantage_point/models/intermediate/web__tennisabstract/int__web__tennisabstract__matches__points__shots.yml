@@ -7,14 +7,14 @@ models:
 
       - name: bk_shot
         data_type: string
-        description: Business key for the shot (generated from bk_point + shot_number_in_point).
+        description: Business key for the shot.
         data_tests:
           - unique
           - not_null
 
       - name: bk_point
         data_type: string
-        description: Business key for the point (generated from bk_match + point_number_in_match).
+        description: Business key for the point.
         data_tests:
           - not_null
 

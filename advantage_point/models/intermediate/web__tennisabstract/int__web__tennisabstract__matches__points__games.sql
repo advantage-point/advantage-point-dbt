@@ -45,6 +45,8 @@ final as (
         game_score_in_set,
         game_score_in_set_server,
         game_score_in_set_receiver,
+        game_score_in_set_server_int,
+        game_score_in_set_receiver_int,
 
         is_tiebreaker,
 
