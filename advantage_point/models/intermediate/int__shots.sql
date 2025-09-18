@@ -24,17 +24,8 @@ final as (
         s.bk_shot,
         s.bk_point,
         s.shot_number_in_point,
-    
-        s_ta.bk_match,
-        s_ta.point_number_in_match,
-        s_ta.match_url,
-
-        s_ta.bk_game,
-        s_ta.bk_set,
         
         s_ta.shot_number,
-        s_ta.shot_text,
-        s_ta.serve_sort,
         s_ta.shot_direction,
         s_ta.shot_result,
         s_ta.shot_type,

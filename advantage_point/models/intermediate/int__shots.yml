@@ -24,50 +24,12 @@ models:
         data_tests:
           - not_null
 
-      - name: bk_match
-        data_type: string
-        description: Unique identifier for matches (date, gender, tournament, round, players).
-        data_tests:
-          - not_null
-
-      - name: point_number_in_match
-        data_type: integer
-        description: Sequential point number within the match.
-        data_tests:
-          - not_null
-
-      - name: match_url
-        data_type: string
-        description: Link to the match data.
-        data_tests:
-          - not_null
-
-      - name: bk_game
-        data_type: string
-        description: Unique identifier for games (game number in match).
-        data_tests:
-          - not_null
-
-      - name: bk_set
-        data_type: string
-        description: Unique identifier for sets (set number in match).
-        data_tests:
-          - not_null
-
       - name: shot_number
         data_type: integer
         description: Shot number within point (groups 1st and 2nd serve together).
         data_tests:
           - not_null
-
-      - name: shot_text
-        data_type: string
-        description: Shot description (includes stroke, direction, result).
-
-      - name: serve_sort
-        data_type: integer
-        description: Integer to sort serve shots (1st serve, 2nd serve) from non-serve shots.
-        
+          
       - name: shot_direction
         data_type: string
         description: Direction of the shot.
