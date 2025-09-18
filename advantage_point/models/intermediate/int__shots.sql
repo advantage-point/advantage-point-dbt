@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='table'
+    )
+}}
+
 with
 
 tennisabstract_matches_points_shots as (
