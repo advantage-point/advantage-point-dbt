@@ -25,9 +25,12 @@ jobs:
       - name: Install dbt
         run: pip install dbt-bigquery
 
-      # Write the service account JSON to a file
+      # Write the service account JSON to a file (preserves multiline)
       - name: Write service account key
-        run: echo "${SA_ADVPOINT_PROD_DBT_KEY_JSON}" > sa.json
+        run: |
+          cat > sa.json <<'EOF'
+          $SA_ADVPOINT_PROD_DBT_KEY_JSON
+          EOF
         env:
           SA_ADVPOINT_PROD_DBT_KEY_JSON: ${{ secrets.SA_ADVPOINT_PROD_DBT_KEY_JSON }}
         working-directory: ./advantage_point
@@ -35,7 +38,7 @@ jobs:
       # Run dbt to install deps and generate docs
       - name: Generate dbt docs
         env:
-          SA_ADVPOINT_PROD_DBT_KEYFILE: ./sa.json   # file path for profiles.yml
+          SA_ADVPOINT_PROD_DBT_KEYFILE: ./sa.json   # matches profiles.yml
         run: |
           dbt deps --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
           dbt docs generate --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
