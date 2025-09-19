@@ -31,8 +31,8 @@ jobs:
       #   - profiles-dir points to custom profiles folder
       - name: Generate dbt docs
         run: |
-          dbt deps
-          dbt docs generate --profiles-dir ./profiles
+          dbt deps --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
+          dbt docs generate --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
         working-directory: ./advantage_point
 
       # upload the generated docs (in `target/`) as an artifact
