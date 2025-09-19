@@ -6,48 +6,56 @@ on:
       - main
 
 jobs:
+  # first job: build dbt docs
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
-      - name: Checkout
-        uses: actions/checkout@v3
 
-      # Setup Python and dbt
+      # checkout repo contents so the runner has code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # install Python on the runner
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
+      # install dbt with the BigQuery adapter
       - name: Install dbt
         run: pip install dbt-bigquery
 
-      # Build docs
+      # run dbt to install dependencies and generate docs
+      #   - working directory points to where dbt_project.yml lives
+      #   - profiles-dir points to custom profiles folder
       - name: Generate dbt docs
         run: |
           dbt deps
-          dbt docs generate
+          dbt docs generate --profiles-dir ./profiles
         working-directory: ./advantage_point
 
-      # Upload to GitHub Pages
+      # upload the generated docs (in `target/`) as an artifact
+      #   - GitHub Pages will use this artifact to publish the site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target   # dbt docs output lives here
+          path: advantage_point/target
 
+  # second job: deploy to GitHub Pages
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      pages: write
-      id-token: write
+      pages: write       # Allow writing to GitHub Pages
+      id-token: write    # Required for OIDC authentication
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}  # outputs final Pages URL
 
     steps:
+      # deploy the uploaded artifact to GitHub Pages
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
