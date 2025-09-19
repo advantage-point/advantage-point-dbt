@@ -28,7 +28,7 @@ jobs:
       # Write the service account JSON to a file (preserves multiline)
       - name: Write service account key
         run: |
-          cat > sa.json <<'EOF'
+          cat > sa.json <<EOF
           $SA_ADVPOINT_PROD_DBT_KEY_JSON
           EOF
         env:
