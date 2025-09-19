@@ -27,10 +27,7 @@ jobs:
 
       # Write the service account JSON to a file (preserves multiline)
       - name: Write service account key
-        run: |
-          cat > sa.json <<EOF
-          $SA_ADVPOINT_PROD_DBT_KEY_JSON
-          EOF
+        run: printf '%s' "$SA_ADVPOINT_PROD_DBT_KEY_JSON" > sa.json
         env:
           SA_ADVPOINT_PROD_DBT_KEY_JSON: ${{ secrets.SA_ADVPOINT_PROD_DBT_KEY_JSON }}
         working-directory: ./advantage_point
