@@ -15,10 +15,10 @@ advantage_point_dbt_docs_ci:
   outputs:
     prod:
       type: bigquery
-      method: service-account-json
+      method: service-account
       project: advantage-point-465313
       dataset: advpoint__dbt
-      keyfile_json: "{{ env_var('SA_ADVPOINT_PROD_DBT_KEY') }}"
+      keyfile: "{{ env_var('SA_ADVPOINT_PROD_DBT_KEYFILE') }}"
       threads: 8
       location: US
       job_execution_timeout_seconds: 1800

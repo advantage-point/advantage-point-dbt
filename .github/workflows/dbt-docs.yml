@@ -6,61 +6,70 @@ on:
       - main
 
 jobs:
-  # first job: build dbt docs
+  # First job: build dbt docs
   build:
     runs-on: ubuntu-latest
 
     steps:
-
-      # checkout repo contents so the runner has code
+      # Checkout repo contents
       - name: Checkout
         uses: actions/checkout@v4
 
-      # install Python on the runner
+      # Install Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # install dbt with the BigQuery adapter
+      # Install dbt with BigQuery adapter
       - name: Install dbt
         run: pip install dbt-bigquery
 
-      # run dbt to install dependencies and generate docs
-      #   - working directory points to where dbt_project.yml lives
-      #   - profiles-dir points to custom profiles folder
+      # Write the service account JSON to a file
+      - name: Write service account key
+        run: echo "${SA_ADVPOINT_PROD_DBT_KEY_JSON}" > sa.json
+        env:
+          SA_ADVPOINT_PROD_DBT_KEY_JSON: ${{ secrets.SA_ADVPOINT_PROD_DBT_KEY_JSON }}
+        working-directory: ./advantage_point
+
+      # Run dbt to install deps and generate docs
       - name: Generate dbt docs
         env:
-          SA_ADVPOINT_PROD_DBT_KEY: ${{ secrets.SA_ADVPOINT_PROD_DBT_KEY }}
+          SA_ADVPOINT_PROD_DBT_KEYFILE: ./sa.json   # file path for profiles.yml
         run: |
           dbt deps --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
           dbt docs generate --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
         working-directory: ./advantage_point
 
-      # upload the generated docs (in `target/`) as an artifact
-      #   - GitHub Pages will use this artifact to publish the site
+      # Upload the generated docs (target/) as an artifact for Pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: advantage_point/target
 
-  # second job: deploy to GitHub Pages
+      # Cleanup: remove the service account key file
+      - name: Remove service account key
+        run: rm -f sa.json
+        working-directory: ./advantage_point
+
+  # Second job: deploy to GitHub Pages
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      pages: write       # Allow writing to GitHub Pages
-      id-token: write    # Required for OIDC authentication
+      pages: write
+      id-token: write
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # outputs final Pages URL
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # deploy the uploaded artifact to GitHub Pages
+      # Deploy the uploaded artifact to GitHub Pages
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
 
+      # Show final URL in logs
       - name: Show Pages URL
         run: echo "dbt docs available at ${{ steps.deployment.outputs.page_url }}"
