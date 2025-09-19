@@ -32,7 +32,7 @@ jobs:
 
       # Upload to GitHub Pages
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: target   # dbt docs output lives here
 
