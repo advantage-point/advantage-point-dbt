@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: dim__tournament
+    description: Dimension table for tennis tournaments.
+    columns:
+      - name: sk_tournament
+        data_type: string
+        description: Surrogate key for the tournament.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_tournament
+        data_type: string
+        description: Business key for tournament.
+        data_tests:
+          - not_null
+
+      - name: tournament_year
+        data_type: integer
+        description: Year of the tournament (may differ from actual start date).
+        data_tests:
+          - not_null
+
+      - name: tournament_gender
+        data_type: string
+        description: Gender of the tournament (M = ATP, W = WTA).
+        data_tests:
+          - not_null
+
+      - name: tournament_name
+        data_type: string
+        description: Tournament name (without year).
+        data_tests:
+          - not_null
+
+      - name: tournament_start_date
+        data_type: date
+        description: Start date of the tournament.
+
+      - name: tournament_surface
+        data_type: string
+        description: Playing surface for the tournament (e.g., Hard, Clay, Grass).
+
+      - name: tournament_draw_size
+        data_type: integer
+        description: Size of the tournament draw (e.g., 32, 64, 128).
+
+      - name: tournament_title
+        data_type: string
+        description: Title of the tournament (includes year + name).
+
+      - name: tournament_tour_name
+        data_type: string
+        description: Tour associated with the tournament (e.g., ATP, WTA).
+        data_tests:
+          - not_null

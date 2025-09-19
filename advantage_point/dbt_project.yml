@@ -38,3 +38,7 @@ models:
     intermediate:
       +materialized: view
       +schema: advpoint__int
+    warehouse:
+      +schema: advpoint__dwh
+      dimension:
+        +schema: table
