@@ -30,6 +30,8 @@ jobs:
       #   - working directory points to where dbt_project.yml lives
       #   - profiles-dir points to custom profiles folder
       - name: Generate dbt docs
+        env:
+          SA_ADVPOINT_PROD_DBT_KEY: ${{ secrets.SA_ADVPOINT_PROD_DBT_KEY }}
         run: |
           dbt deps --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
           dbt docs generate --profiles-dir ./profiles --profile advantage_point_dbt_docs_ci
@@ -59,3 +61,6 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Show Pages URL
+        run: echo "dbt docs available at ${{ steps.deployment.outputs.page_url }}"
