@@ -8,8 +8,8 @@ dim_tournament as (
     select * from {{ ref('dim__tournament') }}
 ),
 
--- create bks
-match_bks as (
+-- create sks
+match_sks as (
     select
         *,
         {{ generate_sk_match(
@@ -39,7 +39,7 @@ final as (
         m.match_players,
         m.match_title,
     
-    from match_bks as m
+    from match_sks as m
     left join dim_tournament as t on m.bk_match_tournament = t.bk_tournament
 )
 
