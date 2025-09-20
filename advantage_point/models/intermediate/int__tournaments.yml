@@ -28,6 +28,10 @@ models:
         description: Tournament name.
         data_tests:
           - not_null
+
+      - name: bk_tournament_start_date
+        data_type: date
+        description: Unique identifier for tournament start date.
       
       - name: tournament_start_date
         data_type: date

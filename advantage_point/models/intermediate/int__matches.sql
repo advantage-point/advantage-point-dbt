@@ -13,11 +13,14 @@ matches_union as (
         (
             select
                 bk_match,
+                bk_match_date,
                 match_date,
                 match_year,
                 match_gender,
+                bk_match_tournament,
                 match_tournament,
                 match_round,
+                bk_match_players,
                 match_players,
             from tennisabstract_matches
         )
@@ -46,12 +49,14 @@ matches_title as (
 matches_joined as (
     select
         m.bk_match,
+        m.bk_match_date,
         m.match_date,
         -- m.match_year,
         m.match_gender,
         m.match_tournament,
         m_ta.bk_match_tournament,
         m.match_round,
+        m.bk_match_players,
         m.match_players,
         coalesce(
             m_ta.match_title,

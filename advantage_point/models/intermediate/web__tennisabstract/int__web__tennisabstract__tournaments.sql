@@ -25,6 +25,9 @@ final as (
         tournament_name,
         tournament_url,
         tournament_title,
+        {{ generate_bk_date(
+            date_col='tournament_start_date'
+        ) }} as bk_tournament_start_date,
         tournament_start_date,
         tournament_surface,
         tournament_draw_size,

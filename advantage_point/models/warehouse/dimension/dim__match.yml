@@ -19,7 +19,7 @@ models:
 
       - name: sk_match_tournament
         data_type: string
-        description: Foreign key to tournament.
+        description: Foreign key from match tournament to tournament.
         data_tests:
           - not_null
           - relationships:
@@ -27,9 +27,30 @@ models:
                 to: ref('dim__tournament')
                 field: sk_tournament
 
-      - name: match_date
-        data_type: date
-        description: Date when match took place.
+      - name: bk_match_tournament
+        data_type: string
+        description: Business key for tournament.
+        data_tests:
+          - not_null
+
+      - name: sk_match_date
+        data_type: integer
+        description: Foreign key from match date to date.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_match_date
+        description: Unique identifier for match date.
+        tests:
+          - not_null
+
+      - name: bk_match_players
+        data_type: array
+        description: Array of unique identifiers for players who participated in the match.
         data_tests:
           - not_null
 
@@ -39,21 +60,9 @@ models:
         data_tests:
           - not_null
 
-      - name: match_tournament
-        data_type: string
-        description: Tournament name associated with the match.
-        data_tests:
-          - not_null
-
       - name: match_round
         data_type: string
         description: Round in which match was played.
-        data_tests:
-          - not_null
-
-      - name: match_players
-        data_type: array
-        description: Array of players who participated in the match.
         data_tests:
           - not_null
 

@@ -35,9 +35,18 @@ models:
         data_tests:
           - not_null
 
-      - name: tournament_start_date
+      - name: sk_tournament_start_date
+        data_type: integer
+        description: Foreign key from tournament start date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_tournament_start_date
         data_type: date
-        description: Start date of the tournament.
+        description: Unique identifier for tournament start date.
 
       - name: tournament_surface
         data_type: string

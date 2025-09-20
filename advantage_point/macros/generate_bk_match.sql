@@ -1,21 +1,21 @@
 {% macro generate_bk_match(
-    match_date_col,
+    bk_match_date_col,
     match_gender_col,
-    match_tournament_col,
+    bk_match_tournament_col,
     match_round_col,
-    match_players_col
+    bk_match_players_col
 ) %}
 
     concat(
-        cast({{ match_date_col }} as string),
-        '||',
+        cast({{ bk_match_date_col }} as string),
+        '_',
         lower({{ match_gender_col }}),
-        '||',
-        lower({{ match_tournament_col }}),
-        '||',
+        '_',
+        lower({{ bk_match_tournament_col }}),
+        '_',
         lower({{ match_round_col }}),
-        '||',
-        lower(array_to_string({{ match_players_col }}, ', '))
+        '_',
+        lower(array_to_string({{ bk_match_players_col }}, ', '))
     )
     
 {% endmacro %}

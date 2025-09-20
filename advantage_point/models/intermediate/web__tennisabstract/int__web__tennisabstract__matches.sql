@@ -67,10 +67,18 @@ tennisabstract_matches_match_score as (
     from tennisabstract_matches_match_loser
 ),
 
--- create bk for players
-tennisabstract_matches_players_bk as (
+-- create bks
+tennisabstract_matches_bk as (
     select
         *,
+        {{ generate_bk_date(
+            date_col='match_date'
+        ) }} as bk_match_date,
+        {{ generate_bk_tournament(
+            tournament_year_col='match_year',
+            tournament_gender_col='match_gender',
+            tournament_name_col='match_tournament'
+        )}} as bk_match_tournament,
         {{ generate_bk_player(
             player_name_col='match_player_one',
             player_gender_col='match_gender'
@@ -88,9 +96,13 @@ tennisabstract_matches_match_players as (
         *,
         (
             select array_agg(player order by player)
+            from unnest(array[match_player_one, match_player_two]) as player
+        ) as match_players,
+        (
+            select array_agg(player order by player)
             from unnest(array[bk_match_player_one, bk_match_player_two]) as player
-        ) as match_players
-    from tennisabstract_matches_players_bk
+        ) as bk_match_players
+    from tennisabstract_matches_bk
 ),
 
 -- override match title
@@ -122,24 +134,22 @@ tennisabstract_matches_match_title as (
 final as (
     select
         {{ generate_bk_match(
-            match_date_col='match_date',
+            bk_match_date_col='bk_match_date',
             match_gender_col='match_gender',
-            match_tournament_col='match_tournament',
+            bk_match_tournament_col='bk_match_tournament',
             match_round_col='match_round',
-            match_players_col='match_players'
+            bk_match_players_col='bk_match_players'
         ) }} as bk_match,
         match_url,
+        bk_match_date,
         match_date,
         match_year,
         match_gender,
         match_tournament,
-        {{ generate_bk_tournament(
-            tournament_year_col='match_year',
-            tournament_gender_col='match_gender',
-            tournament_name_col='match_tournament'
-        )}} as bk_match_tournament,
+        bk_match_tournament,
         match_round,
         match_players,
+        bk_match_players,
         match_player_one,
         match_player_two,
         bk_match_player_one,

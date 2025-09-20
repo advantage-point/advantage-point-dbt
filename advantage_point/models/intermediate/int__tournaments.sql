@@ -63,6 +63,7 @@ final as (
         t.tournament_year,
         t.tournament_gender,
         t.tournament_name,
+        t_ta.bk_tournament_start_date,
         t_ta.tournament_start_date,
         t_ta.tournament_surface,
         t_ta.tournament_draw_size,

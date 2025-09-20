@@ -28,6 +28,9 @@ final as (
         player_peak_singles_ranking,
         player_first_peak_singles_ranking_date,
         player_last_peak_singles_ranking_date,
+        {{ generate_bk_date(
+            date_col='player_date_of_birth'
+        ) }} as bk_player_birth_date,
         player_date_of_birth,
         player_height_in_cm,
         player_hand,

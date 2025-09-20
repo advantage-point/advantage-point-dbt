@@ -53,6 +53,10 @@ models:
         data_type: date
         description: Date when player last achieved highest singles ranking.
 
+      - name: bk_player_birth_date
+        data_type: date
+        description: Unique identifier for player birth date.
+
       - name: player_date_of_birth
         data_type: date
         description: Player date of birth.

@@ -101,6 +101,11 @@ final as (
         ) as player_last_peak_singles_ranking_date,
 
         coalesce(
+            p_ta.bk_player_birth_date,
+            pc_ta.bk_player_birth_date
+        ) as bk_player_birth_date,
+
+        coalesce(
             p_ta.player_date_of_birth,
             pc_ta.player_date_of_birth
         ) as player_date_of_birth,

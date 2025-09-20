@@ -4,6 +4,10 @@ int_match as (
     select * from {{ ref('int__matches') }}
 ),
 
+dim_date as (
+    select * from {{ ref('dim__date') }}
+),
+
 dim_tournament as (
     select * from {{ ref('dim__tournament') }}
 ),
@@ -15,32 +19,25 @@ match_sks as (
         {{ generate_sk_match(
             bk_match_col='bk_match'
         ) }} as sk_match,
-        {{ generate_sk_tournament(
-            bk_tournament_col='bk_match_tournament'
-        ) }} as sk_match_tournament,
     from int_match
 ),
 
 final as (
     select
-        -- surrogate keys
         m.sk_match,
-        t.sk_tournament as sk_match_tournament,
-        
-        -- business key
         m.bk_match,
+        t.sk_tournament as sk_match_tournament,
         m.bk_match_tournament,
-
-        -- attributes
-        m.match_date,
+        d_match_date.sk_date as sk_match_date,
+        m.bk_match_date,
+        m.bk_match_players,
         m.match_gender,
-        m.match_tournament,
         m.match_round,
-        m.match_players,
         m.match_title,
     
     from match_sks as m
     left join dim_tournament as t on m.bk_match_tournament = t.bk_tournament
+    left join dim_date as d_match_date on m.bk_match_date = d_match_date.bk_date
 )
 
 select * from final

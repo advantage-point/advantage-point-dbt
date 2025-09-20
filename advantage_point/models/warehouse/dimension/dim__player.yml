@@ -37,9 +37,18 @@ models:
         data_tests:
           - not_null
 
-      - name: player_date_of_birth
+      - name: sk_player_birth_date
+        data_type: integer
+        description: Foreign key from player birth date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_player_birth_date
         data_type: date
-        description: Player date of birth.
+        description: Unique identifier for player birth date.
 
       - name: player_country
         data_type: string

@@ -38,6 +38,10 @@ models:
       - name: tournament_title
         data_type: string
         description: Title of the tournament (includes year, name).
+
+      - name: bk_tournament_start_date
+        data_type: date
+        description: Unique identifier for tournament start date.
       
       - name: tournament_start_date
         data_type: date

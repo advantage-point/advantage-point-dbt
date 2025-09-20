@@ -17,6 +17,10 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_match_date
+        data_type: date
+        description: Unique identifier for match date.
+
       - name: match_date
         data_type: date
         description: Date when match took place.
@@ -56,6 +60,12 @@ models:
       - name: match_players
         data_type: array
         description: Players in the match.
+        data_tests:
+          - not_null
+
+      - name: bk_match_players
+        data_type: array
+        description: Unique identifiers for players in the match.
         data_tests:
           - not_null
 
