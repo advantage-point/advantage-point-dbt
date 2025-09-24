@@ -23,7 +23,7 @@ final as (
         s.sk_set,
         s.bk_set,
         m.sk_match as sk_set_match,
-        s.bk_match,
+        s.bk_match as bk_set_match,
         s.set_number_in_match,
     from set_sks as s
     left join dim_match as m on s.bk_match = m.bk_match

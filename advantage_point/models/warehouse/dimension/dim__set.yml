@@ -27,7 +27,7 @@ models:
                 to: ref('dim__match')
                 field: sk_match
 
-      - name: bk_match
+      - name: bk_set_match
         data_type: string
         description: Unique identifier for matches.
         data_tests:
