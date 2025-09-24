@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim__player
-    description: Dimension table for player attributes.
+    description: Dimension model for player attributes.
     columns:
       - name: sk_player
         data_type: string

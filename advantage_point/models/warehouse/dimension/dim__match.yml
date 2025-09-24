@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim__match
-    description: Dimension table for matches.
+    description: Dimension model for matches.
     columns:
       - name: sk_match
         data_type: string

@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim__tournament
-    description: Dimension table for tennis tournaments.
+    description: Dimension model for tennis tournaments.
     columns:
       - name: sk_tournament
         data_type: string
