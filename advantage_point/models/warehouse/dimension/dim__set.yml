@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim__set
+    description: Dimension model for sets.
+    columns:
+      - name: sk_set
+        data_type: string
+        description: Surrogate key for set.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_set
+        data_type: string
+        description: Business key for the set.
+        data_tests:
+          - not_null
+
+      - name: sk_set_match
+        data_type: string
+        description: Foreign key from set match to match.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim__match')
+                field: sk_match
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+        data_tests:
+          - not_null
+          
+      - name: set_number_in_match
+        data_type: integer
+        description: Sequential set number within the match.
+        data_tests:
+          - not_null
