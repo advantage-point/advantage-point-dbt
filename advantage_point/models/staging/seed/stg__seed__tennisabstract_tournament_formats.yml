@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: stg__seed__tournament_formats
-    description: Staging model for tournament format data.
+  - name: stg__seed__tennisabstract_tournament_formats
+    description: Staging model for tennisabstract tournament format data.
     columns:
       - name: tournament_name
         data_type: string
