@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__matches__points__games
-    description: Intermediate model for tennisabstract game data (taken from point data).
+  - name: int__web__tennisabstract__matches__points__games_union
+    description: Intermediate model for unioned tennisabstract game data.
     columns:
       - name: bk_game
         data_type: string

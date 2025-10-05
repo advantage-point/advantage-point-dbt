@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim__game
+    description: Dimension model for games.
+    columns:
+      - name: sk_game
+        data_type: string
+        description: Surrogate key for game.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_game
+        data_type: string
+        description: Business key for the game.
+        data_tests:
+          - not_null
+
+      - name: sk_game_set
+        data_type: string
+        description: Foreign key from game set to set.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim__set')
+                field: sk_set
+
+      - name: bk_game_set
+        data_type: string
+        description: Unique identifier for set.
+        data_tests:
+          - not_null
+
+      - name: game_number_in_match
+        data_type: integer
+        description: Sequential game number within the match.
+        data_tests:
+          - not_null
+
+      - name: game_number_in_set
+        data_type: integer
+        description: Ordinal number of the game within the set.
+        data_tests:
+          - not_null
+
+      - name: is_tiebreaker
+        data_type: boolean
+        description: Flag denoting if game is a tiebreaker.
+        data_tests:
+          - not_null

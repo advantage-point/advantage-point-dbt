@@ -24,6 +24,18 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_game
+        data_type: string
+        description: Unique identifier for games (game number in match).
+        data_tests:
+          - not_null
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets (set number in match).
+        data_tests:
+          - not_null
+
       - name: shot_number
         data_type: integer
         description: Shot number within point (groups 1st and 2nd serve together).

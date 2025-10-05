@@ -9,9 +9,7 @@ tennisabstract_matches_points_sets as (
     select
         *
     from tennisabstract_matches_points
-    where 1=1
-        and point_score_in_game = '0-0' -- filter for 'beginning of game' rows
-        and game_score_in_set = '0-0' -- filter for 'beginning of set' rows
+    where is_last_point_in_set = true
 ),
 
 final as (

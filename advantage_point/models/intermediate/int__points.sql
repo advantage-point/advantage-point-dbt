@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        cluster_by=['bk_match', 'bk_set', 'bk_game',],
     )
 }}
 

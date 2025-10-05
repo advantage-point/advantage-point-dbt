@@ -135,7 +135,6 @@ final as (
     select
         {{ generate_bk_match(
             bk_match_date_col='bk_match_date',
-            match_gender_col='match_gender',
             bk_match_tournament_col='bk_match_tournament',
             match_round_col='match_round',
             bk_match_players_col='bk_match_players'

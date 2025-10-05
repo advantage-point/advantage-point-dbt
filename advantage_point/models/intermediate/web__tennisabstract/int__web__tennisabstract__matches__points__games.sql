@@ -9,7 +9,7 @@ tennisabstract_matches_points_games as (
     select
         *
     from tennisabstract_matches_points
-    where point_score_in_game = '0-0' -- filter for 'beginning of game' rows
+    where is_last_point_in_game = true
 ),
 
 -- create tiebreaker flag
@@ -37,8 +37,6 @@ final as (
         bk_set,
         game_number_in_set,
 
-        point_server as game_server,
-        point_receiver as game_receiver,
         bk_point_server as bk_game_server,
         bk_point_receiver as bk_game_receiver,
 

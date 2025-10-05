@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        cluster_by=['bk_match', 'bk_set', 'bk_game',],
     )
 }}
 
@@ -287,8 +288,42 @@ tennisabstract_matches_points_rally as (
     from tennisabstract_matches_points_point_result
 ),
 
--- get point winner
-tennisabstract_matches_points_point_winner as (
+-- create bks
+tennisabstract_matches_points_bks as (
+    select
+        *,
+
+        {{ generate_bk_point(
+            bk_match_col='bk_match',
+            point_number_col='point_number_in_match'
+        )}} as bk_point,
+
+        {{ generate_bk_game(
+            bk_match_col='bk_match',
+            game_number_col='game_number_in_match'
+        )}} as bk_game,
+
+        {{ generate_bk_set(
+            bk_match_col='bk_match',
+            set_number_col='set_number_in_match'
+        )}} as bk_set,
+
+        {{ generate_bk_player(
+            player_name_col='point_server',
+            player_gender_col='match_gender'
+        ) }} as bk_point_server,
+
+        {{ generate_bk_player(
+            player_name_col='point_receiver',
+            player_gender_col='match_gender'
+        ) }} as bk_point_receiver,
+
+    from tennisabstract_matches_points_rally
+),
+
+
+-- get point winner from rally result
+tennisabstract_matches_points_point_winner_result as (
     select
         *,
 
@@ -297,9 +332,9 @@ tennisabstract_matches_points_point_winner as (
             when mod(number_of_shots, 2) != 0 then
                 case
                     -- when 'winner'-like shot
-                    when point_result in ('ace', 'service winner', 'winner') then point_server
+                    when point_result in ('ace', 'service winner', 'winner') then bk_point_server
                     -- when 'error'-like shot
-                    when point_result in ('double fault', 'forced error', 'unforced error') then point_receiver
+                    when point_result in ('double fault', 'forced error', 'unforced error') then bk_point_receiver
                     else null
                 end
             
@@ -307,30 +342,16 @@ tennisabstract_matches_points_point_winner as (
             when mod(number_of_shots, 2) = 0 then
                 case
                     -- when 'winner'-like shot
-                    when point_result in ('ace', 'service winner', 'winner') then point_receiver
+                    when point_result in ('ace', 'service winner', 'winner') then bk_point_receiver
                     -- when 'error'-like shot
-                    when point_result in ('double fault', 'forced error', 'unforced error') then point_server
+                    when point_result in ('double fault', 'forced error', 'unforced error') then bk_point_server
                     else null
                 end
 
             else null
-        end as point_winner,
+        end as bk_point_winner_result,
 
-    from tennisabstract_matches_points_rally
-),
-
--- get point loser
-tennisabstract_matches_points_point_loser as (
-    select
-        *,
-
-        case
-            when point_winner = point_server then point_receiver
-            when point_winner = point_receiver then point_server
-            else null
-        end as point_loser,
-
-    from tennisabstract_matches_points_point_winner
+    from tennisabstract_matches_points_bks
 ),
 
 -- determine game/break points
@@ -354,40 +375,227 @@ tennisabstract_matches_points_game_point_type as (
             else false
         end as is_game_point,
 
+    from tennisabstract_matches_points_point_winner_result
+),
+
+-- calculate player scores
+tennisabstract_matches_points_players as (
+    select
+        *,
+
+        -- player one scores
+        lpad(
+            (
+                case
+                    when bk_point_server = bk_match_player_one then set_score_in_match_server
+                    when bk_point_receiver = bk_match_player_one then set_score_in_match_receiver
+                    else null
+                end
+            ),
+            2,
+            '0'
+        )  as set_score_in_match_player_one,
+        case
+            when bk_point_server = bk_match_player_one then set_score_in_match_server_int
+            when bk_point_receiver = bk_match_player_one then set_score_in_match_receiver_int
+            else null
+        end as set_score_in_match_player_one_int,
+        lpad(
+            (
+                case
+                    when bk_point_server = bk_match_player_one then game_score_in_set_server
+                    when bk_point_receiver = bk_match_player_one then game_score_in_set_receiver
+                    else null
+                end
+            ),
+            4,
+            '0'
+        ) as game_score_in_set_player_one,
+        case
+            when bk_point_server = bk_match_player_one then game_score_in_set_server_int
+            when bk_point_receiver = bk_match_player_one then game_score_in_set_receiver_int
+            else null
+        end as game_score_in_set_player_one_int,
+        lpad(
+            cast(
+                (
+                    case
+                        when bk_point_server = bk_match_player_one then point_score_in_game_server_int
+                        when bk_point_receiver = bk_match_player_one then point_score_in_game_receiver_int
+                        else null
+                    end 
+                )
+            as string),
+            4,
+            '0'
+        ) as point_score_in_game_player_one, -- use the 'int' column since 'AD' recasted
+        case
+            when bk_point_server = bk_match_player_one then point_score_in_game_server_int
+            when bk_point_receiver = bk_match_player_one then point_score_in_game_receiver_int
+            else null
+        end as point_score_in_game_player_one_int,
+        
+        -- player 2 scores
+        lpad(
+            (
+                case
+                    when bk_point_server = bk_match_player_two then set_score_in_match_server
+                    when bk_point_receiver = bk_match_player_two then set_score_in_match_receiver
+                    else null
+                end
+            ),
+            2,
+            '0'
+        )  as set_score_in_match_player_two,
+        case
+            when bk_point_server = bk_match_player_two then set_score_in_match_server_int
+            when bk_point_receiver = bk_match_player_two then set_score_in_match_receiver_int
+            else null
+        end as set_score_in_match_player_two_int,
+        lpad(
+            (
+                case
+                    when bk_point_server = bk_match_player_two then game_score_in_set_server
+                    when bk_point_receiver = bk_match_player_two then game_score_in_set_receiver
+                    else null
+                end
+            ),
+            4,
+            '0'
+        ) as game_score_in_set_player_two,
+        case
+            when bk_point_server = bk_match_player_two then game_score_in_set_server_int
+            when bk_point_receiver = bk_match_player_two then game_score_in_set_receiver_int
+            else null
+        end as game_score_in_set_player_two_int,
+        lpad(
+            cast(
+                (
+                    case
+                        when bk_point_server = bk_match_player_two then point_score_in_game_server_int
+                        when bk_point_receiver = bk_match_player_two then point_score_in_game_receiver_int
+                        else null
+                    end 
+                )
+            as string),
+            4,
+            '0'
+        ) as point_score_in_game_player_two, -- use the 'int' column since 'AD' recasted
+        case
+            when bk_point_server = bk_match_player_two then point_score_in_game_server_int
+            when bk_point_receiver = bk_match_player_two then point_score_in_game_receiver_int
+            else null
+        end as point_score_in_game_player_two_int,
+        
+    from tennisabstract_matches_points_game_point_type
+),
+
+-- concatenate player scores
+tennisabstract_matches_points_players_concat as (
+    select
+        *,
+
+        -- player one
+        concat(
+            set_score_in_match_player_one,
+            '-',
+            game_score_in_set_player_one
+        ) as game_score_in_match_full_player_one,
+        concat(
+            set_score_in_match_player_one,
+            '-',
+            game_score_in_set_player_one,
+            '-',
+            point_score_in_game_player_one
+        ) as point_score_in_match_full_player_one,
+
+        -- player two
+        concat(
+            set_score_in_match_player_two,
+            '-',
+            game_score_in_set_player_two
+        ) as game_score_in_match_full_player_two,
+        concat(
+            set_score_in_match_player_two,
+            '-',
+            game_score_in_set_player_two,
+            '-',
+            point_score_in_game_player_two
+        ) as point_score_in_match_full_player_two,
+
+    from tennisabstract_matches_points_players
+),
+
+-- get 'next point' values (including point winner)
+tennisabstract_matches_points_next_point as (
+    select
+        p.*,
+
+        -- calculate point winner based on next point score
+        case
+            when p_next.point_score_in_match_full_player_one > p.point_score_in_match_full_player_one then p.bk_match_player_one
+            when p_next.point_score_in_match_full_player_two > p.point_score_in_match_full_player_two then p.bk_match_player_two
+            else null
+        end as bk_point_winner_next_point,
+
+    from tennisabstract_matches_points_players_concat as p
+    left join tennisabstract_matches_points_players_concat as p_next on 1=1
+        and p.bk_match = p_next.bk_match
+        and p.point_number_in_match + 1 = p_next.point_number_in_match
+),
+
+-- calculate point winner
+tennisabstract_matches_points_point_winner as (
+    select
+        *,
+
+        -- calculate point winner based on current winner columns
+        coalesce(bk_point_winner_next_point, bk_point_winner_result) as bk_point_winner,
+    
+    from tennisabstract_matches_points_next_point
+),
+
+
+-- get point loser
+tennisabstract_matches_points_point_loser as (
+    select
+        *,
+
+        case
+            when bk_point_winner = bk_point_server then bk_point_receiver
+            when bk_point_winner = bk_point_receiver then bk_point_server
+            else null
+        end as bk_point_loser,
+
+    from tennisabstract_matches_points_point_winner
+),
+
+-- get last point in match units (game, sets)
+tennisabstract_matches_points_last_point as (
+    select
+        *,
+
+        point_number_in_match = max(point_number_in_match) over (partition by bk_match order by bk_set, bk_game) as is_last_point_in_game,
+        point_number_in_match = max(point_number_in_match) over (partition by bk_match order by bk_set) as is_last_point_in_set,
+
     from tennisabstract_matches_points_point_loser
 ),
 
+
 final as (
     select
-        {{ generate_bk_point(
-            bk_match_col='bk_match',
-            point_number_col='point_number_in_match'
-        )}} as bk_point,
+        bk_point,
         bk_match,
         point_number_in_match,
         match_url,
         point_dict,
 
-        {{ generate_bk_game(
-            bk_match_col='bk_match',
-            game_number_col='game_number_in_match'
-        )}} as bk_game,
+        bk_game,
+        bk_set,        
 
-        {{ generate_bk_set(
-            bk_match_col='bk_match',
-            set_number_col='set_number_in_match'
-        )}} as bk_set,        
-
-        point_server,
-        point_receiver,
-        {{ generate_bk_player(
-            player_name_col='point_server',
-            player_gender_col='match_gender'
-        ) }} as bk_point_server,
-        {{ generate_bk_player(
-            player_name_col='point_receiver',
-            player_gender_col='match_gender'
-        ) }} as bk_point_receiver,
+        bk_point_server,
+        bk_point_receiver,
+        bk_point_winner_result,
 
         set_score_in_match,
         game_score_in_set,
@@ -414,11 +622,35 @@ final as (
         point_result,
         number_of_shots,
         rally_length,
-        point_winner,
-        point_loser,
         is_break_point,
         is_game_point,
-    from tennisabstract_matches_points_game_point_type
+        set_score_in_match_player_one,
+        set_score_in_match_player_one_int,
+        set_score_in_match_player_two,
+        set_score_in_match_player_two_int,
+        game_score_in_set_player_one,
+        game_score_in_set_player_one_int,
+        game_score_in_set_player_two,
+        game_score_in_set_player_two_int,
+        point_score_in_game_player_one,
+        point_score_in_game_player_one_int,
+        point_score_in_game_player_two,
+        point_score_in_game_player_two_int,
+
+        game_score_in_match_full_player_one,
+        point_score_in_match_full_player_one,
+        game_score_in_match_full_player_two,
+        point_score_in_match_full_player_two,
+
+        bk_point_winner_next_point,
+        bk_point_winner,
+        bk_point_loser,
+
+        is_last_point_in_game,
+        is_last_point_in_set,
+
+
+    from tennisabstract_matches_points_last_point
 )
 
 select * from final

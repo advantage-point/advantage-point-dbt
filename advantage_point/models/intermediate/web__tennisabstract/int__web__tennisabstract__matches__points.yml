@@ -47,18 +47,6 @@ models:
         data_tests:
           - not_null
 
-      - name: point_server
-        data_type: string
-        description: Player serving the point.
-        data_tests:
-          - not_null
-
-      - name: point_receiver
-        data_type: string
-        description: Player returning serve for the point.
-        data_tests:
-          - not_null
-
       - name: bk_point_server
         data_type: string
         description: Unique identifier for point server.
@@ -70,6 +58,10 @@ models:
         description: Unique identifier for point receiver.
         data_tests:
           - not_null
+
+      - name: bk_point_winner_result
+        data_type: string
+        description: Player who won the point based on the rally outcome.
 
       - name: set_score_in_match
         data_type: string
@@ -214,14 +206,6 @@ models:
       - name: rally_length
         data_type: integer
         description: Rally length based on point result logic.
-
-      - name: point_winner
-        data_type: string
-        description: Player who won the point.
-
-      - name: point_loser
-        data_type: string
-        description: Player who lost the point.
        
       - name: is_break_point
         data_type: boolean
@@ -234,4 +218,127 @@ models:
         description: Flag for whether this point was a game point.
         data_tests:
           - not_null
-          
+
+      - name: set_score_in_match_player_one
+        data_type: string
+        description: Set score for player one at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: set_score_in_match_player_one_int
+        data_type: integer
+        description: Set score (player one) as integer.
+        data_tests:
+          - not_null
+      
+      - name: set_score_in_match_player_two
+        data_type: string
+        description: Set score for player two at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: set_score_in_match_player_two_int
+        data_type: integer
+        description: Set score (player two) as integer.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set_player_one
+        data_type: string
+        description: Game score for player one at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set_player_one_int
+        data_type: integer
+        description: Game score (player one) as integer.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set_player_two
+        data_type: string
+        description: Game score for player two at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set_player_two_int
+        data_type: integer
+        description: Game score (player two) as integer.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_game_player_one
+        data_type: string
+        description: Point score for player one at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_game_player_one_int
+        data_type: integer
+        description: Point score (player one) as integer. AD converted to 41.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_game_player_two
+        data_type: string
+        description: Point score for player two at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_game_player_two_int
+        data_type: integer
+        description: Point score (player two) as integer. AD converted to 41.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_match_full_player_one
+        data_type: string
+        description: Game score for player one, concatenated with player one set score, at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_match_full_player_one
+        data_type: string
+        description: Point score for player one, concatenated with player one full game score, at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_match_full_player_two
+        data_type: string
+        description: Game score for player two, concatenated with player two set score, at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: point_score_in_match_full_player_two
+        data_type: string
+        description: Point score for player two, concatenated with player two full game score, at the time of the point.
+        data_tests:
+          - not_null
+
+      - name: bk_point_winner_next_point
+        data_type: string
+        description: Player who won the point based on the score of the next point.
+
+      - name: bk_point_winner
+        data_type: string
+        description: Player who won the point.
+        data_tests:
+          - not_null
+
+      - name: bk_point_loser
+        data_type: string
+        description: Player who lost the point.
+        data_tests:
+          - not_null
+
+      - name: is_last_point_in_game
+        data_type: boolean
+        description: Boolean indicating if point is last point in game.
+        data_tests:
+          - not_null
+      
+      - name: is_last_point_in_set
+        data_type: boolean
+        description: Boolean indicating if point is last point in set.
+        data_tests:
+          - not_null

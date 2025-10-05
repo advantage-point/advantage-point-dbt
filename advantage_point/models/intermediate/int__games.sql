@@ -1,7 +1,7 @@
 with
 
 tennisabstract_matches_points_games as (
-    select * from {{ ref('int__web__tennisabstract__matches__points__games') }}
+    select * from {{ ref('int__web__tennisabstract__matches__points__games_union') }}
 ),
 
 -- union games

@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        cluster_by=['bk_point',],
     )
 }}
 
@@ -30,6 +31,9 @@ final as (
         s.bk_shot,
         s.bk_point,
         s.shot_number_in_point,
+
+        s_ta.bk_game,
+        s_ta.bk_set,
         
         s_ta.shot_number,
         s_ta.shot_direction,
