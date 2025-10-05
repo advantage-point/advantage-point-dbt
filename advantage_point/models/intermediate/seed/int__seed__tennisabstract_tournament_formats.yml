@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__tournaments
-    description: Intermediate model for tennisabstract tournament data.
+  - name: int__seed__tennisabstract_tournament_formats
+    description: Intermediate model for tennisabstract tournament format data.
     columns:
       - name: bk_tournament
         data_type: string
@@ -28,32 +28,6 @@ models:
         description: Tournament name.
         data_tests:
           - not_null
-
-      - name: tournament_url
-        data_type: string
-        description: Link to the tournament data.
-        data_tests:
-          - not_null
-
-      - name: tournament_title
-        data_type: string
-        description: Title of the tournament (includes year, name).
-
-      - name: bk_tournament_start_date
-        data_type: date
-        description: Unique identifier for tournament start date.
-      
-      - name: tournament_start_date
-        data_type: date
-        description: Start date of the tournament.
-
-      - name: tournament_surface
-        data_type: string
-        description: Surface on which tournament is played.
-
-      - name: tournament_draw_size
-        data_type: integer
-        description: Size of the tournament draw.
 
       - name: best_of_sets
         data_type: integer
@@ -86,11 +60,5 @@ models:
       - name: is_ad_scoring
         data_type: boolean
         description: Boolean to indicate if AD scoring is used within a game.
-        data_tests:
-          - not_null
-
-      - name: tournament_tour_name
-        data_type: string
-        description: Tournament tour name.
         data_tests:
           - not_null

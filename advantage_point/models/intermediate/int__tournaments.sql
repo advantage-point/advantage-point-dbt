@@ -68,6 +68,14 @@ final as (
         t_ta.tournament_surface,
         t_ta.tournament_draw_size,
 
+        t_ta.best_of_sets,
+        t_ta.games_per_set,
+        t_ta.tiebreak_trigger_game,
+        t_ta.tiebreak_points,
+        t_ta.final_set_tiebreak_trigger_game,
+        t_ta.final_set_tiebreak_points,
+        t_ta.is_ad_scoring,
+
         coalesce(
             t_ta.tournament_title,
             m_ta.tournament_title,

@@ -48,6 +48,10 @@ models:
         data_type: string
         description: Score at which a tiebreak is triggered in the final set.
 
+      - name: final_set_tiebreak_points
+        data_type: integer
+        description: Number of points required to win a tiebreak (commonly 7 or 10) in the final set.
+
       - name: is_ad_scoring
         data_type: boolean
         description: Boolean to indicate if AD scoring is used within a game.

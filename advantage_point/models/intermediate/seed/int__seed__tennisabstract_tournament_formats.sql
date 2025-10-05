@@ -79,5 +79,20 @@ tennisabstract_tournament_bks as (
 
 final as (
     select
+        bk_tournament,
+        tournament_year,
+        tournament_gender,
+        tournament_name,
 
+        best_of_sets,
+        games_per_set,
+        tiebreak_trigger_game,
+        tiebreak_points,
+        final_set_tiebreak_trigger_game,
+        final_set_tiebreak_points,
+        is_ad_scoring,
+
+    from tennisabstract_tournament_bks
 )
+
+select * from final
