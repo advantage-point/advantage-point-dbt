@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: stg__seed__tournament_formats
+    description: Staging model for tournament format data.
+    columns:
+      - name: tournament_name
+        data_type: string
+        description: Name of the tournament or '_default' for fallback formats.
+        data_tests:
+          - not_null
+
+      - name: tournament_gender
+        data_type: string
+        description: Tournament gender
+        data_tests:
+          - not_null
+
+      - name: effective_start_year
+        data_type: integer
+        description: Year when this format first became effective.
+
+      - name: effective_end_year
+        data_type: integer
+        description: Year when this format ended.
+
+      - name: best_of_sets
+        data_type: integer
+        description: Number of sets per match (usually 3 or 5).
+        data_tests:
+          - not_null
+
+      - name: games_per_set
+        data_type: integer
+        description: Games required to win a set (usually 6 or 4 for Fast4 formats).
+        data_tests:
+          - not_null
+
+      - name: tiebreak_trigger_game
+        data_type: string
+        description: Score at which a tiebreak is triggered (e.g., 6-6, 12-12, or 3-3).
+
+      - name: tiebreak_points
+        data_type: integer
+        description: Number of points required to win a tiebreak (commonly 7 or 10).
+
+      - name: final_set_tiebreak_trigger_game
+        data_type: string
+        description: Score at which a tiebreak is triggered in the final set.
+
+      - name: is_ad_scoring
+        data_type: boolean
+        description: Boolean to indicate if AD scoring is used within a game.
+        data_tests:
+          - not_null
+
+      - name: notes
+        data_type: string
+        description: Descriptive text explaining the specific rules or format changes for the tournament.
