@@ -2,7 +2,7 @@
     case
         -- remove quotes, check if only digits remain
         when regexp_contains(replace(replace(trim({{ column_name }}), '"', ''), "'", ''), r'^\d+$')
-        then cast(replace(replace(trim({{ column_name }}), '"', ''), "'", '') as int64)
+        then cast(replace(replace(trim({{ column_name }}), '"', ''), "'", '') as int)
         else null
     end
 {% endmacro %}

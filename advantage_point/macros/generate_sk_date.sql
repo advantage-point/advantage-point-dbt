@@ -2,7 +2,7 @@
     bk_date_col
 ) %}
 
-    cast(format_date('%Y%m%d', {{ bk_date_col }}) as int64)
+    cast(format_date('%Y%m%d', {{ bk_date_col }}) as int)
 
     
 {% endmacro %}
