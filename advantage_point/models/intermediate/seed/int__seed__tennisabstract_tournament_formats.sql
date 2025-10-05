@@ -5,7 +5,8 @@ tennisabstract_tournament_formats as (
 ),
 
 tennisabstract_tournaments as (
-    select * from {{ ref('int__web__tennisabstract__tournaments') }}
+    select * from {{ ref('stg__web__tennisabstract__tournaments') }}
+    where audit_column__active_flag = true
 ),
 
 -- get min/max tournament years
