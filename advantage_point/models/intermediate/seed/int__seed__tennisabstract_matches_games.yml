@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: int__seed__tennisabstract_matches_games
+    description: Intermediate model for seed tennisabstract game data.
+    columns:
+      - name: bk_game
+        data_type: string
+        description: Business key for the game.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+        data_tests:
+          - not_null
+          
+      - name: game_number_in_match
+        data_type: integer
+        description: Sequential game number within the match.
+        data_tests:
+          - not_null
+
+      - name: match_url
+        data_type: string
+        description: Link to the match data.
+        data_tests:
+          - not_null
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets (set number in match).
+        data_tests:
+          - not_null
+
+      - name: game_number_in_set
+        data_type: integer
+        description: Ordinal number of the game within the set.
+        data_tests:
+          - not_null
+
+      - name: bk_game_server
+        data_type: string
+        description: Unique identifier for game server.
+        data_tests:
+          - not_null
+
+      - name: bk_game_receiver
+        data_type: string
+        description: Unique identifier for game receiver.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set
+        data_type: string
+        description: Game score string within the set from server's perspective.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_server
+        data_type: string
+        description: Game score for the server at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_receiver
+        data_type: string
+        description: Game score for the receiver at the time of the point.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_server_int
+        data_type: integer
+        description: Game score (server) as integer.
+        data_tests:
+          - not_null
+          
+      - name: game_score_in_set_receiver_int
+        data_type: integer
+        description: Game score (receiver) as integer.
+        data_tests:
+          - not_null
+
+      - name: is_tiebreaker
+        data_type: boolean
+        description: Flag denoting if game is a tiebreaker.
+        data_tests:
+          - not_null

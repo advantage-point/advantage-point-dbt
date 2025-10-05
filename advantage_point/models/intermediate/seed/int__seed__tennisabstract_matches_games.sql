@@ -177,8 +177,26 @@ matches_games_tiebreaker as (
 ),
 
 final as (
-  select
-    *
+    select
+        bk_game,
+        bk_match,
+        game_number_in_match,
+
+        match_url,
+
+        bk_set,
+        game_number_in_set,
+
+        bk_game_server,
+        bk_game_receiver,
+
+        game_score_in_set,
+        game_score_in_set_server,
+        game_score_in_set_receiver,
+        game_score_in_set_server_int,
+        game_score_in_set_receiver_int,
+
+        is_tiebreaker,
   from matches_games_tiebreaker
 )
 
