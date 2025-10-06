@@ -1,7 +1,7 @@
 with
 
 tennisabstract_tournament_formats as (
-    select * from {{ ref('stg__seed__tennis_tournament_formats') }}
+    select * from {{ ref('stg__seed__tennisabstract_tournament_formats') }}
 ),
 
 tennisabstract_tournaments as (
@@ -57,7 +57,7 @@ tennisabstract_tournament_years as (
         year as tournament_year,
     from tennisabstract_tournament_formats_effective_years as tf,
     unnest(
-        generate_series(
+        generate_array(
             tf.effective_start_year,
             tf.effective_end_year
         )
@@ -85,6 +85,7 @@ final as (
         tournament_name,
 
         best_of_sets,
+        sets_to_win,
         games_per_set,
         tiebreak_trigger_game,
         tiebreak_points,

@@ -3,7 +3,7 @@ with
 source as (
     select
         *
-    from {{ ref('raw__seed__tournament_formats') }}
+    from {{ ref('raw__seed__tennisabstract_tournament_formats') }}
 ),
 
 renamed as (
@@ -13,6 +13,7 @@ renamed as (
         cast(effective_start_year as int) as effective_start_year,
         cast(effective_end_year as int) as effective_end_year,
         cast(best_of_sets as int) as best_of_sets,
+        cast(sets_to_win as int) as sets_to_win,
         cast(games_per_set as int) as games_per_set,
         tiebreak_trigger_game,
         cast(tiebreak_points as int) as tiebreak_points,

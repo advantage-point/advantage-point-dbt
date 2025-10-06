@@ -35,6 +35,12 @@ models:
         data_tests:
           - not_null
 
+      - name: sets_to_win
+        data_type: integer
+        description: Number of sets needed to win the match.
+        data_tests:
+          - not_null
+
       - name: games_per_set
         data_type: integer
         description: Games required to win a set (usually 6 or 4 for Fast4 formats).

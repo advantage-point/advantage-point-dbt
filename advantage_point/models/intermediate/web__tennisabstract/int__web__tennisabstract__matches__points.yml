@@ -206,18 +206,6 @@ models:
       - name: rally_length
         data_type: integer
         description: Rally length based on point result logic.
-       
-      - name: is_break_point
-        data_type: boolean
-        description: Flag for whether this point was a break point.
-        data_tests:
-          - not_null
-          
-      - name: is_game_point
-        data_type: boolean
-        description: Flag for whether this point was a game point.
-        data_tests:
-          - not_null
 
       - name: set_score_in_match_player_one
         data_type: string
@@ -291,21 +279,87 @@ models:
         data_tests:
           - not_null
 
-      - name: game_score_in_match_full_player_one
-        data_type: string
-        description: Game score for player one, concatenated with player one set score, at the time of the point.
+      - name: is_tiebreak_game
+        data_type: boolean
+        description: Boolean indicating if current game is a tiebreaker.
+        data_tests:
+          - not_null
+
+      - name: is_tiebreak_set
+        data_type: boolean
+        description: Boolean indicating if current set resulted in a tiebreaker.
+        data_tests:
+          - not_null
+        
+      - name: is_final_set
+        data_type: boolean
+        description: Boolean indicating if current set is the final/deciding set in the match.
+        data_tests:
+          - not_null
+
+      - name: is_game_point_player_one
+        data_type: boolean
+        description: Boolean indicating if player one has game point.
+        data_tests:
+          - not_null
+      
+      - name: is_game_point_player_two
+        data_type: boolean
+        description: Boolean indicating if player two has game point.
+        data_tests:
+          - not_null
+      
+      - name: is_break_point_player_one
+        data_type: boolean
+        description: Boolean indicating if player one has break point.
+        data_tests:
+          - not_null
+
+      - name: is_break_point_player_two
+        data_type: boolean
+        description: Boolean indicating if player two has break point.
+        data_tests:
+          - not_null
+
+      - name: is_set_point_player_one
+        data_type: boolean
+        description: Boolean indicating if player one has set point.
+        data_tests:
+          - not_null
+
+      - name: is_set_point_player_two
+        data_type: boolean
+        description: Boolean indicating if player two has set point.
+        data_tests:
+          - not_null
+      
+      - name: cumulative_set_score_in_match_player_one_int
+        data_type: integer
+        description: Cumulative number of sets won by player one at the time of current point in match.
+        data_tests:
+          - not_null
+
+      - name: cumulative_set_score_in_match_player_two_int
+        data_type: integer
+        description: Cumulative number of sets won by player two at the time of current point in match.
+        data_tests:
+          - not_null
+
+      - name: is_match_point_player_one
+        data_type: boolean
+        description: Boolean indicating if player one has match point.
+        data_tests:
+          - not_null
+
+      - name: is_match_point_player_two
+        data_type: boolean
+        description: Boolean indicating if player two has match point.
         data_tests:
           - not_null
 
       - name: point_score_in_match_full_player_one
         data_type: string
         description: Point score for player one, concatenated with player one full game score, at the time of the point.
-        data_tests:
-          - not_null
-
-      - name: game_score_in_match_full_player_two
-        data_type: string
-        description: Game score for player two, concatenated with player two set score, at the time of the point.
         data_tests:
           - not_null
 

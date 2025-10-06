@@ -11,6 +11,10 @@ tennisabstract_matches as (
     select * from {{ ref('int__web__tennisabstract__matches') }}
 ),
 
+tennisabstract_tournaments as (
+    select * from {{ ref('int__web__tennisabstract__tournaments') }}
+),
+
 -- parse out points into own rows
 -- parse out point dict values into columns
 tennisabstract_matches_points as (
@@ -354,30 +358,6 @@ tennisabstract_matches_points_point_winner_result as (
     from tennisabstract_matches_points_bks
 ),
 
--- determine game/break points
-tennisabstract_matches_points_game_point_type as (
-    select
-        *,
-
-        -- determine break point
-        case
-            when point_score_in_game in (
-                '0-40', '15-40', '30-40', '40-AD'
-            ) then true
-            else false
-        end as is_break_point,
-
-        -- determine game point
-        case
-            when point_score_in_game in (
-                '40-0', '40-15', '40-30', 'AD-40'
-            ) then true
-            else false
-        end as is_game_point,
-
-    from tennisabstract_matches_points_point_winner_result
-),
-
 -- calculate player scores
 tennisabstract_matches_points_players as (
     select
@@ -487,7 +467,396 @@ tennisabstract_matches_points_players as (
             else null
         end as point_score_in_game_player_two_int,
         
-    from tennisabstract_matches_points_game_point_type
+    from tennisabstract_matches_points_point_winner_result
+),
+
+-- join to tournaments to get formats
+tennisabstract_matches_points_tournament_formats as (
+    select
+        p.*,
+
+        t.best_of_sets,
+        t.sets_to_win,
+        t.games_per_set,
+        t.tiebreak_trigger_game,
+        t.tiebreak_points,
+        t.final_set_tiebreak_trigger_game,
+        t.final_set_tiebreak_points,
+        t.is_ad_scoring,
+
+        -- is set the last set in the match
+        p.set_number_in_match = t.best_of_sets as is_final_set,
+
+    from tennisabstract_matches_points_players as p
+    left join tennisabstract_tournaments as t on p.bk_match_tournament = t.bk_tournament
+),
+
+-- determine tiebreak flags for games
+tennisabstract_matches_points_game_tiebreak_flags as (
+    select
+        *,
+
+        -- determine if game is tiebreak game
+        case
+            -- when in final set
+            when 1=1
+                and is_final_set = true
+                and game_score_in_set = final_set_tiebreak_trigger_game
+            then true
+
+            -- when not in final set
+            when 1=1
+                and is_final_set = false
+                and game_score_in_set = tiebreak_trigger_game
+            then true
+
+            else false
+        
+        end as is_tiebreak_game,
+
+        -- determine if 
+    from tennisabstract_matches_points_tournament_formats
+),
+
+-- determine set tiebreak flags
+tennisabstract_matches_points_set_tiebreak_flags as (
+    select
+        *,
+
+        -- check if any values within set are 'tiebreak games'
+        max(cast(is_tiebreak_game as int)) over (partition by bk_set) = 1 as is_tiebreak_set,
+
+    from tennisabstract_matches_points_game_tiebreak_flags
+),
+
+-- determine point flags
+tennisabstract_matches_points_game_point_flags as (
+    select
+        *,
+
+        -- determine game point for player one
+        case
+
+            -- when in tiebreak --> false
+            when is_tiebreak_game = true then false
+
+            -- when no ad scoring --> true when player is serving at 'deuce'
+            when 1=1
+                and is_ad_scoring = false
+                and bk_point_server = bk_match_player_one
+                and point_score_in_game = '40-40'
+            then true
+
+            -- when ad scoring --> true when player is serving up '40-{something}' or has advantage
+            when 1=1
+                and is_ad_scoring = true
+                and bk_point_server = bk_match_player_one
+                and point_score_in_game_player_one_int >= 40
+                and point_score_in_game_player_one_int > point_score_in_game_player_two_int
+            then true
+
+            else false
+
+        end as is_game_point_player_one,
+
+        -- determine game point for player two
+        case
+
+            -- when in tiebreak --> false
+            when is_tiebreak_game = true then false
+
+            -- when no ad scoring --> true when player is serving at 'deuce'
+            when 1=1
+                and is_ad_scoring = false
+                and bk_point_server = bk_match_player_two
+                and point_score_in_game = '40-40'
+            then true
+
+            -- when ad scoring --> true when player is serving up '40-{something}' or has advantage
+            when 1=1
+                and is_ad_scoring = true
+                and bk_point_server = bk_match_player_two
+                and point_score_in_game_player_two_int >= 40
+                and point_score_in_game_player_two_int > point_score_in_game_player_one_int
+            then true
+
+            else false
+
+        end as is_game_point_player_two,
+
+        -- determine break point for player one
+        case
+
+            -- when in tiebreak --> false
+            when is_tiebreak_game = true then false
+
+            -- when no ad scoring --> true when player is receiving at 'deuce'
+            when 1=1
+                and is_ad_scoring = false
+                and bk_point_receiver = bk_match_player_one
+                and point_score_in_game = '40-40'
+            then true
+
+            -- when ad scoring --> true when player is receiving up '{something}-40' or has advantage
+            when 1=1
+                and is_ad_scoring = true
+                and bk_point_receiver = bk_match_player_one
+                and point_score_in_game_player_one_int >= 40
+                and point_score_in_game_player_one_int > point_score_in_game_player_two_int
+            then true
+
+            else false
+
+        end as is_break_point_player_one,
+
+        -- determine break point for player two
+        case
+
+            -- when in tiebreak --> false
+            when is_tiebreak_game = true then false
+
+            -- when no ad scoring --> true when player is receiving at 'deuce'
+            when 1=1
+                and is_ad_scoring = false
+                and bk_point_receiver = bk_match_player_two
+                and point_score_in_game = '40-40'
+            then true
+
+            -- when ad scoring --> true when player is receiving up '{something}-40' or has advantage
+            when 1=1
+                and is_ad_scoring = true
+                and bk_point_receiver = bk_match_player_two
+                and point_score_in_game_player_two_int >= 40
+                and point_score_in_game_player_two_int > point_score_in_game_player_one_int
+            then true
+
+            else false
+
+        end as is_break_point_player_two,
+
+    from tennisabstract_matches_points_set_tiebreak_flags
+),
+
+-- determine set point flags
+tennisabstract_matches_points_game_set_flags as (
+    select
+        *,
+
+        -- determine set point for player one
+        case
+
+            -- when invalid or undefined format --> skip logic
+            when best_of_sets is null or games_per_set is null then false
+
+            -- tiebreak scenarios (regular or final sets)
+            when is_tiebreak_game = true then
+                
+                case
+
+                    -- when final set tiebreak
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and final_set_tiebreak_trigger_game is not null -- format explicitly defines final set TB
+                        and final_set_tiebreak_points is not null -- format explicitly defines final set TB points
+                        and point_score_in_game_player_one_int >= final_set_tiebreak_points - 1 -- one point away from target
+                        and point_score_in_game_player_one_int > point_score_in_game_player_two_int -- leading
+                    then true
+
+                    -- when regular (non-final) set tiebreak
+                    when 1=1
+                        and is_final_set = false -- not final set
+                        and tiebreak_trigger_game is not null -- format defines regular set TB
+                        and tiebreak_points is not null -- format defines regular set TB points
+                        and point_score_in_game_player_one_int >= tiebreak_points - 1 -- one point away from target
+                        and point_score_in_game_player_one_int > point_score_in_game_player_two_int -- leading
+                    then true
+
+                    -- when 'extended' tiebreak (no limit or missing config)
+                    when 1=1
+                        and (tiebreak_points is null or final_set_tiebreak_points is null) -- undefined upper limit
+                        and point_score_in_game_player_one_int - point_score_in_game_player_two_int = 1 -- leading by 1
+                    then true
+
+                    else false
+
+                end
+
+            -- non-tiebreak scenarios
+            when is_tiebreak_game = false then
+
+                case
+
+                    -- normal (non-final) sets
+                    when 1=1
+                        and is_final_set = false -- not last set
+                        and game_score_in_set_player_one_int = games_per_set - 1 -- one game away
+                        and game_score_in_set_player_one_int > game_score_in_set_player_two_int -- leading
+                        and (is_game_point_player_one = true or is_break_point_player_one = true) -- point could close out game
+                    then true
+
+                    -- when final set with standard or super tiebreak
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and final_set_tiebreak_trigger_game is not null -- format explicitly defines final set TB
+                        and game_score_in_set_player_one_int = games_per_set - 1 -- one game away
+                        and game_score_in_set_player_one_int > game_score_in_set_player_two_int -- leading
+                        and (is_game_point_player_one = true or is_break_point_player_one = true) -- point could close out game
+                    then true
+
+                    -- when advantage final set (no tiebreak)
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and (final_set_tiebreak_trigger_game is null or final_set_tiebreak_points is null) -- no TB defined
+                        and (game_score_in_set_player_one_int - game_score_in_set_player_two_int = 1) -- leading by 1 game
+                        and (is_game_point_player_one = true or is_break_point_player_one = true) -- point could close out game
+                    then true 
+
+                    else false
+
+                end
+
+            else false
+
+        end as is_set_point_player_one,
+
+        -- determine set point for player two
+        case
+
+            -- when invalid or undefined format --> skip logic
+            when best_of_sets is null or games_per_set is null then false
+
+            -- tiebreak scenarios (regular or final sets)
+            when is_tiebreak_game = true then
+                
+                case
+
+                    -- when final set tiebreak
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and final_set_tiebreak_trigger_game is not null -- format explicitly defines final set TB
+                        and final_set_tiebreak_points is not null -- format explicitly defines final set TB points
+                        and point_score_in_game_player_two_int >= final_set_tiebreak_points - 1 -- one point away from target
+                        and point_score_in_game_player_two_int > point_score_in_game_player_one_int -- leading
+                    then true
+
+                    -- when regular (non-final) set tiebreak
+                    when 1=1
+                        and is_final_set = false -- not final set
+                        and tiebreak_trigger_game is not null -- format defines regular set TB
+                        and tiebreak_points is not null -- format defines regular set TB points
+                        and point_score_in_game_player_two_int >= tiebreak_points - 1 -- one point away from target
+                        and point_score_in_game_player_two_int > point_score_in_game_player_one_int -- leading
+                    then true
+
+                    -- when 'extended' tiebreak (no limit or missing config)
+                    when 1=1
+                        and (tiebreak_points is null or final_set_tiebreak_points is null) -- undefined upper limit
+                        and point_score_in_game_player_two_int - point_score_in_game_player_one_int = 1 -- leading by 1
+                    then true
+
+                    else false
+
+                end
+
+            -- non-tiebreak scenarios
+            when is_tiebreak_game = false then
+
+                case
+
+                    -- normal (non-final) sets
+                    when 1=1
+                        and is_final_set = false -- not last set
+                        and game_score_in_set_player_two_int = games_per_set - 1 -- one game away
+                        and game_score_in_set_player_two_int > game_score_in_set_player_one_int -- leading
+                        and (is_game_point_player_two = true or is_break_point_player_two = true) -- point could close out game
+                    then true
+
+                    -- when final set with standard or super tiebreak
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and final_set_tiebreak_trigger_game is not null -- format explicitly defines final set TB
+                        and game_score_in_set_player_two_int = games_per_set - 1 -- one game away
+                        and game_score_in_set_player_two_int > game_score_in_set_player_one_int -- leading
+                        and (is_game_point_player_two = true or is_break_point_player_two = true) -- point could close out game
+                    then true
+
+                    -- when advantage final set (no tiebreak)
+                    when 1=1
+                        and is_final_set = true -- in final set
+                        and (final_set_tiebreak_trigger_game is null or final_set_tiebreak_points is null) -- no TB defined
+                        and (game_score_in_set_player_two_int - game_score_in_set_player_one_int = 1) -- leading by 1 game
+                        and (is_game_point_player_two = true or is_break_point_player_two = true) -- point could close out game
+                    then true 
+
+                    else false
+
+                end
+
+            else false
+
+        end as is_set_point_player_two,
+
+        -- get cumulative sets won by player one
+        max(set_score_in_match_player_one_int) over (
+            partition by bk_match
+            order by point_number_in_match
+            rows between unbounded preceding and current row
+        ) as cumulative_set_score_in_match_player_one_int,
+
+        -- get cumulative sets won by player two
+        max(set_score_in_match_player_two_int) over (
+            partition by bk_match
+            order by point_number_in_match
+            rows between unbounded preceding and current row
+        ) as cumulative_set_score_in_match_player_two_int,
+
+    from tennisabstract_matches_points_game_point_flags
+),
+
+-- determine match point flags
+tennisabstract_matches_points_game_match_flags as (
+    select
+        *,
+
+        -- determine match point for player one
+        case
+
+            -- when invalid or undefined format --> skip
+            when (best_of_sets is null or sets_to_win is null) then false
+
+            -- when player has reached required sets to win --> skip
+            when cumulative_set_score_in_match_player_one_int >= sets_to_win then false
+
+            -- when player is one set away and has set point
+            when 1=1
+                and cumulative_set_score_in_match_player_one_int = sets_to_win - 1 -- 1 set away
+                and is_set_point_player_one -- set point
+            then true
+
+            else false
+
+        end as is_match_point_player_one,
+
+        -- determine match point for player two
+        case
+
+            -- when invalid or undefined format --> skip
+            when (best_of_sets is null or sets_to_win is null) then false
+
+            -- when player has reached required sets to win --> skip
+            when cumulative_set_score_in_match_player_two_int >= sets_to_win then false
+
+            -- when player is one set away and has set point
+            when 1=1
+                and cumulative_set_score_in_match_player_two_int = sets_to_win - 1  -- 1 set away
+                and is_set_point_player_two                                         -- set point
+            then true
+
+            else false
+
+        end as is_match_point_player_two,
+
+    from tennisabstract_matches_points_game_set_flags
 ),
 
 -- concatenate player scores
@@ -496,11 +865,6 @@ tennisabstract_matches_points_players_concat as (
         *,
 
         -- player one
-        concat(
-            set_score_in_match_player_one,
-            '-',
-            game_score_in_set_player_one
-        ) as game_score_in_match_full_player_one,
         concat(
             set_score_in_match_player_one,
             '-',
@@ -513,17 +877,12 @@ tennisabstract_matches_points_players_concat as (
         concat(
             set_score_in_match_player_two,
             '-',
-            game_score_in_set_player_two
-        ) as game_score_in_match_full_player_two,
-        concat(
-            set_score_in_match_player_two,
-            '-',
             game_score_in_set_player_two,
             '-',
             point_score_in_game_player_two
         ) as point_score_in_match_full_player_two,
 
-    from tennisabstract_matches_points_players
+    from tennisabstract_matches_points_game_match_flags
 ),
 
 -- get 'next point' values (including point winner)
@@ -550,7 +909,7 @@ tennisabstract_matches_points_point_winner as (
         *,
 
         -- calculate point winner based on current winner columns
-        coalesce(bk_point_winner_next_point, bk_point_winner_result) as bk_point_winner,
+        coalesce(bk_point_winner_result, bk_point_winner_next_point) as bk_point_winner,
     
     from tennisabstract_matches_points_next_point
 ),
@@ -575,8 +934,8 @@ tennisabstract_matches_points_last_point as (
     select
         *,
 
-        point_number_in_match = max(point_number_in_match) over (partition by bk_match order by bk_set, bk_game) as is_last_point_in_game,
-        point_number_in_match = max(point_number_in_match) over (partition by bk_match order by bk_set) as is_last_point_in_set,
+        point_number_in_match = max(point_number_in_match) over (partition by bk_match, bk_set, bk_game) as is_last_point_in_game,
+        point_number_in_match = max(point_number_in_match) over (partition by bk_match, bk_set) as is_last_point_in_set,
 
     from tennisabstract_matches_points_point_loser
 ),
@@ -622,8 +981,6 @@ final as (
         point_result,
         number_of_shots,
         rally_length,
-        is_break_point,
-        is_game_point,
         set_score_in_match_player_one,
         set_score_in_match_player_one_int,
         set_score_in_match_player_two,
@@ -637,9 +994,25 @@ final as (
         point_score_in_game_player_two,
         point_score_in_game_player_two_int,
 
-        game_score_in_match_full_player_one,
+        is_tiebreak_game,
+        
+        is_tiebreak_set,
+        is_final_set,
+
+        is_game_point_player_one,
+        is_game_point_player_two,
+        is_break_point_player_one,
+        is_break_point_player_two,
+
+        is_set_point_player_one,
+        is_set_point_player_two,
+        cumulative_set_score_in_match_player_one_int,
+        cumulative_set_score_in_match_player_two_int,
+
+        is_match_point_player_one,
+        is_match_point_player_two,
+
         point_score_in_match_full_player_one,
-        game_score_in_match_full_player_two,
         point_score_in_match_full_player_two,
 
         bk_point_winner_next_point,
