@@ -33,7 +33,6 @@ final as (
         p.point_number_in_match,
 
         p_ta.bk_game,
-        p_ta.bk_set,
 
         p_ta.point_number_in_set,
         p_ta.point_number_in_game,
@@ -42,6 +41,8 @@ final as (
         p_ta.point_result,
         p_ta.number_of_shots,
         p_ta.rally_length,
+
+        p_ta.is_quality_point,
 
     from points_union as p
     left join tennisabstract_matches_points as p_ta on p.bk_point = p_ta.bk_point

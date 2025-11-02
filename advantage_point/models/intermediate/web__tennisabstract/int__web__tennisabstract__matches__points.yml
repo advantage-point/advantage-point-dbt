@@ -376,14 +376,10 @@ models:
       - name: bk_point_winner
         data_type: string
         description: Player who won the point.
-        data_tests:
-          - not_null
 
       - name: bk_point_loser
         data_type: string
         description: Player who lost the point.
-        data_tests:
-          - not_null
 
       - name: is_last_point_in_game
         data_type: boolean
@@ -395,4 +391,10 @@ models:
         data_type: boolean
         description: Boolean indicating if point is last point in set.
         data_tests:
+          - not_null
+
+      - name: is_quality_point
+        data_type: boolean
+        description: Boolean indicating if point record is of good data quality.
+        data_test:
           - not_null

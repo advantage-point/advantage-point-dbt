@@ -45,6 +45,16 @@ models:
         data_type: integer
         description: Size of the tournament draw.
 
+      - name: tournament_title
+        data_type: string
+        description: Title of the tournament (includes year, name).
+
+      - name: tournament_tour_name
+        data_type: string
+        description: Tournament tour name.
+        data_tests:
+          - not_null
+
       - name: best_of_sets
         data_type: integer
         description: Number of sets per match (usually 3 or 5).
@@ -82,15 +92,5 @@ models:
       - name: is_ad_scoring
         data_type: boolean
         description: Boolean to indicate if AD scoring is used within a game.
-        data_tests:
-          - not_null
-
-      - name: tournament_title
-        data_type: string
-        description: Title of the tournament (includes year, name).
-
-      - name: tournament_tour_name
-        data_type: string
-        description: Tournament tour name.
         data_tests:
           - not_null

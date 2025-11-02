@@ -11,8 +11,8 @@ tennisabstract_matches as (
     select * from {{ ref('int__web__tennisabstract__matches') }}
 ),
 
-tennisabstract_tournaments as (
-    select * from {{ ref('int__web__tennisabstract__tournaments') }}
+tournaments as (
+    select * from {{ ref('int__tournaments') }}
 ),
 
 -- parse out points into own rows
@@ -53,7 +53,17 @@ tennisabstract_matches_points as (
 
         -- split by ';' (converts ';{any number of spaces}to ';')
         split(
-            regexp_replace(json_value(point_dict, '$.point_description'), r';\s*', ';'),
+            regexp_replace(
+                -- replace mid-string result phrases (e.g., ',winner.' or ', service winner.')
+                regexp_replace(
+                    lower(json_value(point_dict, '$.point_description')),  -- normalize casing
+                    --  r',winner\.[A-Za-z]',
+                    r',(service winner|winner|unforced error|forced error|double fault|ace)\.([a-z])',
+                    ';\\2'
+                ),
+                r';\s*',
+                ';'
+            ),
             ';'
         ) as point_shotlog,
 
@@ -145,6 +155,305 @@ tennisabstract_matches_points_clean_scores as (
     from tennisabstract_matches_points
 ),
 
+-- apply another layer of cleaning
+-- mostly to fix 'swapped scores'
+tennisabstract_matches_points_swap_scores as (
+    select
+        * replace (
+
+            -- point_score_in_game: manually inspect/select/clean rows
+            -- make sure the CASE/WHEN is specific enough to the row
+            (
+                case
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130818-M-Cincinnati_Masters-F-John_Isner-Rafael_Nadal.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 71 and 88 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (74, 76, 78, 79, 80, 82, 84, 86, 88)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 149 and 158 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (152, 153, 154, 155, 156, 157, 158)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20131005-M-Tokyo-SF-Nicolas_Almagro-Juan_Martin_Del_Potro.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 68 and 83 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (71, 73, 75, 77, 79, 81, 83)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 143 and 150 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (147, 148, 149)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130501-M-Munich-R16-Dmitry_Tursunov-Alexandr_Dolgopolov.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 63 and 71 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (65, 66, 67, 68, 69, 70, 71)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 153 and 162 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (156, 158, 159, 160, 161, 162)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130908-W-US_Open-F-Victoria_Azarenka-Serena_Williams.html' then
+                        case
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 141 and 154 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (144, 145, 146, 148, 150, 151, 152, 152, 154)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20140526-W-Roland_Garros-R128-Kirsten_Flipkens-Danka_Kovinic.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 81 and 94 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (84, 85, 86, 87, 88, 89, 90, 92, 94)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20121112-M-Tour_Finals-F-Roger_Federer-Novak_Djokovic.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 87 and 100 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (90, 92, 94, 96, 98, 100)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130818-W-Cincinnati-F-Victoria_Azarenka-Serena_Williams.html' then
+                        case
+                            -- 3rd set TB
+                            when 1=1
+                                and point_number_in_match between 193 and 206 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (196, 197, 198, 199, 200, 202, 204, 206)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20140210-M-Memphis-R32-Nick_Kyrgios-Tim_Smyczek.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 71 and 82 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (74, 76, 78, 79, 80, 81, 82)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20131104-M-Tour_Finals-RR-Richard_Gasquet-Juan_Martin_Del_Potro.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 61 and 71 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (64, 66, 68, 69, 70, 71)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20150131-W-Australian_Open-F-Maria_Sharapova-Serena_Williams.html' then
+                        case
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 129 and 140 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (132, 133, 134, 135, 136, 137, 138, 139, 140)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20151031-W-Singapore-SF-Agnieszka_Radwanska-Garbine_Muguruza.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 73 and 84 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (76, 77, 78, 79, 80, 82, 83, 84)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20120129-M-Australian_Open-F-Novak_Djokovic-Rafael_Nadal.html' then
+                        case
+                            -- 4th set TB
+                            when 1=1
+                                and point_number_in_match between 285 and 296 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (288, 290, 292, 293, 296)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130426-M-Barcelona-QF-Tomas_Berdych-Tommy_Robredo.html' then
+                        case
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 122 and 133 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (125, 127, 128, 129, 130, 131, 132, 133)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20150221-W-Dubai-F-Karolina_Pliskova-Simona_Halep.html' then
+                        case
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 139 and 149 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (142, 144, 146, 148, 149)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20070907-W-US_Open-SF-Venus_Williams-Justine_Henin.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 73 and 81 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (76, 77, 78, 79, 80, 81)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20130831-W-US_Open-R32-Alize_Cornet-Victoria_Azarenka.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 80 and 88 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (82, 83, 84, 85, 86, 87, 88)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20160323-W-Miami-R128-Timea_Babos-Anna_Tatishvili.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 85 and 93 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (88, 89, 90, 91, 92, 93)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20140423-M-Barcelona-R32-Albert_Ramos-Rafael_Nadal.html' then
+                        case
+                            -- 1st set TB
+                            when 1=1
+                                and point_number_in_match between 68 and 76 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (71, 73, 74, 76)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/20131025-M-Basel-QF-Grigor_Dimitrov-Roger_Federer.html' then
+                        case
+                            -- 2nd set TB
+                            when 1=1
+                                and point_number_in_match between 136 and 144 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (139, 140, 141, 142, 143)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    when match_url = 'https://www.tennisabstract.com/charting/19700913-M-US_Open-F-Tony_Roche-Ken_Rosewall.html' then
+                        case
+                            -- 3rd set TB
+                            when 1=1
+                                and point_number_in_match between 184 and 190 -- need to use point number since the set score flips 
+                                and game_score_in_set = '6-6'
+                                and point_number_in_match in (185)
+                            then array_to_string(array_reverse(split(point_score_in_game, '-')), '-')
+
+                            else point_score_in_game
+
+                        end
+
+                    else point_score_in_game
+                end
+            ) as point_score_in_game
+        ),
+    from tennisabstract_matches_points_clean_scores
+),
+
 -- get point receiver
 tennisabstract_matches_points_point_receiver as (
     select
@@ -158,7 +467,7 @@ tennisabstract_matches_points_point_receiver as (
             else null
         end as point_receiver,
 
-    from tennisabstract_matches_points_clean_scores
+    from tennisabstract_matches_points_swap_scores
 ),
 
 -- parse out scores
@@ -488,7 +797,7 @@ tennisabstract_matches_points_tournament_formats as (
         p.set_number_in_match = t.best_of_sets as is_final_set,
 
     from tennisabstract_matches_points_players as p
-    left join tennisabstract_tournaments as t on p.bk_match_tournament = t.bk_tournament
+    left join tournaments as t on p.bk_match_tournament = t.bk_tournament
 ),
 
 -- determine tiebreak flags for games
@@ -940,6 +1249,23 @@ tennisabstract_matches_points_last_point as (
     from tennisabstract_matches_points_point_loser
 ),
 
+-- flag row data quality
+tennisabstract_matches_points_quality as (
+    select
+        *,
+
+        -- flag rows
+        case
+            when 1=1
+                and bk_point_winner_result = bk_point_winner_next_point
+                and point_result is not null
+            then true
+            else false
+        end as is_quality_point,
+
+    from tennisabstract_matches_points_last_point
+),
+
 
 final as (
     select
@@ -1022,8 +1348,10 @@ final as (
         is_last_point_in_game,
         is_last_point_in_set,
 
+        is_quality_point,
 
-    from tennisabstract_matches_points_last_point
+
+    from tennisabstract_matches_points_quality
 )
 
 select * from final

@@ -28,12 +28,6 @@ models:
         description: Unique identifier for games (game number in match).
         data_tests:
           - not_null
-
-      - name: bk_set
-        data_type: string
-        description: Unique identifier for sets (set number in match).
-        data_tests:
-          - not_null
           
       - name: point_number_in_set
         data_type: integer
@@ -64,3 +58,9 @@ models:
       - name: rally_length
         data_type: integer
         description: Rally length based on point result logic.
+
+      - name: is_quality_point
+        data_type: boolean
+        description: Boolean indicating if point record is of good data quality.
+        data_test:
+          - not_null
