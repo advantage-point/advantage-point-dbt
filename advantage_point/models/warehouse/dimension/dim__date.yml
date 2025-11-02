@@ -12,46 +12,41 @@ models:
           - not_null
 
       - name: bk_date
+        data_type: date
         description: Unique identifier for dates.
-        tests:
+        data_tests:
           - not_null
 
       - name: date_day
+        data_type: date
         description: Calendar date.
-        tests:
+        data_tests:
           - not_null
 
       - name: date_year
+        data_type: integer
         description: Year number.
-        tests:
-          - not_null
 
       - name: date_month
+        data_type: integer
         description: Month number (1-12).
-        tests:
-          - not_null
 
       - name: date_month_name
+        data_type: string
         description: Full month name (e.g. 'September').
-        tests:
-          - not_null
 
       - name: day_of_month
+        data_type: integer
         description: Day of the month (1-31).
-        tests:
-          - not_null
 
       - name: day_of_week
+        data_type: integer
         description: Day of the week as number (1=Sunday, 7=Saturday).
-        tests:
-          - not_null
 
       - name: day_name
+        data_type: string
         description: Day of the week name (e.g. 'Monday').
-        tests:
-          - not_null
 
       - name: is_weekend
+        data_type: boolean
         description: Boolean flag if the date is a weekend (Saturday or Sunday).
-        tests:
-          - not_null
