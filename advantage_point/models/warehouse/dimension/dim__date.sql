@@ -1,7 +1,18 @@
 with
 
-int_date as (
-    select * from {{ ref('int__dates') }}
+date_spine as (
+    select * from {{ ref('stg__utils__date_spine') }}
+),
+
+-- create bk
+date_bk as (
+    select
+        *,
+        -- bk_date
+        {{ generate_bk_date(
+            date_col='date_day'
+        ) }} as bk_date,
+    from date_spine
 ),
 
 -- create sk
@@ -11,7 +22,7 @@ date_sk as (
         {{ generate_sk_date(
             bk_date_col='bk_date'
         ) }} as sk_date,
-    from int_date
+    from date_bk
 ),
 
 final as (
@@ -20,13 +31,17 @@ final as (
         bk_date,
         date_day,
 
-        date_year,
-        date_month,
-        date_month_name,
-        day_of_month,
-        day_of_week,
-        day_name,
-        is_weekend,
+        extract(year from date_day) as date_year,
+        extract(month from date_day) as date_month,
+        format_date('%B', date_day) as date_month_name,
+        extract(day from date_day) as day_of_month,
+        extract(dayofweek from date_day) as day_of_week,
+        format_date('%A', date_day) as day_name,
+        case
+            when extract(dayofweek from date_day) in (1,7) then true
+            when extract(dayofweek from date_day) not in (1,7) then false
+            else null
+        end as is_weekend,
 
     from date_sk
 )
