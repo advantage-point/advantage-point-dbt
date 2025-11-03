@@ -83,20 +83,6 @@ final as (
             else null
         end as player_hand_plays,
 
-        -- since 'atp_id' was recoded in staging model to 'tour_id' (more generalizable), this denotes the tour name of the id
-        case
-            when player_gender = 'M' then 'ATP'
-            when player_gender = 'W' then 'WTA'
-            else null
-        end as player_tour_id_name,
-
-        -- since 'dc_id' was recoded in staging model to 'team_cup_id' (more generalizable), this denotes the team event name of the id
-        case
-            when player_gender = 'M' then 'Davis Cup'
-            when player_gender = 'W' then 'Billie Jean King Cup'
-            else null
-        end as player_team_cup_id_name,
-
         -- create wikipedia url
         concat(
             'https://en.wikipedia.org/wiki/',

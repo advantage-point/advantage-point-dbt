@@ -43,26 +43,6 @@ players_union as (
     ) as p
 ),
 
--- create default tour values
-players_tour_values as (
-    select
-        *,
-        -- since 'atp_id' was recoded in staging model to 'tour_id' (more generalizable), this denotes the tour name of the id
-        case
-            when player_gender = 'M' then 'ATP'
-            when player_gender = 'W' then 'WTA'
-            else null
-        end as player_tour_id_name,
-
-        -- since 'dc_id' was recoded in staging model to 'team_cup_id' (more generalizable), this denotes the team event name of the id
-        case
-            when player_gender = 'M' then 'Davis Cup'
-            when player_gender = 'W' then 'Billie Jean King Cup'
-            else null
-        end as player_team_cup_id_name,
-    from players_union
-),
-
 -- join data to players
 final as (
     select
@@ -215,24 +195,26 @@ final as (
             pc_ta.player_hand_plays
         ) as player_hand_plays,
 
-        coalesce(
-            p_ta.player_tour_id_name,
-            pc_ta.player_tour_id_name,
-            p.player_tour_id_name
-        ) as player_tour_id_name,
+        -- since 'atp_id' was recoded in staging model to 'tour_id' (more generalizable), this denotes the tour name of the id
+        case
+            when p.player_gender = 'M' then 'ATP'
+            when p.player_gender = 'W' then 'WTA'
+            else null
+        end as player_tour_id_name,
 
-        coalesce(
-            p_ta.player_team_cup_id_name,
-            pc_ta.player_team_cup_id_name,
-            p.player_team_cup_id_name
-        ) as player_team_cup_id_name,
+        -- since 'dc_id' was recoded in staging model to 'team_cup_id' (more generalizable), this denotes the team event name of the id
+        case
+            when p.player_gender = 'M' then 'Davis Cup'
+            when p.player_gender = 'W' then 'Billie Jean King Cup'
+            else null
+        end as player_team_cup_id_name,
 
         coalesce(
             p_ta.player_wikipedia_url,
             pc_ta.player_wikipedia_url
         ) as player_wikipedia_url,
 
-    from players_tour_values as p
+    from players_union as p
     left join tennisabstract_players as p_ta on p.bk_player = p_ta.bk_player
     left join tennisabstract_players_classic as pc_ta on p.bk_player = pc_ta.bk_player
     left join tennisabstract_matches_players as mp_ta on p.bk_player = mp_ta.bk_player

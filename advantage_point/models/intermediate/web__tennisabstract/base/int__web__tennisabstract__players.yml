@@ -145,14 +145,6 @@ models:
         data_type: string
         description: Player handedness (expressed as a phrase).
 
-      - name: player_tour_id_name
-        data_type: string
-        description: Tour to which tour ID belongs.
-      
-      - name: player_team_cup_id_name
-        data_type: string
-        description: Team cup to which team cup ID belongs.
-
       - name: player_wikipedia_url
         data_type: string
         description: Player Wikipedia url.
