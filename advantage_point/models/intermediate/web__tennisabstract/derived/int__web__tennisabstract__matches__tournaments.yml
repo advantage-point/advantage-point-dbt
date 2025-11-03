@@ -19,7 +19,7 @@ models:
       
       - name: tournament_event
         data_type: string
-        description: Tournament gender (ex. Men's Singles, Women's Singles).
+        description: Tournament gender (ex. men's singles, women's singles).
         data_tests:
           - not_null
 

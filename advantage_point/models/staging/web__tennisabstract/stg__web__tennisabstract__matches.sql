@@ -22,8 +22,8 @@ renamed as (
         ) as match_date,
         match_gender,
         case
-            when match_gender = 'M' then 'MS'
-            when match_gender = 'W' then 'WS'
+            when match_gender = 'M' then "men's singles"
+            when match_gender = 'W' then "women's singles"
             else null
         end as match_event,
         replace(match_tournament, '_', ' ') as match_tournament,

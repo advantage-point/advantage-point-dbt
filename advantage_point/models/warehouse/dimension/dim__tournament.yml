@@ -23,7 +23,7 @@ models:
 
       - name: tournament_event
         data_type: string
-        description: Tournament event (ex. Men's Singles, Women's Singles).
+        description: Tournament event (ex. men's singles, women's singles).
 
       - name: tournament_name
         data_type: string

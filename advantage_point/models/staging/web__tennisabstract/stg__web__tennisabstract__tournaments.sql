@@ -12,8 +12,8 @@ renamed as (
         cast(tournament_year as integer) as tournament_year,
         tournament_gender,
         case
-            when tournament_gender = 'M' then 'MS'
-            when tournament_gender = 'W' then 'WS'
+            when tournament_gender = 'M' then "men's singles"
+            when tournament_gender = 'W' then "women's singles"
             else null
         end as tournament_event,
         tournament_name,

@@ -9,7 +9,11 @@ source as (
 renamed as (
     select
         tournament_name,
-        tournament_event,
+        case
+            when tournament_event = 'MS' then "men's singles"
+            when tournament_event = 'WS' then "women's singles"
+            else null
+        end as tournament_event,
         cast(effective_start_year as int) as effective_start_year,
         cast(effective_end_year as int) as effective_end_year,
         cast(best_of_sets as int) as best_of_sets,
