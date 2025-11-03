@@ -34,7 +34,7 @@ models:
 
       - name: match_event
         data_type: string
-        description: Match event (M = Men's Singles, W = Women's Singles)
+        description: Match event (ex. Men's Singles, Women's Singles)
 
       - name: match_tournament
         data_type: string
