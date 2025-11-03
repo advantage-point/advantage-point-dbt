@@ -13,7 +13,7 @@ tennisabstract_tournaments as (
 tennisabstract_tournaments_agg as (
     select
         tournament_name,
-        tournament_gender,
+        tournament_event,
         min(tournament_year) as min_tournament_year,
         max(tournament_year) as max_tournament_year,
     
@@ -47,7 +47,7 @@ tennisabstract_tournament_formats_effective_years as (
     from tennisabstract_tournament_formats as tf
     left join tennisabstract_tournaments_agg as t on 1=1
         and lower(tf.tournament_name) = lower(t.tournament_name)
-        and lower(tf.tournament_gender) = lower(t.tournament_gender)
+        and lower(tf.tournament_event) = lower(t.tournament_event)
 ),
 
 -- explode into one row per effective year
@@ -81,7 +81,7 @@ final as (
     select
         bk_tournament,
         tournament_year,
-        tournament_gender,
+        tournament_event,
         tournament_name,
 
         best_of_sets,

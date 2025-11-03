@@ -144,6 +144,7 @@ final as (
         match_date,
         match_year,
         match_gender,
+        match_event,
         match_tournament,
         bk_match_tournament,
         match_round,

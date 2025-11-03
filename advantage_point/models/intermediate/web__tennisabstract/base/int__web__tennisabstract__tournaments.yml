@@ -17,9 +17,9 @@ models:
         data_tests:
           - not_null
       
-      - name: tournament_gender
+      - name: tournament_event
         data_type: string
-        description: Gender of the tournament.
+        description: Tournament event (ex. Men's Singles, Women's Singles)
         data_tests:
           - not_null
 
@@ -54,9 +54,3 @@ models:
       - name: tournament_draw_size
         data_type: integer
         description: Size of the tournament draw.
-
-      - name: tournament_tour_name
-        data_type: string
-        description: Tournament tour name.
-        data_tests:
-          - not_null

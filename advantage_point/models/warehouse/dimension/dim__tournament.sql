@@ -28,10 +28,9 @@ final as (
 
         -- core attributes
         t.tournament_year,
-        t.tournament_gender,
+        t.tournament_event,
         t.tournament_name,
         t.tournament_title,
-        t.tournament_tour_name,
 
         -- optional attributes
         d_tsd.sk_date as sk_tournament_start_date,

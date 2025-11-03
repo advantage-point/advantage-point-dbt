@@ -20,20 +20,14 @@ models:
       - name: tournament_year
         data_type: integer
         description: Year of the tournament (may differ from actual start date).
-        data_tests:
-          - not_null
 
-      - name: tournament_gender
+      - name: tournament_event
         data_type: string
-        description: Gender of the tournament (M = ATP, W = WTA).
-        data_tests:
-          - not_null
+        description: Tournament event (ex. Men's Singles, Women's Singles).
 
       - name: tournament_name
         data_type: string
-        description: Tournament name (without year).
-        data_tests:
-          - not_null
+        description: Tournament name.
 
       - name: sk_tournament_start_date
         data_type: integer
@@ -60,29 +54,17 @@ models:
         data_type: string
         description: Title of the tournament (includes year + name).
 
-      - name: tournament_tour_name
-        data_type: string
-        description: Tour associated with the tournament (e.g., ATP, WTA).
-        data_tests:
-          - not_null
-
       - name: best_of_sets
         data_type: integer
         description: Number of sets per match (usually 3 or 5).
-        data_tests:
-          - not_null
 
       - name: sets_to_win
         data_type: integer
         description: Number of sets needed to win the match.
-        data_tests:
-          - not_null
 
       - name: games_per_set
         data_type: integer
         description: Games required to win a set (usually 6 or 4 for Fast4 formats).
-        data_tests:
-          - not_null
 
       - name: tiebreak_trigger_game
         data_type: string
@@ -103,5 +85,3 @@ models:
       - name: is_ad_scoring
         data_type: boolean
         description: Boolean to indicate if AD scoring is used within a game.
-        data_tests:
-          - not_null

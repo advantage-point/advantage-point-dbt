@@ -1,17 +1,17 @@
 with
 
-tennisabstract_matches as (
+matches as (
     select * from {{ ref('int__web__tennisabstract__matches') }}
 ),
 
 -- get tournaments from match data
-tennisabstract_matches_tournaments as (
+match_tournaments as (
     select distinct
         bk_match_tournament as bk_tournament,
         match_year as tournament_year,
-        match_gender as tournament_gender,
+        match_event as tournament_event,
         match_tournament as tournament_name,
-    from tennisabstract_matches
+    from matches
 ),
 
 -- add a row number
@@ -19,35 +19,23 @@ tennisabstract_matches_tournaments as (
     -- Rio de Janeiro
     -- Rio De Janeiro
 -- filtered out in next cte
-tennisabstract_matches_tournament_row_num as (
+match_tournaments_row_num as (
     select
         *,
 
         -- order by tournament DESC so that the 'more capitalized' version captured
         row_number() over (partition by bk_tournament order by tournament_name desc) as bk_tournament_row_num
-    from tennisabstract_matches_tournaments
+    from match_tournaments
 ),
 
 final as (
     select
         bk_tournament,
         tournament_year,
-        tournament_gender,
+        tournament_event,
         tournament_name,
 
-        concat(
-            cast(tournament_year as string),
-            ' ',
-            tournament_name
-        ) as tournament_title,
-
-        -- designate tournament tour based on gender
-        case
-            when tournament_gender = 'M' then 'ATP'
-            when tournament_gender = 'W' then 'WTA'
-            else null
-        end as tournament_tour_name,
-    from tennisabstract_matches_tournament_row_num
+    from match_tournaments_row_num
     where bk_tournament_row_num = 1
 )
 

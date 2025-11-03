@@ -17,9 +17,9 @@ models:
         data_tests:
           - not_null
       
-      - name: tournament_gender
+      - name: tournament_event
         data_type: string
-        description: Gender of the tournament.
+        description: Tournament event (ex. Men's Singles, Women's Singles).
         data_tests:
           - not_null
 
