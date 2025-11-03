@@ -11,6 +11,11 @@ renamed as (
         tournament_url,
         cast(tournament_year as integer) as tournament_year,
         tournament_gender,
+        case
+            when tournament_gender = 'M' then 'MS'
+            when tournament_gender = 'W' then 'WS'
+            else null
+        end as tournament_event,
         tournament_name,
         tournament_title,
         parse_date('%B %d, %Y', tournament_start_date) as tournament_start_date,

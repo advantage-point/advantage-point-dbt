@@ -76,7 +76,7 @@ tennisabstract_matches_bk as (
         ) }} as bk_match_date,
         {{ generate_bk_tournament(
             tournament_year_col='match_year',
-            tournament_gender_col='match_gender',
+            tournament_event_col='match_event',
             tournament_name_col='match_tournament'
         )}} as bk_match_tournament,
         {{ generate_bk_player(

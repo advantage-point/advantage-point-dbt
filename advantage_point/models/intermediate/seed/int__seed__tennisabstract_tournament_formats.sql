@@ -71,7 +71,7 @@ tennisabstract_tournament_bks as (
 
         {{ generate_bk_tournament(
             tournament_year_col='tournament_year',
-            tournament_gender_col='tournament_gender',
+            tournament_event_col='tournament_event',
             tournament_name_col='tournament_name'
         ) }} as bk_tournament,
     from tennisabstract_tournament_years

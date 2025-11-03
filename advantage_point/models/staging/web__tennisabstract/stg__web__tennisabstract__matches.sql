@@ -21,6 +21,11 @@ renamed as (
             end
         ) as match_date,
         match_gender,
+        case
+            when match_gender = 'M' then 'MS'
+            when match_gender = 'W' then 'WS'
+            else null
+        end as match_event,
         replace(match_tournament, '_', ' ') as match_tournament,
         match_round,
         replace(match_player_one, '_', ' ') as match_player_one,
