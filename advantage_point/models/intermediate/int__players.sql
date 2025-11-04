@@ -8,8 +8,34 @@ tennisabstract_players_classic as (
     select * from {{ ref('int__web__tennisabstract__players_classic') }}
 ),
 
+tennisabstract_matches as (
+    select * from {{ ref('stg__web__tennisabstract__matches') }}
+    where audit_column__active_flag = true
+),
+
+-- get players from match data
 tennisabstract_matches_players as (
-    select * from {{ ref('int__web__tennisabstract__matches__players') }}
+    select distinct
+        {{ generate_bk_player(
+            player_name_col='player_name',
+            player_gender_col='player_gender'
+        ) }} as bk_player,
+        *
+    from (
+        (
+            select
+                match_player_one as player_name,
+                match_gender as player_gender
+            from tennisabstract_matches
+        )
+        union all
+        (
+            select
+                match_player_two as player_name,
+                match_gender as player_gender
+            from tennisabstract_matches
+        )
+    ) as p
 ),
 
 -- union players
