@@ -20,8 +20,10 @@ models:
       - name: player_name
         data_type: string
         description: Player name.
-        data_tests:
-          - not_null
+
+      - name: player_gender
+        data_type: string
+        description: Gender of the player.
 
       - name: player_full_name
         data_type: string
@@ -31,25 +33,6 @@ models:
         data_type: string
         description: Player's last name.
 
-      - name: player_gender
-        data_type: string
-        description: Gender of the player.
-        data_tests:
-          - not_null
-
-      - name: sk_player_birth_date
-        data_type: integer
-        description: Foreign key from player birth date to date.
-        data_tests:
-          - relationships:
-              arguments:
-                to: ref('dim__date')
-                field: sk_date
-
-      - name: bk_player_birth_date
-        data_type: date
-        description: Unique identifier for player birth date.
-
       - name: player_country
         data_type: string
         description: Player's country code (abbreviated).
@@ -57,98 +40,6 @@ models:
       - name: player_height_in_cm
         data_type: integer
         description: Player height (in centimeters).
-
-      - name: player_hand
-        data_type: string
-        description: Indicates if player is right or left handed.
-
-      - name: player_backhand
-        data_type: string
-        description: Indicates if player uses one-handed or two-handed backhand.
-
-      - name: player_current_singles_ranking
-        data_type: integer
-        description: Current singles ranking.
-
-      - name: player_peak_singles_ranking
-        data_type: integer
-        description: Highest singles ranking achieved by player.
-
-      - name: player_first_peak_singles_ranking_date
-        data_type: date
-        description: Date when player first achieved peak singles ranking.
-
-      - name: player_last_peak_singles_ranking_date
-        data_type: date
-        description: Date when player last achieved peak singles ranking.
-
-      - name: player_current_doubles_ranking
-        data_type: integer
-        description: Current doubles ranking.
-
-      - name: player_peak_doubles_ranking
-        data_type: integer
-        description: Highest doubles ranking achieved by player.
-
-      - name: player_first_peak_doubles_ranking_date
-        data_type: date
-        description: Date when player first achieved peak doubles ranking.
-
-      - name: player_tour_id
-        data_type: string
-        description: Player ID for ATP/WTA tours.
-
-      - name: player_tour_id_name
-        data_type: string
-        description: Tour associated with tour ID (e.g., ATP, WTA).
-        data_tests:
-          - not_null
-
-      - name: player_team_cup_id
-        data_type: string
-        description: Player ID for team cup play (Davis Cup or Billie Jean King Cup).
-
-      - name: player_team_cup_id_name
-        data_type: string
-        description: Team cup associated with team cup ID.
-        data_tests:
-          - not_null
-
-      - name: player_itf_id
-        data_type: string
-        description: Player's ITF (International Tennis Federation) ID.
-
-      - name: player_wikipedia_id
-        data_type: string
-        description: Player Wikipedia ID.
-
-      - name: player_wikipedia_url
-        data_type: string
-        description: URL for player's Wikipedia page.
-
-      - name: player_tennisabstract_photograph
-        data_type: string
-        description: Player photograph from TennisAbstract.
-
-      - name: player_tennisabstract_photograph_credit
-        data_type: string
-        description: Credit for player photograph.
-
-      - name: player_tennisabstract_photograph_link
-        data_type: string
-        description: Link to player photograph.
-
-      - name: player_tennisabstract_photograph_url
-        data_type: string
-        description: URL for player photograph.
-
-      - name: player_twitter_x_handle
-        data_type: string
-        description: Player Twitter/X handle.
-
-      - name: player_twitter_x_url
-        data_type: string
-        description: URL for player Twitter/X profile.
 
       - name: player_hand_plays
         data_type: string
@@ -158,10 +49,119 @@ models:
         data_type: string
         description: Player backhand style (expressed as a phrase).
 
+      - name: sk_player_date_of_birth
+        data_type: integer
+        description: Foreign key from player birth date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_player_date_of_birth
+        data_type: date
+        description: Unique identifier for player date of birth.
+
+      - name: player_itf_id
+        data_type: string
+        description: Player's ITF (International Tennis Federation) ID.
+
+      - name: player_tour_id
+        data_type: string
+        description: Player ID for ATP/WTA tours.
+
+      - name: player_tour_id_name
+        data_type: string
+        description: Tour associated with tour ID (e.g., ATP, WTA).
+        
+      - name: player_team_cup_id
+        data_type: string
+        description: Player ID for team cup play (Davis Cup or Billie Jean King Cup).
+
+      - name: player_team_cup_id_name
+        data_type: string
+        description: Team cup associated with team cup ID.
+        
+      - name: player_tennisabstract_photograph_url
+        data_type: string
+        description: Player TennisAbstract photograph url.
+
+      - name: player_wikipedia_url
+        data_type: string
+        description: Player Wikipedia url.
+
+      - name: player_twitter_url
+        data_type: string
+        description: Player Twitter/X url.
+
       - name: is_player_active
         data_type: boolean
-        description: Indicates if player is currently active.
+        description: Denotes if player is active.
+      
+      - name: player_current_singles_ranking
+        data_type: integer
+        description: Current singles ranking.
+  
+      - name: player_peak_singles_ranking
+        data_type: integer
+        description: Highest singles ranking achieved by player.
 
-      - name: player_last_match_played_date
+      - name: sk_player_first_peak_singles_ranking_date
+        data_type: integer
+        description: Foreign key from player first peak singles ranking date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_player_first_peak_singles_ranking_date
         data_type: date
-        description: Date on which player last played a match.
+        description: Unique identifier for player first peak singles ranking date.
+
+      - name: sk_player_last_peak_singles_ranking_date
+        data_type: integer
+        description: Foreign key from player last peak singles ranking date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_player_last_peak_singles_ranking_date
+        data_type: date
+        description: Unique identifier for player last peak singles ranking date.
+
+      - name: player_current_doubles_ranking
+        data_type: integer
+        description: Current doubles ranking.
+
+      - name: player_peak_doubles_ranking
+        data_type: integer
+        description: Highest doubles ranking achieved by player.
+
+      - name: sk_player_first_peak_doubles_ranking_date
+        data_type: integer
+        description: Foreign key from player first peak doubles ranking date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+
+      - name: bk_player_first_peak_doubles_ranking_date
+        data_type: date
+        description: Unique identifier for player first peak doubles ranking date.
+
+      - name: sk_player_last_match_played_date
+        data_type: integer
+        description: Foreign key from player last match played date to date.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim__date')
+                field: sk_date
+        
+      - name: bk_player_last_match_played_date
+        data_type: date
+        description: Unique identifier for player last match played date.

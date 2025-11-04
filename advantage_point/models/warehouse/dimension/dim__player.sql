@@ -22,53 +22,53 @@ final as (
     select
         p.sk_player,
         p.bk_player,
-
-        -- core attributes
         p.player_name,
+        p.player_gender,
+
+        -- player attributes
         p.player_full_name,
         p.player_last_name,
-        p.player_gender,
-        d_birth_date.sk_date as sk_player_birth_date,
-        p.bk_player_birth_date,
         p.player_country,
         p.player_height_in_cm,
-        p.player_hand,
-        p.player_backhand,
+        p.player_hand_plays,
+        p.player_backhand_plays,
+        date_player_date_of_birth.sk_date as sk_player_date_of_birth,
+        p.bk_player_date_of_birth,
 
-        -- rankings
-        p.player_current_singles_ranking,
-        p.player_peak_singles_ranking,
-        p.player_first_peak_singles_ranking_date,
-        p.player_last_peak_singles_ranking_date,
-        p.player_current_doubles_ranking,
-        p.player_peak_doubles_ranking,
-        p.player_first_peak_doubles_ranking_date,
-
-        -- identifiers
+        -- tours and associations
         p.player_itf_id,
         p.player_tour_id,
         p.player_tour_id_name,
         p.player_team_cup_id,
         p.player_team_cup_id_name,
-        p.player_wikipedia_id,
-        p.player_wikipedia_url,
-
-        -- metadata
-        p.player_tennisabstract_photograph,
-        p.player_tennisabstract_photograph_credit,
-        p.player_tennisabstract_photograph_link,
+        
+        -- media
         p.player_tennisabstract_photograph_url,
-        p.player_twitter_x_handle,
-        p.player_twitter_x_url,
-        p.player_hand_plays,
-        p.player_backhand_plays,
+        p.player_wikipedia_url,
+        p.player_twitter_url,
 
-        -- status
+        -- rankings and status
         p.is_player_active,
-        p.player_last_match_played_date,
+        p.player_current_singles_ranking,
+        p.player_peak_singles_ranking,
+        date_player_first_peak_singles_ranking_date.sk_date as sk_player_first_peak_singles_ranking_date,
+        p.bk_player_first_peak_singles_ranking_date,
+        date_player_last_peak_singles_ranking_date.sk_date as sk_player_last_peak_singles_ranking_date,
+        p.bk_player_last_peak_singles_ranking_date,
+        p.player_current_doubles_ranking,
+        p.player_peak_doubles_ranking,
+        date_player_first_peak_doubles_ranking_date.sk_date as sk_player_first_peak_doubles_ranking_date,
+        p.bk_player_first_peak_doubles_ranking_date, 
+        date_player_last_match_played_date.sk_date as sk_player_last_match_played_date,
+        p.bk_player_last_match_played_date,
 
     from player_sks as p
-    left join dim_date as d_birth_date on p.bk_player_birth_date = d_birth_date.bk_date 
+    left join dim_date as date_player_date_of_birth on p.bk_player_date_of_birth = date_player_date_of_birth.bk_date 
+    left join dim_date as date_player_first_peak_singles_ranking_date on p.bk_player_first_peak_singles_ranking_date = date_player_first_peak_singles_ranking_date.bk_date 
+    left join dim_date as date_player_last_peak_singles_ranking_date on p.bk_player_last_peak_singles_ranking_date = date_player_last_peak_singles_ranking_date.bk_date 
+    left join dim_date as date_player_first_peak_doubles_ranking_date on p.bk_player_first_peak_doubles_ranking_date = date_player_first_peak_doubles_ranking_date.bk_date 
+    left join dim_date as date_player_last_match_played_date on p.bk_player_last_match_played_date = date_player_last_match_played_date.bk_date 
+    
 )
 
 select * from final

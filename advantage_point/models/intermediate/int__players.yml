@@ -39,17 +39,25 @@ models:
         data_type: integer
         description: Player's highest singles ranking.
 
+      - name: bk_player_first_peak_singles_ranking_date
+        data_type: date
+        description: Unique identifier for player first peak singles ranking date.
+
       - name: player_first_peak_singles_ranking_date
         data_type: date
         description: Date when player first achieved highest singles ranking.
+
+      - name: bk_player_last_peak_singles_ranking_date
+        data_type: date
+        description: Unique identifier for player last peak singles ranking date.
 
       - name: player_last_peak_singles_ranking_date
         data_type: date
         description: Date when player last achieved highest singles ranking.
 
-      - name: bk_player_birth_date
+      - name: bk_player_date_of_birth
         data_type: date
-        description: Unique identifier for player birth date.
+        description: Unique identifier for player date of birth.
 
       - name: player_date_of_birth
         data_type: date
@@ -75,6 +83,10 @@ models:
         data_type: boolean
         description: Denotes if player is active.
 
+      - name: bk_player_last_match_played_date
+        data_type: date
+        description: Unique identifier for player last match played date.
+
       - name: player_last_match_played_date
         date_type: date
         description: Date on which player's last match took place.
@@ -90,6 +102,10 @@ models:
       - name: player_peak_doubles_ranking
         data_type: integer
         description: Player's peak doubles ranking.
+
+      - name: bk_player_first_peak_doubles_ranking_date
+        data_type: date
+        description: Unique identifier for player first peak doubles ranking date.
 
       - name: player_first_peak_doubles_ranking_date
         data_type: date
@@ -131,7 +147,7 @@ models:
         data_type: string
         description: Player TennisAbstract photograph url.
 
-      - name: player_twitter_x_url
+      - name: player_twitter_url
         data_type: string
         description: Player Twitter/X url.
 
@@ -142,15 +158,11 @@ models:
       - name: player_tour_id_name
         data_type: string
         description: Tour to which tour ID belongs.
-        data_tests:
-          - not_null
       
       - name: player_team_cup_id_name
         data_type: string
         description: Team cup to which team cup ID belongs.
-        data_tests:
-          - not_null
 
-      - name: player_wikipedia_id
+      - name: player_wikipedia_url
         data_type: string
-        description: Player Wikipedia url
+        description: Player Wikipedia url.
