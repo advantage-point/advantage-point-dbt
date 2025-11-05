@@ -15,11 +15,10 @@ tennisabstract_tournaments as (
 tennisabstract_matches as (
     select
         *,
-        extract(year from match_date) as tournament_year,
+        match_year as tournament_year,
         match_event as tournament_event,
         match_tournament as tournament_name,
-    from {{ ref('stg__web__tennisabstract__matches') }}
-    where audit_column__active_flag = true
+    from {{ ref('int__web__tennisabstract__matches') }}
 ),
 
 tennisabstract_tournament_formats as (
