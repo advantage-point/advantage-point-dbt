@@ -30,8 +30,7 @@ final as (
         m.bk_match_tournament,
         d_match_date.sk_date as sk_match_date,
         m.bk_match_date,
-        m.bk_match_players,
-        m.match_gender,
+        m.bk_match_players_array,
         m.match_round,
         m.match_title,
     

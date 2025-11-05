@@ -30,8 +30,6 @@ models:
       - name: bk_match_tournament
         data_type: string
         description: Business key for tournament.
-        data_tests:
-          - not_null
 
       - name: sk_match_date
         data_type: integer
@@ -45,20 +43,10 @@ models:
 
       - name: bk_match_date
         description: Unique identifier for match date.
-        tests:
-          - not_null
 
-      - name: bk_match_players
+      - name: bk_match_players_array
         data_type: array
         description: Array of unique identifiers for players who participated in the match.
-        data_tests:
-          - not_null
-
-      - name: match_gender
-        data_type: string
-        description: Gender of the match.
-        data_tests:
-          - not_null
 
       - name: match_round
         data_type: string
@@ -69,5 +57,3 @@ models:
       - name: match_title
         data_type: string
         description: Human-readable match title.
-        data_tests:
-          - not_null

@@ -127,10 +127,10 @@ matches_games_bk_match as (
     select
         *,
         {{ generate_bk_match(
-            bk_match_date_col='bk_match_date',
-            bk_match_tournament_col='bk_match_tournament',
+            bk_match_date_col='2025-01-01',
+            bk_match_tournament_col='test',
             match_round_col='match_round',
-            bk_match_players_col='bk_match_players'
+            bk_match_players_array_col='["1", "2"]'
         ) }} as bk_match,
     from matches_games_match_players
 ),

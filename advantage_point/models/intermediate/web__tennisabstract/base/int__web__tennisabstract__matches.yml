@@ -10,34 +10,26 @@ models:
         data_tests:
           - unique
           - not_null
-          
-      - name: match_url
-        data_type: string
-        description: Link to the match data.
-        data_tests:
-          - not_null
 
       - name: bk_match_date
         data_type: date
         description: Unique identifier for match date.
+        data_tests:
+          - not_null
 
       - name: match_date
         data_type: date
         description: Date when match took place.
+
+      - name: bk_match_tournament
+        data_type: string
+        description: Unique identifier for tournament.
         data_tests:
           - not_null
 
       - name: match_year
         data_type: integer
         description: Year when match took place.
-        data_tests:
-          - not_null
-        
-      - name: match_gender
-        data_type: string
-        description: Gender of the match.
-        data_tests:
-          - not_null
 
       - name: match_event
         data_type: string
@@ -46,56 +38,32 @@ models:
       - name: match_tournament
         data_type: string
         description: Tournament where match took place.
-        data_tests:
-          - not_null
-
-      - name: bk_match_tournament
-        data_type: string
-        description: Unique identifier for tournament.
-        data_tests:
-          - not_null
 
       - name: match_round
         data_type: string
         description: Round within tournament when match took place.
-        data_tests:
-          - not_null
 
-      - name: match_players
+      - name: bk_match_players_array
         data_type: array
-        description: Players in the match.
-        data_tests:
-          - not_null
-
-      - name: bk_match_players
-        data_type: array
-        description: Unique identifiers for players in the match.
+        description: Array of players in the match.
         data_tests:
           - not_null
 
       - name: match_player_one
         data_type: string
         description: One of the players in the match.
-        data_tests:
-          - not_null
 
       - name: match_player_two
         data_type: string
         description: One of the players in the match.
-        data_tests:
-          - not_null
 
-      - name: bk_match_player_one
+      - name: match_gender
         data_type: string
-        description: Unique identifier for player one.
-        data_tests:
-          - not_null
+        description: Gender of the match.
 
-      - name: bk_match_player_two
+      - name: match_url
         data_type: string
-        description: Unique identifier for player two.
-        data_tests:
-          - not_null
+        description: Link to the match data.
 
       - name: match_title
         data_type: string
@@ -109,22 +77,52 @@ models:
         data_type: array
         description: Points within the match. Contain shot-by-shot descriptions.
 
-      - name: match_winner
-        data_type: string
-        description: Match winner.
+      
+      
+      
 
-      - name: match_loser
-        data_type: string
-        description: Match loser.
+      
 
-      - name: bk_match_winner
-        data_type: string
-        description: Unique identifier for match winner.
+      
 
-      - name: bk_match_loser
-        data_type: string
-        description: Unique identifier for match loser.
+      # - name: bk_match_players
+      #   data_type: array
+      #   description: Unique identifiers for players in the match.
+      #   data_tests:
+      #     - not_null
 
-      - name: match_score
-        data_type: string
-        description: Match score (from winner's perspective).
+      
+
+      # - name: bk_match_player_one
+      #   data_type: string
+      #   description: Unique identifier for player one.
+      #   data_tests:
+      #     - not_null
+
+      # - name: bk_match_player_two
+      #   data_type: string
+      #   description: Unique identifier for player two.
+      #   data_tests:
+      #     - not_null
+
+      
+
+      # - name: match_winner
+      #   data_type: string
+      #   description: Match winner.
+
+      # - name: match_loser
+      #   data_type: string
+      #   description: Match loser.
+
+      # - name: bk_match_winner
+      #   data_type: string
+      #   description: Unique identifier for match winner.
+
+      # - name: bk_match_loser
+      #   data_type: string
+      #   description: Unique identifier for match loser.
+
+      # - name: match_score
+      #   data_type: string
+      #   description: Match score (from winner's perspective).

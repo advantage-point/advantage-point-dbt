@@ -14,35 +14,12 @@ matches_union as (
             select
                 bk_match,
                 bk_match_date,
-                match_date,
-                match_year,
-                match_gender,
                 bk_match_tournament,
-                match_tournament,
                 match_round,
-                bk_match_players,
-                match_players,
+                bk_match_players_array,
             from tennisabstract_matches
         )
     ) as m
-),
-
--- create match title from id columns (used as default title value during joins)
-matches_title as (
-    select
-        *,
-        concat(
-            cast(match_year as string),
-            ' ',
-            match_tournament,
-            ' ',
-            match_round,
-            ': ',
-            match_players[0],
-            ' vs ',
-            match_players[1]
-        ) as match_title
-    from matches_union
 ),
 
 -- join data to matches
@@ -50,19 +27,13 @@ matches_joined as (
     select
         m.bk_match,
         m.bk_match_date,
-        m.match_date,
-        -- m.match_year,
-        m.match_gender,
-        m.match_tournament,
-        m_ta.bk_match_tournament,
+        m.bk_match_tournament,
         m.match_round,
-        m.bk_match_players,
-        m.match_players,
-        coalesce(
-            m_ta.match_title,
-            m.match_title
-        ) as match_title,
-    from matches_title as m
+        m.bk_match_players_array, 
+        
+       m_ta.match_title,
+
+    from matches_union as m
     left join tennisabstract_matches as m_ta on m.bk_match = m_ta.bk_match
 )
 
