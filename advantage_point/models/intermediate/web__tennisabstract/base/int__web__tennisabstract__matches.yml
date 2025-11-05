@@ -49,6 +49,14 @@ models:
         data_tests:
           - not_null
 
+      - name: bk_match_player_one
+        data_type: string
+        description: Unique identifier for player one.
+
+      - name: bk_match_player_two
+        data_type: string
+        description: Unique identifier for player two.
+
       - name: match_player_one
         data_type: string
         description: One of the players in the match.
@@ -76,34 +84,9 @@ models:
       - name: match_pointlog
         data_type: array
         description: Points within the match. Contain shot-by-shot descriptions.
-
-      
-      
       
 
       
-
-      
-
-      # - name: bk_match_players
-      #   data_type: array
-      #   description: Unique identifiers for players in the match.
-      #   data_tests:
-      #     - not_null
-
-      
-
-      # - name: bk_match_player_one
-      #   data_type: string
-      #   description: Unique identifier for player one.
-      #   data_tests:
-      #     - not_null
-
-      # - name: bk_match_player_two
-      #   data_type: string
-      #   description: Unique identifier for player two.
-      #   data_tests:
-      #     - not_null
 
       
 

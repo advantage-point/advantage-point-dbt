@@ -83,6 +83,8 @@ final as (
         match_tournament,
         match_round,
         bk_match_players_array,
+        bk_match_player_one,
+        bk_match_player_two,
         match_player_one,
         match_player_two,
         match_gender,
