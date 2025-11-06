@@ -23,8 +23,7 @@ tennisabstract_players_classic as (
 ),
 
 tennisabstract_matches as (
-    select * from {{ ref('stg__web__tennisabstract__matches') }}
-    where audit_column__active_flag = true
+    select * from {{ ref('int__web__tennisabstract__matches') }}
 ),
 
 -- get players from match data
