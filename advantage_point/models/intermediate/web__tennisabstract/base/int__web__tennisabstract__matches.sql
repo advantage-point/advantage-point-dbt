@@ -1,7 +1,7 @@
 
 {{
     config(
-        materialized='table',
+        materialized='table', -- referenced in multiple downstream models
     )
 }}
 
