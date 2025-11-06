@@ -1,4 +1,10 @@
 
+{{
+    config(
+        materialized='table',
+    )
+}}
+
 with
 
 tennisabstract_matches as (
