@@ -41,6 +41,8 @@ models:
     intermediate:
       +materialized: view
       +schema: advpoint__int
+      base:
+        +materialized: table
     warehouse:
       +schema: advpoint__dwh
       dimension:
