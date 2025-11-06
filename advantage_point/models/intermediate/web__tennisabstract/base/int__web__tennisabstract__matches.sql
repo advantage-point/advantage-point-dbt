@@ -1,7 +1,7 @@
-
+-- materialized as table since referenced in multiple downstream models
 {{
     config(
-        materialized='table', -- referenced in multiple downstream models
+        materialized = 'table',
     )
 }}
 
@@ -169,10 +169,10 @@ final as (
 
         match_url,        
 
-        coalesce(
-            match_title,
-            match_title_coalesce
-        ) as match_title,
+        case
+            when match_title is null or match_title = '404 Not Found' then match_title_coalesce
+            else match_title
+        end as match_title,
         
         match_result,
         match_pointlog,

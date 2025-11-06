@@ -45,3 +45,5 @@ models:
       +schema: advpoint__dwh
       dimension:
         +materialized: table
+      fact:
+        +materialized: table
