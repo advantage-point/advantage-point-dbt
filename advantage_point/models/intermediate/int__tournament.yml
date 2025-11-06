@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__tournaments
+  - name: int__tournament
     description: Intermediate model for tournament data.
     columns:
       - name: bk_tournament

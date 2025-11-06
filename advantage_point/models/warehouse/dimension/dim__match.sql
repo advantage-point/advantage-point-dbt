@@ -1,7 +1,7 @@
 with
 
 int_match as (
-    select * from {{ ref('int__matches') }}
+    select * from {{ ref('int__match') }}
 ),
 
 dim_date as (

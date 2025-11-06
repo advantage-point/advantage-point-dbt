@@ -1,7 +1,7 @@
 with
 
 int_sets as (
-    select * from {{ ref('int__sets') }}
+    select * from {{ ref('int__set') }}
 ),
 
 dim_match as (

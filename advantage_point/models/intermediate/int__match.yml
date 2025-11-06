@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__matches
+  - name: int__match
     description: Intermediate model for match data.
     columns:
       - name: bk_match

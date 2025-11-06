@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__players
+  - name: int__player
     description: Intermediate model for player data.
     columns:
       - name: bk_player

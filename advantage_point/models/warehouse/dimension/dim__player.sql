@@ -1,7 +1,7 @@
 with
 
 int_player as (
-    select * from {{ ref('int__players') }}
+    select * from {{ ref('int__player') }}
 ),
 
 dim_date as (

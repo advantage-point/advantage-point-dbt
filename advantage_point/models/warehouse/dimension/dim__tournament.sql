@@ -1,7 +1,7 @@
 with
 
 int_tournament as (
-    select * from {{ ref('int__tournaments') }}
+    select * from {{ ref('int__tournament') }}
 ),
 
 dim_date as (

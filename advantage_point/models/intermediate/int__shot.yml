@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__shots
+  - name: int__shot
     description: Intermediate model for shot data.
     columns:
 

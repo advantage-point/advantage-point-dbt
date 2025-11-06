@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__sets
+  - name: int__set
     description: Intermediate model for set data.
     columns:
       - name: bk_set
