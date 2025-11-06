@@ -66,6 +66,78 @@ tennisabstract_matches_bks as (
     from tennisabstract_matches_match_result
 ),
 
+-- create coalesced match title
+-- in case some titles are '404' error value
+tennisabstract_matches_title as (
+    select
+        *,
+
+        concat(
+            cast(match_year as string),
+            ' ',
+            match_tournament,
+            ' ',
+            match_round,
+            ': ',
+            match_player_one,
+            ' vs ',
+            match_player_two
+        ) as match_title_coalesce,
+
+    from tennisabstract_matches_bks
+),
+
+-- parse match winner
+tennisabstract_matches_winner as (
+    select
+        *,
+
+        -- match_result: {match_winner} d. {match_loser} {match_score}
+        split(match_result, ' d.')[0] as match_winner,
+
+    from tennisabstract_matches_title
+),
+
+-- parse match loser (and other player/bk_player columns)
+tennisabstract_matches_loser as (
+    select
+        *,
+
+        -- get bk match winner
+        case match_winner
+            when match_player_one then bk_match_player_one
+            when match_player_two then bk_match_player_two
+            else null
+        end as bk_match_winner,
+
+        -- get match loser
+        case match_winner
+            when match_player_one then match_player_two
+            when match_player_two then match_player_one
+            else null
+        end as match_loser,
+
+        -- get bk match loser
+        case match_winner
+            when match_player_one then bk_match_player_two
+            when match_player_two then bk_match_player_one
+            else null
+        end as bk_match_loser,
+
+    from tennisabstract_matches_winner
+),
+
+-- parse match score
+tennisabstract_matches_score as (
+    select
+        *,
+
+        -- match_result: {match_winner} d. {match_loser} {match_score}
+        split(match_result, match_loser || ' ')[1] as match_score,
+        
+    from tennisabstract_matches_loser
+),
+
 final as (
     select
         {{ generate_bk_match(
@@ -90,149 +162,22 @@ final as (
         match_gender,
 
         match_url,        
-        -- construct match title (in case some titles are '404' error value)
+
         coalesce(
             match_title,
-            concat(
-                cast(match_year as string),
-                ' ',
-                match_tournament,
-                ' ',
-                match_round,
-                ': ',
-                match_player_one,
-                ' vs ',
-                match_player_two
-            )    
+            match_title_coalesce
         ) as match_title,
         
         match_result,
         match_pointlog,
+
+        match_winner,
+        bk_match_winner,
+        match_loser,
+        bk_match_loser,
+        match_score,
         
-    from tennisabstract_matches_bks
+    from tennisabstract_matches_score
 )
 
 select * from final
-
-
-
--- -- -- parse match winner
--- -- tennisabstract_matches_match_winner as (
--- --     select
--- --         *,
--- --         -- match_result: {match_winner} d. {match_loser} {match_score}
--- --         split(match_result, ' d.')[0] as match_winner
-
-
--- -- -- parse match loser
--- -- tennisabstract_matches_match_loser as (
--- --     select
--- --         *,
--- --         case
--- --             when match_winner = match_player_one then match_player_two
--- --             when match_winner = match_player_two then match_player_one
--- --             else null
--- --         end as match_loser
--- --     from tennisabstract_matches_match_winner
--- -- ),
-
--- -- parse match score
--- tennisabstract_matches_match_score as (
---     select
---         *,
---         -- match_result: {match_winner} d. {match_loser} {match_score}
---         split(match_result, match_loser || ' ')[1] as match_score
---     from tennisabstract_matches_match_loser
--- ),
-
--- create bks
--- tennisabstract_matches_bk as (
---     select
-        -- *,
-        --     date_col='match_date'
-        --     tournament_year_col='match_year',
-        --     tournament_event_col='match_event',
-        --     tournament_name_col='match_tournament'
-        --     player_name_col='match_player_one',
-        --     player_gender_col='match_gender'
-        --     player_name_col='match_player_two',
-        --     player_gender_col='match_gender'
---     from tennisabstract_matches_match_score
--- ),
-
--- -- create player array string (for use in unique id)
--- tennisabstract_matches_match_players as (
---     select
---         *,
---         (
---             select array_agg(player order by player)
---             from unnest(array[match_player_one, match_player_two]) as player
---         ) as match_players,
---         (
---             select array_agg(player order by player)
---             from unnest(array[bk_match_player_one, bk_match_player_two]) as player
---         ) as bk_match_players
---     from tennisabstract_matches_bk
--- ),
-
--- -- override match title
--- tennisabstract_matches_match_title as (
---     select
---         * replace (
---             (
---                 case
---                     when contains_substr(match_title, '404 Not Found') then
---                         concat(
---                             cast(match_year as string),
---                             ' ',
---                             match_tournament,
---                             ' ',
---                             match_round,
---                             ': ',
---                             match_players[0],
---                             ' vs ',
---                             match_players[1]
---                         )
---                     else match_title
---                 end
---             ) as match_title
---         )
-
---     from tennisabstract_matches_match_players
--- ),
-
--- final as (
---     select
---             bk_match_date_col='bk_match_date',
---             bk_match_tournament_col='bk_match_tournament',
---             match_round_col='match_round',
---             bk_match_players_col='bk_match_players'
---         match_url,
---         bk_match_date,
---         match_date,
---         match_year,
---         match_gender,
---         match_event,
---         match_tournament,
---         bk_match_tournament,
---         match_round,
---         match_players,
---         bk_match_players,
---         match_player_one,
---         match_player_two,
---         bk_match_player_one,
---         bk_match_player_two,
---         match_title,
---         match_result,
---         match_pointlog,
---         match_winner,
---         match_loser,
---             player_name_col='match_winner',
---             player_gender_col='match_gender'
---             player_name_col='match_loser',
---             player_gender_col='match_gender'
---         match_score,
---     from tennisabstract_matches_match_title
--- )
-
--- select * from final

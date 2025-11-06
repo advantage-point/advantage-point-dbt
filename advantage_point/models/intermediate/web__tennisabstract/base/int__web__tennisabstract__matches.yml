@@ -84,28 +84,23 @@ models:
       - name: match_pointlog
         data_type: array
         description: Points within the match. Contain shot-by-shot descriptions.
-      
 
-      
+      - name: match_winner
+        data_type: string
+        description: Match winner.
 
-      
+      - name: bk_match_winner
+        data_type: string
+        description: Unique identifier for match winner.
 
-      # - name: match_winner
-      #   data_type: string
-      #   description: Match winner.
+      - name: match_loser
+        data_type: string
+        description: Match loser.
 
-      # - name: match_loser
-      #   data_type: string
-      #   description: Match loser.
+      - name: bk_match_loser
+        data_type: string
+        description: Unique identifier for match loser.
 
-      # - name: bk_match_winner
-      #   data_type: string
-      #   description: Unique identifier for match winner.
-
-      # - name: bk_match_loser
-      #   data_type: string
-      #   description: Unique identifier for match loser.
-
-      # - name: match_score
-      #   data_type: string
-      #   description: Match score (from winner's perspective).
+      - name: match_score
+        data_type: string
+        description: Match score (from winner's perspective).
