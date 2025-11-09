@@ -1,14 +1,7 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['bk_match', 'bk_set', 'bk_game',],
-    )
-}}
-
 with
 
-tennisabstract_matches_points as (
-    select * from {{ ref('int__web__tennisabstract__matches__points') }}
+tennisabstract_points as (
+    select * from {{ ref('int__web__tennisabstract__points__enriched') }}
 ),
 
 -- union points
@@ -21,7 +14,7 @@ points_union as (
                 bk_point,
                 bk_match,
                 point_number_in_match
-            from tennisabstract_matches_points
+            from tennisabstract_points
         )
     ) as p
 ),
@@ -34,18 +27,44 @@ final as (
 
         p_ta.bk_game,
 
-        p_ta.point_number_in_set,
-        p_ta.point_number_in_game,
-
-        p_ta.point_side,
         p_ta.point_result,
-        p_ta.number_of_shots,
         p_ta.rally_length,
 
-        p_ta.is_quality_point,
+         -- point number in set
+        row_number() over (
+            partition by p_ta.bk_match, p_ta.set_number_in_match
+            order by p_ta.game_number_in_set, p_ta.point_number_in_match
+        ) as point_number_in_set,
+
+        -- point number in game
+        row_number() over (
+            partition by p_ta.bk_match, p_ta.set_number_in_match, p_ta.game_number_in_set
+            order by p_ta.point_number_in_match
+        ) as point_number_in_game,
+
+        -- get side of court
+        case
+            -- determine side based on non-tiebreaker scores
+            when p_ta.point_score_in_game in (
+                '0-0', '0-30',
+                '15-15', '15-40',
+                '30-0', '30-30',
+                '40-40'
+            ) then 'deuce'
+            when p_ta.point_score_in_game in (
+                '0-15', '0-40',
+                '15-0', '15-30',
+                '30-15', '30-40',
+                'AD-40', '40-AD'
+            ) then 'ad'
+            -- determine side based on tiebreak scores
+            when mod(p_ta.point_score_in_game_server_int + p_ta.point_score_in_game_receiver_int, 2) = 0 then 'deuce'
+            when mod(p_ta.point_score_in_game_server_int + p_ta.point_score_in_game_receiver_int, 2) != 0 then 'ad'
+            else null
+        end as point_side,
 
     from points_union as p
-    left join tennisabstract_matches_points as p_ta on p.bk_point = p_ta.bk_point
+    left join tennisabstract_points as p_ta on p.bk_point = p_ta.bk_point
 )
 
 select * from final

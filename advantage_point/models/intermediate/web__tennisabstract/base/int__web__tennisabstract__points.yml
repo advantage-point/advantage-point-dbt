@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: int__web__tennisabstract__points
+    description: Intermediate model for raw tennisabstract point data (one row per point). Parsed from match_pointlog JSON.
+    columns:
+      - name: bk_point
+        data_type: string
+        description: Business key for the point.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+        data_tests:
+          - not_null
+          
+      - name: point_number_in_match
+        data_type: integer
+        description: Sequential point number within the match.
+        data_tests:
+          - not_null
+
+      - name: point_server
+        data_type: string
+        description: Point server.
+        data_tests:
+          - not_null
+
+      - name: set_score_in_match
+        data_type: string
+        description: Set score string at the time of the point from server's perspective.
+        data_tests:
+          - not_null
+
+      - name: game_score_in_set
+        data_type: string
+        description: Game score string within the set from server's perspective.
+        data_tests:
+          - not_null
+          
+      - name: point_score_in_game
+        data_type: string
+        description: Point score string within the game from server's perspective.
+        data_tests:
+          - not_null
+          
+      - name: point_shotlog
+        data_type: array
+        description: Array of shot descriptions for the point.
+        data_tests:
+          - not_null
