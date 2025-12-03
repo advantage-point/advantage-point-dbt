@@ -3,7 +3,7 @@
 {{
     config(
         materialized='table',
-        cluster_by=['bk_match',],
+        cluster_by=['bk_match', 'bk_set', 'bk_game',],
     )
 }}
 
@@ -173,10 +173,11 @@ final as (
         point_score_in_game_server,
         point_score_in_game_receiver,
 
+        set_score_in_match_server_int,
+        set_score_in_match_receiver_int,
         point_score_in_game_server_int,
         point_score_in_game_receiver_int,
 
-        set_number_in_match,
         game_number_in_set,
 
         point_result,
@@ -188,6 +189,12 @@ final as (
             game_number_col='game_number_in_match'
         )}} as bk_game,
         game_number_in_match,
+
+        {{ generate_bk_set(
+            bk_match_col='bk_match',
+            set_number_col='set_number_in_match'
+        )}} as bk_set,
+        set_number_in_match,
     
     from tennisabstract_points_running_numbers
 )
@@ -205,20 +212,12 @@ select * from final
 --     select
 --         *,
 
---             bk_match_col='bk_match',
---             point_number_col='point_number_in_match'
 
---             bk_match_col='bk_match',
---             game_number_col='game_number_in_match'
 
 --             bk_match_col='bk_match',
 --             set_number_col='set_number_in_match'
 
---             player_name_col='point_server',
---             player_gender_col='match_gender'
 
---             player_name_col='point_receiver',
---             player_gender_col='match_gender'
 
 --     from tennisabstract_matches_points_rally
 -- ),
@@ -854,93 +853,3 @@ select * from final
 
 --     from tennisabstract_matches_points_last_point
 -- ),
-
-
--- final as (
---     select
---         bk_point,
---         bk_match,
---         point_number_in_match,
---         match_url,
---         point_dict,
-
---         bk_game,
---         bk_set,        
-
---         bk_point_server,
---         bk_point_receiver,
---         bk_point_winner_result,
-
---         set_score_in_match,
---         game_score_in_set,
---         point_score_in_game,
---         point_shotlog,
---         set_score_in_match_server,
---         set_score_in_match_receiver,
---         game_score_in_set_server,
---         game_score_in_set_receiver,
---         point_score_in_game_server,
---         point_score_in_game_receiver,
---         set_score_in_match_server_int,
---         set_score_in_match_receiver_int,
---         game_score_in_set_server_int,
---         game_score_in_set_receiver_int,
---         point_score_in_game_server_int,
---         point_score_in_game_receiver_int,
---         set_number_in_match,
---         game_number_in_set,
---         game_number_in_match,
---         point_number_in_set,
---         point_number_in_game,
---         point_side,
---         point_result,
---         number_of_shots,
---         rally_length,
---         set_score_in_match_player_one,
---         set_score_in_match_player_one_int,
---         set_score_in_match_player_two,
---         set_score_in_match_player_two_int,
---         game_score_in_set_player_one,
---         game_score_in_set_player_one_int,
---         game_score_in_set_player_two,
---         game_score_in_set_player_two_int,
---         point_score_in_game_player_one,
---         point_score_in_game_player_one_int,
---         point_score_in_game_player_two,
---         point_score_in_game_player_two_int,
-
---         is_tiebreak_game,
-        
---         is_tiebreak_set,
---         is_final_set,
-
---         is_game_point_player_one,
---         is_game_point_player_two,
---         is_break_point_player_one,
---         is_break_point_player_two,
-
---         is_set_point_player_one,
---         is_set_point_player_two,
---         cumulative_set_score_in_match_player_one_int,
---         cumulative_set_score_in_match_player_two_int,
-
---         is_match_point_player_one,
---         is_match_point_player_two,
-
---         point_score_in_match_full_player_one,
---         point_score_in_match_full_player_two,
-
---         bk_point_winner_next_point,
---         bk_point_winner,
---         bk_point_loser,
-
---         is_last_point_in_game,
---         is_last_point_in_set,
-
---         is_quality_point,
-
-
---     from tennisabstract_matches_points_quality
--- )
-
--- select * from final

@@ -76,6 +76,18 @@ models:
         data_tests:
           - not_null
 
+      - name: set_score_in_match_server_int
+        data_type: integer
+        description: Set score (server) as integer.
+        data_tests:
+          - not_null
+          
+      - name: set_score_in_match_receiver_int
+        data_type: integer
+        description: Set score (receiver) as integer.
+        data_tests:
+          - not_null
+
       - name: point_score_in_game_server_int
         data_type: integer
         description: Point score (server) as integer. AD converted to 41.
@@ -85,12 +97,6 @@ models:
       - name: point_score_in_game_receiver_int
         data_type: integer
         description: Point score (receiver) as integer. AD converted to 41.
-        data_tests:
-          - not_null
-          
-      - name: set_number_in_match
-        data_type: integer
-        description: Ordinal number of the set within the match (1 = first set).
         data_tests:
           - not_null
           
@@ -121,5 +127,17 @@ models:
       - name: bk_game
         data_type: string
         description: Unique identifier for game.
+        data_tests:
+          - not_null
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for set.
+        data_tests:
+          - not_null
+
+      - name: set_number_in_match
+        data_type: integer
+        description: Ordinal number of the set within the match (1 = first set).
         data_tests:
           - not_null
