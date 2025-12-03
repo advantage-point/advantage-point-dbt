@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int__set__player
+    description: Intermediate model for set-player data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - bk_set
+              - bk_player
+    columns:
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets.
+        data_tests:
+          - not_null
+
+      - name: bk_player
+        data_type: string
+        description: Unique identifier for players.
+        data_tests:
+          - not_null
+
+      - name: player_score
+        data_type: string
+        description: Set score from the player's point of view.

@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: fact__set__player
+    description: Fact table representing each player's participation in a set.
+    columns:
+      - name: sk_set_player
+        description: Surrogate key for set-player.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: sk_set
+        description: Foreign key to set dimension.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim__set')
+                field: sk_set
+
+      - name: sk_player
+        description: Foreign key to player dimension.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim__player')
+                field: sk_player
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets.
+
+      - name: bk_player
+        data_type: string
+        description: Unique identifier for players.
+
+      - name: player_score
+        data_type: string
+        description: Set score from the player's point of view.

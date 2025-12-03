@@ -9,11 +9,7 @@
 
 with
 
-tennisabstract_points as (
-    select * from {{ ref('int__web__tennisabstract__points__enriched') }}
-),
-
-tennisabstract_sets_points as (
+tennisabstract_sets as (
     select
         *,
 
@@ -28,10 +24,7 @@ tennisabstract_sets_points as (
             else null
         end as set_score_in_match_norm,
 
-    from tennisabstract_points
-    where 1=1
-    and game_score_in_set = '0-0'
-    and point_score_in_game = '0-0'
+    from {{ ref('int__web__tennisabstract__sets') }}
 ),
 
 -- union sets
@@ -44,7 +37,7 @@ sets_union as (
                 bk_set,
                 bk_match,
                 set_number_in_match
-            from tennisabstract_points
+            from tennisabstract_sets
         )
     ) as s
 ),
@@ -58,7 +51,7 @@ final as (
         s_p_ta.set_score_in_match_norm as set_score_in_match
 
     from sets_union as s
-    left join tennisabstract_sets_points as s_p_ta on s.bk_set = s_p_ta.bk_set
+    left join tennisabstract_sets as s_p_ta on s.bk_set = s_p_ta.bk_set
 )
 
 select * from final

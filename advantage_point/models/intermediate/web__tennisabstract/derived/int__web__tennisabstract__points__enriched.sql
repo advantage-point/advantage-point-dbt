@@ -38,6 +38,9 @@ tennisabstract_point_players as (
             else null
         end as bk_point_receiver,
 
+        m.bk_match_player_one as bk_point_player_one,
+        m.bk_match_player_two as bk_point_player_two,
+
     from tennisabstract_points as p
     left join tennisabstract_matches as m on p.bk_match = m.bk_match
 ),
@@ -163,6 +166,8 @@ final as (
         game_score_in_set,
         point_score_in_game,
 
+        bk_point_player_one,
+        bk_point_player_two,
         bk_point_server,
         bk_point_receiver,
 
@@ -260,23 +265,7 @@ select * from final
 --     select
 --         *,
 
---         -- player one scores
---         lpad(
---             (
---                 case
---                     when bk_point_server = bk_match_player_one then set_score_in_match_server
---                     when bk_point_receiver = bk_match_player_one then set_score_in_match_receiver
---                     else null
---                 end
---             ),
---             2,
---             '0'
---         )  as set_score_in_match_player_one,
---         case
---             when bk_point_server = bk_match_player_one then set_score_in_match_server_int
---             when bk_point_receiver = bk_match_player_one then set_score_in_match_receiver_int
---             else null
---         end as set_score_in_match_player_one_int,
+
 --         lpad(
 --             (
 --                 case
@@ -312,23 +301,7 @@ select * from final
 --             else null
 --         end as point_score_in_game_player_one_int,
         
---         -- player 2 scores
---         lpad(
---             (
---                 case
---                     when bk_point_server = bk_match_player_two then set_score_in_match_server
---                     when bk_point_receiver = bk_match_player_two then set_score_in_match_receiver
---                     else null
---                 end
---             ),
---             2,
---             '0'
---         )  as set_score_in_match_player_two,
---         case
---             when bk_point_server = bk_match_player_two then set_score_in_match_server_int
---             when bk_point_receiver = bk_match_player_two then set_score_in_match_receiver_int
---             else null
---         end as set_score_in_match_player_two_int,
+
 --         lpad(
 --             (
 --                 case
