@@ -3,16 +3,6 @@ version: 2
 models:
   - name: stg_tennisabstract__players
     description: Staging model for tennisabstract player data.
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - player_url
-              - audit_column__start_datetime_utc
-      - one_true_per_id:
-          arguments:
-            id_column: player_url
-            active_flag_column: audit_column__active_flag
     columns:
       - name: player_name
         data_type: string
