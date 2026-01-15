@@ -396,5 +396,5 @@ models:
       - name: is_quality_point
         data_type: boolean
         description: Boolean indicating if point record is of good data quality.
-        data_test:
+        data_tests:
           - not_null

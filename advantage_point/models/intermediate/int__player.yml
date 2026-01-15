@@ -88,7 +88,7 @@ models:
         description: Unique identifier for player last match played date.
 
       - name: player_last_match_played_date
-        date_type: date
+        data_type: date
         description: Date on which player's last match took place.
 
       - name: player_twitter_handle
