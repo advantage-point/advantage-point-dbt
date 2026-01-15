@@ -35,13 +35,19 @@ seeds:
 models:
   advantage_point:
     # Config indicated by + and applies to all files under models/example/
+    +enabled: false
     staging:
       +materialized: view
       +schema: advpoint__stg
+      +enabled: true
+      seed:
+        +enabled: false
     intermediate:
       +materialized: view
       +schema: advpoint__int
+      +enabled: false
     warehouse:
+      +enabled: false
       +schema: advpoint__dwh
       dimension:
         +materialized: table
