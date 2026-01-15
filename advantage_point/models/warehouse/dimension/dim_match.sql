@@ -23,7 +23,7 @@ final as (
         ) }} as sk_match_tournament,
         m.bk_match_tournament,
         {{ generate_sk_date(
-            bk_date_bol='m.bk_match_date'
+            bk_date_col='m.bk_match_date'
         ) }} as sk_match_date,
         m.bk_match_date,
         m.bk_match_players_array,
