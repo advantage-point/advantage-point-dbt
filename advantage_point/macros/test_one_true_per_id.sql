@@ -1,19 +1,26 @@
 {% test one_true_per_id(
     model,
-    id_column,
+    id_column_array,
     active_flag_column
 ) %}
-    with
-        id_agg as (
-            select
-                {{ id_column }} as id,
-                count(*) as id_count
-            from {{ model }}
-            where {{ active_flag_column }} = True
-            group by all
-        )
+
+{% set composite_id %}
+    {{ id_column_array | map('string') | join(" || '|' || ") }}
+{% endset %}
+
+with id_agg as (
+
     select
-        *
-    from id_agg
-    where id_count > 1
+        {{ composite_id }} as composite_id,
+        count(*) as id_count
+    from {{ model }}
+    where {{ active_flag_column }} = true
+    group by composite_id
+
+)
+
+select *
+from id_agg
+where id_count > 1
+
 {% endtest %}
