@@ -8,7 +8,7 @@ tennisabstract_tournaments as (
             tournament_event_col='tournament_event',
             tournament_name_col='tournament_name'
         )}} as bk_tournament,
-    from {{ ref('stg__web__tennisabstract__tournaments') }}
+    from {{ ref('stg_tennisabstract__tournaments') }}
     where audit_column__active_flag = true
 ),
 

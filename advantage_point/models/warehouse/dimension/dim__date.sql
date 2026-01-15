@@ -1,7 +1,7 @@
 with
 
 date_spine as (
-    select * from {{ ref('stg__utils__date_spine') }}
+    select * from {{ ref('stg_utils__date_spine') }}
 ),
 
 -- create bk

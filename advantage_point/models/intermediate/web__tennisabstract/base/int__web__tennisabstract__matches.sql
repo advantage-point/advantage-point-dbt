@@ -23,7 +23,7 @@ tennisabstract_matches as (
             player_gender_col='match_gender'
         )}} as bk_match_player_two,
 
-    from {{ ref('stg__web__tennisabstract__matches') }}
+    from {{ ref('stg_tennisabstract__matches') }}
     where audit_column__active_flag = true
 ),
 

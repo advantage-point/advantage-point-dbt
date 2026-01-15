@@ -7,7 +7,7 @@ tennisabstract_players as (
             player_gender_col='player_gender'
         )}} as bk_player,
         *
-    from {{ ref('stg__web__tennisabstract__players') }}
+    from {{ ref('stg_tennisabstract__players') }}
     where audit_column__active_flag = true
 ),
 
@@ -18,7 +18,7 @@ tennisabstract_players_classic as (
             player_name_col='player_name',
             player_gender_col='player_gender'
         )}} as bk_player
-    from {{ ref('stg__web__tennisabstract__players_classic') }}
+    from {{ ref('stg_tennisabstract__players_classic') }}
     where audit_column__active_flag = true
 ),
 
