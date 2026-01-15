@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__matches
+  - name: int_tennisabstract__matches
     description: Intermediate model for tennisabstract match data.
     columns:
       - name: bk_match

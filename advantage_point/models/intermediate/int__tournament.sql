@@ -18,7 +18,7 @@ tennisabstract_matches as (
         match_year as tournament_year,
         match_event as tournament_event,
         match_tournament as tournament_name,
-    from {{ ref('int__web__tennisabstract__matches') }}
+    from {{ ref('int_tennisabstract__matches') }}
 ),
 
 tennisabstract_tournament_formats as (

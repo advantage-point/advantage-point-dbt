@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: dim__date
+  - name: dim_date
     description: Dimension model for date.
     columns:
       - name: sk_date

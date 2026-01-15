@@ -1,11 +1,11 @@
 with
 
 int_player as (
-    select * from {{ ref('int__player') }}
+    select * from {{ ref('int_player') }}
 ),
 
 dim_date as (
-    select * from {{ ref('dim__date') }}
+    select * from {{ ref('dim_date') }}
 ),
 
 -- generate sk

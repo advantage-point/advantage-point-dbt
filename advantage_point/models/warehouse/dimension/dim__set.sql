@@ -5,7 +5,7 @@ int_sets as (
 ),
 
 dim_match as (
-    select * from {{ ref('dim__match') }}
+    select * from {{ ref('dim_match') }}
 ),
 
 -- create sks

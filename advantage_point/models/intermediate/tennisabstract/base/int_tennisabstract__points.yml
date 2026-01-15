@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__points
+  - name: int_tennisabstract__points
     description: Intermediate model for raw tennisabstract point data (one row per point). Parsed from match_pointlog JSON.
     columns:
       - name: bk_point

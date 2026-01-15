@@ -1,15 +1,15 @@
 with
 
 int_match as (
-    select * from {{ ref('int__match') }}
+    select * from {{ ref('int_match') }}
 ),
 
 dim_date as (
-    select * from {{ ref('dim__date') }}
+    select * from {{ ref('dim_date') }}
 ),
 
 dim_tournament as (
-    select * from {{ ref('dim__tournament') }}
+    select * from {{ ref('dim_tournament') }}
 ),
 
 -- create sks

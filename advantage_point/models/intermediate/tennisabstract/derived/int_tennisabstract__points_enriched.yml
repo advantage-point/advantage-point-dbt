@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__web__tennisabstract__points__enriched
+  - name: int_tennisabstract__points_enriched
     description: Intermediate model for enriched tennisabstract point data.
     columns:
       - name: bk_point

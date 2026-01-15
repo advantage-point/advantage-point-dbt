@@ -11,7 +11,7 @@
 with
 
 tennisabstract_matches as (
-    select * from {{ ref('int__web__tennisabstract__matches') }}
+    select * from {{ ref('int_tennisabstract__matches') }}
 ),
 
 -- parse out points into own rows

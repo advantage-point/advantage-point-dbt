@@ -45,6 +45,8 @@ models:
       +materialized: view
       +schema: advpoint__int
       +enabled: false
+      tennisabstract:
+        +enabled: true
     warehouse:
       +enabled: false
       +schema: advpoint__dwh

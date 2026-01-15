@@ -1,11 +1,11 @@
 with
 
 tennisabstract_points as (
-    select * from {{ ref('int__web__tennisabstract__points__enriched') }}
+    select * from {{ ref('int_tennisabstract__points_enriched') }}
 ),
 
 matches as (
-    select * from {{ ref('int__match') }}
+    select * from {{ ref('int_match') }}
 ),
 
 tournaments as (

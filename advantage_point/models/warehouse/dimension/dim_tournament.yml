@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: dim__tournament
+  - name: dim_tournament
     description: Dimension model for tennis tournaments.
     columns:
       - name: sk_tournament
@@ -35,7 +35,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_tournament_start_date

@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__point
+  - name: int_point
     description: Intermediate model for point data.
     columns:
       - name: bk_point

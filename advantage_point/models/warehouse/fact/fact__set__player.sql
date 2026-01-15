@@ -15,7 +15,7 @@ dim_set as (
 ),
 
 dim_player as (
-    select * from {{ ref('dim__player') }}
+    select * from {{ ref('dim_player') }}
 ),
 
 -- generate surrogate key

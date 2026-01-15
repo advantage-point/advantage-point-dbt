@@ -10,7 +10,7 @@
 with
 
 tennisabstract_points as (
-    select * from {{ ref('int__web__tennisabstract__points__enriched') }}
+    select * from {{ ref('int_tennisabstract__points_enriched') }}
     where point_score_in_game = '0-0'
 ),
 

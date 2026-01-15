@@ -23,7 +23,7 @@ tennisabstract_players_classic as (
 ),
 
 tennisabstract_matches as (
-    select * from {{ ref('int__web__tennisabstract__matches') }}
+    select * from {{ ref('int_tennisabstract__matches') }}
 ),
 
 -- get players from match data

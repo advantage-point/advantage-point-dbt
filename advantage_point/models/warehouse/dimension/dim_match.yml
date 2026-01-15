@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: dim__match
+  - name: dim_match
     description: Dimension model for matches.
     columns:
       - name: sk_match
@@ -24,7 +24,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim__tournament')
+                to: ref('dim_tournament')
                 field: sk_tournament
 
       - name: bk_match_tournament
@@ -38,7 +38,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_match_date

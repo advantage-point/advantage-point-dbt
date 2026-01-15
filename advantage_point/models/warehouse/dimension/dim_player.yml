@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: dim__player
+  - name: dim_player
     description: Dimension model for player attributes.
     columns:
       - name: sk_player
@@ -55,7 +55,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_player_date_of_birth
@@ -112,7 +112,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_player_first_peak_singles_ranking_date
@@ -125,7 +125,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_player_last_peak_singles_ranking_date
@@ -146,7 +146,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
 
       - name: bk_player_first_peak_doubles_ranking_date
@@ -159,7 +159,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('dim__date')
+                to: ref('dim_date')
                 field: sk_date
         
       - name: bk_player_last_match_played_date

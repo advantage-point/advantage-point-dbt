@@ -5,7 +5,7 @@ int_tournament as (
 ),
 
 dim_date as (
-    select * from {{ ref('dim__date') }}
+    select * from {{ ref('dim_date') }}
 ),
 
 -- generate sk

@@ -10,11 +10,11 @@
 with
 
 tennisabstract_points as (
-    select * from {{ ref('int__web__tennisabstract__points') }}
+    select * from {{ ref('int_tennisabstract__points') }}
 ),
 
 tennisabstract_matches as (
-    select * from {{ ref('int__web__tennisabstract__matches') }}
+    select * from {{ ref('int_tennisabstract__matches') }}
 ),
 
 -- get point server and receiver
