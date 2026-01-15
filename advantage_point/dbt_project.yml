@@ -38,6 +38,8 @@ models:
     staging:
       +materialized: view
       +schema: advpoint__stg
+      seed:
+        enabled: false
     intermediate:
       +materialized: view
       +schema: advpoint__int
