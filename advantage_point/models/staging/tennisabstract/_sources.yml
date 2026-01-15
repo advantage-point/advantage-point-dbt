@@ -10,14 +10,15 @@ sources:
         description: Contain matches that exist on the site.
         data_tests:
           - dbt_utils.unique_combination_of_columns:
-            arguments:
-              combination_of_columns:
-                - match_url
-                - audit_column__start_datetime_utc
+              arguments:
+                combination_of_columns:
+                  - match_url
+                  - audit_column__start_datetime_utic
           - one_true_per_id:
-            id_column_array:
-              - match_url
-            active_flag_column: audit_column__active_flag
+              arguments:
+                id_column_array:
+                  - match_url
+                active_flag_column: audit_column__active_flag
 
       - name: players
         identifier: raw__web__tennisabstract__players
