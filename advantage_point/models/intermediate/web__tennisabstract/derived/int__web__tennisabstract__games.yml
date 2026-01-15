@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: int__web__tennisabstract__games
+    description: Intermediate model for tennisabstract game data (taken from point data).
+    columns:
+      - name: bk_game
+        data_type: string
+        description: Business key for the game.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+          
+      - name: game_number_in_match
+        data_type: integer
+        description: Sequential game number within the match.
+
+      - name: game_score_in_set
+        data_type: string
+        description: Game score string within the set from server's perspective.
+          
+      - name: game_score_in_set_server
+        data_type: string
+        description: Game score for the server at the time of the point.
+          
+      - name: game_score_in_set_receiver
+        data_type: string
+        description: Game score for the receiver at the time of the point.
+
+      - name: game_number_in_set
+        data_type: integer
+        description: Ordinal number of the game within the set.
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets (set number in match).  
+
+      - name: bk_game_server
+        data_type: string
+        description: Unique identifier for game server.
+
+      - name: bk_game_receiver
+        data_type: string
+        description: Unique identifier for game receiver.
