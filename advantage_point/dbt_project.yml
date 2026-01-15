@@ -41,16 +41,34 @@ models:
       +enabled: false
       tennisabstract:
         +enabled: true
+      utils:
+        +enabled: true
     intermediate:
       +materialized: view
       +schema: advpoint__int
       +enabled: false
       tennisabstract:
+        +enabled: false
+        base:
+          +enabled: true
+      int_match:
+        +enabled: true
+      int_player:
+        +enabled: true
+      int_tournament:
         +enabled: true
     warehouse:
       +enabled: false
       +schema: advpoint__dwh
       dimension:
         +materialized: table
+        dim_date:
+          +enabled: true
+        dim_match:
+          +enabled: true
+        dim_player:
+          +enabled: true
+        dim_tournament:
+          +enabled: true
       fact:
         +materialized: table

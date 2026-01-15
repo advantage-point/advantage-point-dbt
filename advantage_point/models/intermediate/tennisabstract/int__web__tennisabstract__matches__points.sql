@@ -12,7 +12,7 @@ tennisabstract_matches as (
 ),
 
 tournaments as (
-    select * from {{ ref('int__tournament') }}
+    select * from {{ ref('int_tournament') }}
 ),
 
 -- parse out points into own rows

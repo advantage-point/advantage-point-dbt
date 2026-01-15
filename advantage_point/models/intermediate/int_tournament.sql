@@ -21,15 +21,15 @@ tennisabstract_matches as (
     from {{ ref('int_tennisabstract__matches') }}
 ),
 
-tennisabstract_tournament_formats as (
-    select * from {{ ref('int__seed__tennisabstract_tournament_formats') }}
-),
+-- tennisabstract_tournament_formats as (
+--     select * from  ref('int__seed__tennisabstract_tournament_formats') 
+-- ),
 
--- get 'default' rows from tournament formats
-tennisabstract_tournament_formats_default as (
-    select * from tennisabstract_tournament_formats
-    where lower(tournament_name) = '_default'
-),
+-- -- get 'default' rows from tournament formats
+-- tennisabstract_tournament_formats_default as (
+--     select * from tennisabstract_tournament_formats
+--     where lower(tournament_name) = '_default'
+-- ),
 
 -- get tournaments from match data
 tennisabstract_match_tournaments as (
@@ -107,51 +107,51 @@ final as (
             )
         ) as tournament_title,
 
-        coalesce(
-            tf.best_of_sets,
-            tf_default.best_of_sets
-        ) as best_of_sets,
+        -- coalesce(
+        --     tf.best_of_sets,
+        --     tf_default.best_of_sets
+        -- ) as best_of_sets,
 
-        coalesce(
-            tf.sets_to_win,
-            tf_default.sets_to_win
-        ) as sets_to_win,
+        -- coalesce(
+        --     tf.sets_to_win,
+        --     tf_default.sets_to_win
+        -- ) as sets_to_win,
 
-        coalesce(
-            tf.games_per_set,
-            tf_default.games_per_set
-        ) as games_per_set,
+        -- coalesce(
+        --     tf.games_per_set,
+        --     tf_default.games_per_set
+        -- ) as games_per_set,
 
-        coalesce(
-            tf.tiebreak_trigger_game,
-            tf_default.tiebreak_trigger_game
-        ) as tiebreak_trigger_game,
+        -- coalesce(
+        --     tf.tiebreak_trigger_game,
+        --     tf_default.tiebreak_trigger_game
+        -- ) as tiebreak_trigger_game,
 
-        coalesce(
-            tf.tiebreak_points,
-            tf_default.tiebreak_points
-        ) as tiebreak_points,
+        -- coalesce(
+        --     tf.tiebreak_points,
+        --     tf_default.tiebreak_points
+        -- ) as tiebreak_points,
 
-        coalesce(
-            tf.final_set_tiebreak_trigger_game,
-            tf_default.final_set_tiebreak_trigger_game
-        ) as final_set_tiebreak_trigger_game,
+        -- coalesce(
+        --     tf.final_set_tiebreak_trigger_game,
+        --     tf_default.final_set_tiebreak_trigger_game
+        -- ) as final_set_tiebreak_trigger_game,
 
-        coalesce(
-            tf.final_set_tiebreak_points,
-            tf_default.final_set_tiebreak_points
-        ) as final_set_tiebreak_points,
+        -- coalesce(
+        --     tf.final_set_tiebreak_points,
+        --     tf_default.final_set_tiebreak_points
+        -- ) as final_set_tiebreak_points,
 
-        coalesce(
-            tf.is_ad_scoring,
-            tf_default.is_ad_scoring
-        ) as is_ad_scoring,
+        -- coalesce(
+        --     tf.is_ad_scoring,
+        --     tf_default.is_ad_scoring
+        -- ) as is_ad_scoring,
 
     from tournaments_union as t
     left join tennisabstract_tournaments as t_ta on t.bk_tournament = t_ta.bk_tournament
     left join tennisabstract_match_tournaments_row_num as m_ta on t.bk_tournament = m_ta.bk_tournament
-    left join tennisabstract_tournament_formats as tf on t.bk_tournament = tf.bk_tournament
-    left join tennisabstract_tournament_formats_default as tf_default on lower(t.tournament_event) = lower(tf_default.tournament_event)
+    -- left join tennisabstract_tournament_formats as tf on t.bk_tournament = tf.bk_tournament
+    -- left join tennisabstract_tournament_formats_default as tf_default on lower(t.tournament_event) = lower(tf_default.tournament_event)
 )
 
 select * from final

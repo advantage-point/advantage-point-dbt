@@ -9,7 +9,7 @@ matches as (
 ),
 
 tournaments as (
-    select * from {{ ref('int__tournament') }}
+    select * from {{ ref('int_tournament') }}
 ),
 
 -- union points
