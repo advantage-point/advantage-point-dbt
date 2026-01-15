@@ -38,9 +38,9 @@ models:
     staging:
       +materialized: view
       +schema: advpoint__stg
-      +enabled: true
-      seed:
-        +enabled: false
+      +enabled: false
+      tennisabstract:
+        +enabled: true
     intermediate:
       +materialized: view
       +schema: advpoint__int
