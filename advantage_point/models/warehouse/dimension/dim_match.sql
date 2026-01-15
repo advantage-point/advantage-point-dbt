@@ -4,14 +4,6 @@ int_match as (
     select * from {{ ref('int_match') }}
 ),
 
-dim_date as (
-    select * from {{ ref('dim_date') }}
-),
-
-dim_tournament as (
-    select * from {{ ref('dim_tournament') }}
-),
-
 -- create sks
 match_sks as (
     select
@@ -26,17 +18,19 @@ final as (
     select
         m.sk_match,
         m.bk_match,
-        t.sk_tournament as sk_match_tournament,
+        {{ generate_sk_tournament(
+            bk_tournament_col='m.bk_match_tournament'
+        ) }} as sk_match_tournament,
         m.bk_match_tournament,
-        d_match_date.sk_date as sk_match_date,
+        {{ generate_sk_date(
+            bk_date_bol='m.bk_match_date'
+        ) }} as sk_match_date,
         m.bk_match_date,
         m.bk_match_players_array,
         m.match_round,
         m.match_title,
     
     from match_sks as m
-    left join dim_tournament as t on m.bk_match_tournament = t.bk_tournament
-    left join dim_date as d_match_date on m.bk_match_date = d_match_date.bk_date
 )
 
 select * from final

@@ -4,10 +4,6 @@ int_player as (
     select * from {{ ref('int_player') }}
 ),
 
-dim_date as (
-    select * from {{ ref('dim_date') }}
-),
-
 -- generate sk
 player_sks as (
     select
@@ -32,7 +28,9 @@ final as (
         p.player_height_in_cm,
         p.player_hand_plays,
         p.player_backhand_plays,
-        date_player_date_of_birth.sk_date as sk_player_date_of_birth,
+        {{ generate_sk_date(
+            bk_date_col='p.bk_player_date_of_birth'
+        ) }} as sk_player_date_of_birth,
         p.bk_player_date_of_birth,
 
         -- tours and associations
@@ -51,23 +49,26 @@ final as (
         p.is_player_active,
         p.player_current_singles_ranking,
         p.player_peak_singles_ranking,
-        date_player_first_peak_singles_ranking_date.sk_date as sk_player_first_peak_singles_ranking_date,
+        {{ generate_sk_date(
+            bk_date_col='p.bk_player_first_peak_singles_ranking_date'
+        ) }} as sk_player_first_peak_singles_ranking_date,
         p.bk_player_first_peak_singles_ranking_date,
-        date_player_last_peak_singles_ranking_date.sk_date as sk_player_last_peak_singles_ranking_date,
+        {{ generate_sk_date(
+            bk_date_col='p.bk_player_last_peak_singles_ranking_date'
+        ) }} as sk_player_last_peak_singles_ranking_date,
         p.bk_player_last_peak_singles_ranking_date,
         p.player_current_doubles_ranking,
         p.player_peak_doubles_ranking,
-        date_player_first_peak_doubles_ranking_date.sk_date as sk_player_first_peak_doubles_ranking_date,
-        p.bk_player_first_peak_doubles_ranking_date, 
-        date_player_last_match_played_date.sk_date as sk_player_last_match_played_date,
+        {{ generate_sk_date(
+            bk_date_col='p.bk_player_first_peak_doubles_ranking_date'
+        ) }} as sk_player_first_peak_doubles_ranking_date,
+        p.bk_player_first_peak_doubles_ranking_date,
+        {{ generate_sk_date(
+            bk_date_col='p.bk_player_last_match_played_date'
+        ) }} as sk_player_last_match_played_date,
         p.bk_player_last_match_played_date,
 
     from player_sks as p
-    left join dim_date as date_player_date_of_birth on p.bk_player_date_of_birth = date_player_date_of_birth.bk_date 
-    left join dim_date as date_player_first_peak_singles_ranking_date on p.bk_player_first_peak_singles_ranking_date = date_player_first_peak_singles_ranking_date.bk_date 
-    left join dim_date as date_player_last_peak_singles_ranking_date on p.bk_player_last_peak_singles_ranking_date = date_player_last_peak_singles_ranking_date.bk_date 
-    left join dim_date as date_player_first_peak_doubles_ranking_date on p.bk_player_first_peak_doubles_ranking_date = date_player_first_peak_doubles_ranking_date.bk_date 
-    left join dim_date as date_player_last_match_played_date on p.bk_player_last_match_played_date = date_player_last_match_played_date.bk_date 
     
 )
 

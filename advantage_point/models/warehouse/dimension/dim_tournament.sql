@@ -4,10 +4,6 @@ int_tournament as (
     select * from {{ ref('int_tournament') }}
 ),
 
-dim_date as (
-    select * from {{ ref('dim_date') }}
-),
-
 -- generate sk
 tournament_sk as (
     select
@@ -33,7 +29,9 @@ final as (
         t.tournament_title,
 
         -- optional attributes
-        d_tsd.sk_date as sk_tournament_start_date,
+        {{ generate_sk_date(
+            bk_date_col='t.bk_tournament_start_date'
+        ) }} as sk_tournament_start_date,
         t.bk_tournament_start_date,
         t.tournament_surface,
         t.tournament_draw_size,
@@ -47,7 +45,6 @@ final as (
         -- t.is_ad_scoring,
 
     from tournament_sk as t
-    left join dim_date as d_tsd on t.bk_tournament_start_date = d_tsd.bk_date
 )
 
 select * from final
