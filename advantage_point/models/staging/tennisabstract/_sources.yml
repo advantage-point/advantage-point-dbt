@@ -13,7 +13,7 @@ sources:
               arguments:
                 combination_of_columns:
                   - match_url
-                  - audit_column__start_datetime_utic
+                  - audit_column__start_datetime_utc
           - one_true_per_id:
               arguments:
                 id_column_array:
