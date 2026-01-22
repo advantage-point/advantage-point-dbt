@@ -55,6 +55,8 @@ models:
           +enabled: false
           int_tennisabstract__points_enriched:
             +enabled: true
+          int_tennisabstract__shots:
+            +enabled: true
       int_match:
         +enabled: true
       int_match_player:

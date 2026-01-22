@@ -28,6 +28,10 @@ models:
         data_type: string
         description: Point score string within the game from server's perspective.
 
+      - name: point_shotlog
+        data_type: array
+        description: Shots within the point.
+
       - name: bk_point_player_one
         data_type: string
         description: Unique identifier for a player.

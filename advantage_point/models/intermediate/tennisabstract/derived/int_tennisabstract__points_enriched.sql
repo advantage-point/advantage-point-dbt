@@ -399,6 +399,7 @@ final as (
         set_score_in_match,
         game_score_in_set,
         point_score_in_game,
+        point_shotlog,
 
         bk_point_player_one,
         bk_point_player_two,

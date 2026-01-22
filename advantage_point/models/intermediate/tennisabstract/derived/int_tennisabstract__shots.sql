@@ -7,12 +7,13 @@
 
 with
 
-tennisabstract_matches_points as (
-    select * from {{ ref('int__web__tennisabstract__matches__points') }}
+tennisabstract_points as (
+    select * from {{ ref('int_tennisabstract__points_enriched') }}
+    where point_shotlog is not null
 ),
 
 -- split out shotlog into rows
-tennisabstract_matches_points_shots as (
+tennisabstract_shots as (
     select
         * except(ordinality, shot_text),
         
@@ -21,12 +22,12 @@ tennisabstract_matches_points_shots as (
 
         trim(shot_text) as shot_text,
 
-    from tennisabstract_matches_points,
+    from tennisabstract_points,
     unnest(point_shotlog) as shot_text with offset as ordinality
 ),
 
 -- split serves into own rows
-tennisabstract_matches_points_shots_serves as (
+tennisabstract_shots_serves as (
   select
     * except(serve_text) replace (
       trim(serve_text) as shot_text
@@ -39,7 +40,7 @@ tennisabstract_matches_points_shots_serves as (
       else null
     end as serve_sort,
 
-  from tennisabstract_matches_points_shots,
+  from tennisabstract_shots,
   unnest(split(shot_text, '.')) as serve_text
   where 1=1
       and shot_number = 1 -- filter for 'serve' rows
@@ -47,32 +48,32 @@ tennisabstract_matches_points_shots_serves as (
 ),
 
 -- filter out non-serves (will be unioned back later)
-tennisabstract_matches_points_shots_non_serves as (
+tennisabstract_shots_non_serves as (
   select
     *,
     -- assign a sort value so that rally shots are ordered after serve shots
     3 as serve_sort,
-  from tennisabstract_matches_points_shots
+  from tennisabstract_shots
   where shot_number != 1
 ),
 
 -- union serve rows with non-serve rows
-tennisabstract_matches_points_shots_union as (
-  (select * from tennisabstract_matches_points_shots_serves)
+tennisabstract_shots_union as (
+  (select * from tennisabstract_shots_serves)
   union all
-  (select * from tennisabstract_matches_points_shots_non_serves)
+  (select * from tennisabstract_shots_non_serves)
 ),
 
 -- get shot number with serve factored
-tennisabstract_matches_points_shot_num as (
+tennisabstract_shot_num as (
   select
     *,
     row_number() over (partition by bk_point order by shot_number, serve_sort) as shot_number_in_point,
-  from tennisabstract_matches_points_shots_union
+  from tennisabstract_shots_union
 ),
 
 -- get shot attributes
-tennisabstract_matches_points_shot_attributes as (
+tennisabstract_shot_attributes as (
   select
     *,
 
@@ -92,11 +93,11 @@ tennisabstract_matches_points_shot_attributes as (
     )
   end as shot_result,
 
-  from tennisabstract_matches_points_shot_num
+  from tennisabstract_shot_num
 ),
 
 -- get shot type
-tennisabstract_matches_points_shot_type as (
+tennisabstract_shot_type as (
   select
     *,
 
@@ -116,11 +117,11 @@ tennisabstract_matches_points_shot_type as (
       else null      
     end as shot_type
 
-  from tennisabstract_matches_points_shot_attributes
+  from tennisabstract_shot_attributes
 ),
 
 -- get person who hit shot
-tennisabstract_matches_points_shot_by as (
+tennisabstract_shot_by as (
   select
     *,
 
@@ -132,7 +133,7 @@ tennisabstract_matches_points_shot_by as (
       else null
     end as bk_shot_player,
 
-  from tennisabstract_matches_points_shot_type
+  from tennisabstract_shot_type
 ),
 
 final as (
@@ -146,7 +147,6 @@ final as (
 
     bk_match,
     point_number_in_match,
-    match_url,
 
     bk_game,
     bk_set,
@@ -159,7 +159,7 @@ final as (
     shot_type,
     bk_shot_player,
   
-  from tennisabstract_matches_points_shot_by
+  from tennisabstract_shot_by
 )
 
 select * from final

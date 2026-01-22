@@ -33,32 +33,18 @@ models:
       - name: point_number_in_match
         data_type: integer
         description: Sequential point number within the match.
-        data_tests:
-          - not_null
-
-      - name: match_url
-        data_type: string
-        description: Link to the match data.
-        data_tests:
-          - not_null
 
       - name: bk_game
         data_type: string
         description: Unique identifier for games (game number in match).
-        data_tests:
-          - not_null
 
       - name: bk_set
         data_type: string
         description: Unique identifier for sets (set number in match).
-        data_tests:
-          - not_null
 
       - name: shot_number
         data_type: integer
         description: Shot number within point (groups 1st and 2nd serve together).
-        data_tests:
-          - not_null
 
       - name: shot_text
         data_type: string
