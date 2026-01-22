@@ -8,7 +8,7 @@
 with
 
 tennisabstract_matches_points_shots as (
-    select * from {{ ref('int__web__tennisabstract__matches__points__shots') }}
+    select * from {{ ref('int_tennisabstract__shots') }}
 ),
 
 -- union shots
