@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: dim_point
+    description: Dimension model for point attributes.
+
+    columns:
+      - name: sk_point
+        description: Surrogate key for the point.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_point
+        description: Unique identifier for the point.
+
+      - name: bk_match
+        description: Unique identifier for the match to which the point belongs.
+
+      - name: bk_set
+        description: Unique identifier for the set to which the point belongs.
+
+      - name: bk_game
+        description: Unique identifier for the game to which the point belongs.
+
+      - name: point_number_in_match
+        description: Sequential point number within the match.
+        
+      - name: point_number_in_set
+        description: Sequential point number within the set.
+
+      - name: point_number_in_game
+        description: Sequential point number within the game.
+
+      - name: point_result
+        description: Result of the point (ace, winner, forced error, etc.).
+
+      - name: point_side
+        description: Side of the court (ad or deuce) for the point.
+
+      - name: rally_length
+        description: Rally length based on point result logic.

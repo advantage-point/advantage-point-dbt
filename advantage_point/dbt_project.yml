@@ -74,6 +74,8 @@ models:
           +enabled: true
         dim_player:
           +enabled: true
+        dim_point:
+          +enabled: true
         dim_tournament:
           +enabled: true
       fact:
