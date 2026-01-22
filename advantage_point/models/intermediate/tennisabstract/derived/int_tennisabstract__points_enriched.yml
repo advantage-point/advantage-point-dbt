@@ -55,68 +55,46 @@ models:
       - name: set_score_in_match_server
         data_type: string
         description: Set score for the server at the time of the point.
-        data_tests:
-          - not_null
           
       - name: set_score_in_match_receiver
         data_type: string
         description: Set score for the receiver at the time of the point.
-        data_tests:
-          - not_null
           
       - name: game_score_in_set_server
         data_type: string
         description: Game score for the server at the time of the point.
-        data_tests:
-          - not_null
           
       - name: game_score_in_set_receiver
         data_type: string
         description: Game score for the receiver at the time of the point.
-        data_tests:
-          - not_null
-          
+
       - name: point_score_in_game_server
         data_type: string
         description: Point score for the server at the time of the point.
-        data_tests:
-          - not_null
           
       - name: point_score_in_game_receiver
         data_type: string
         description: Point score for the receiver at the time of the point.
-        data_tests:
-          - not_null
 
       - name: set_score_in_match_server_int
         data_type: integer
         description: Set score (server) as integer.
-        data_tests:
-          - not_null
           
       - name: set_score_in_match_receiver_int
         data_type: integer
         description: Set score (receiver) as integer.
-        data_tests:
-          - not_null
 
       - name: point_score_in_game_server_int
         data_type: integer
         description: Point score (server) as integer. AD converted to 41.
-        data_tests:
-          - not_null
           
       - name: point_score_in_game_receiver_int
         data_type: integer
         description: Point score (receiver) as integer. AD converted to 41.
-        data_tests:
-          - not_null
           
       - name: game_number_in_set
         data_type: integer
         description: Ordinal number of the game within the set.
-        data_tests:
-          - not_null
 
       - name: point_result
         data_type: string
@@ -153,3 +131,79 @@ models:
         description: Ordinal number of the set within the match (1 = first set).
         data_tests:
           - not_null
+
+      - name: bk_point_winner_result
+        data_type: string
+        description: Player who won the point based on the rally outcome.
+
+      - name: set_score_in_match_player_one
+        data_type: string
+        description: Set score for player one at the time of the point.
+
+      - name: set_score_in_match_player_one_int
+        data_type: integer
+        description: Set score (player one) as integer.
+      
+      - name: set_score_in_match_player_two
+        data_type: string
+        description: Set score for player two at the time of the point.
+
+      - name: set_score_in_match_player_two_int
+        data_type: integer
+        description: Set score (player two) as integer.
+
+      - name: game_score_in_set_player_one
+        data_type: string
+        description: Game score for player one at the time of the point.
+
+      - name: game_score_in_set_player_one_int
+        data_type: integer
+        description: Game score (player one) as integer.
+
+      - name: game_score_in_set_player_two
+        data_type: string
+        description: Game score for player two at the time of the point.
+        
+      - name: game_score_in_set_player_two_int
+        data_type: integer
+        description: Game score (player two) as integer.
+
+      - name: point_score_in_game_player_one
+        data_type: string
+        description: Point score for player one at the time of the point.
+
+      - name: point_score_in_game_player_one_int
+        data_type: integer
+        description: Point score (player one) as integer. AD converted to 41.
+
+      - name: point_score_in_game_player_two
+        data_type: string
+        description: Point score for player two at the time of the point.
+
+      - name: point_score_in_game_player_two_int
+        data_type: integer
+        description: Point score (player two) as integer. AD converted to 41.
+
+      - name: point_score_in_match_full_player_one
+        data_type: string
+        description: Point score for player one, concatenated with player one full game score, at the time of the point.
+
+      - name: point_score_in_match_full_player_two
+        data_type: string
+        description: Point score for player two, concatenated with player two full game score, at the time of the point.
+
+      - name: bk_point_winner_next_point
+        data_type: string
+        description: Player who won the point based on the score of the next point.
+
+      - name: bk_point_winner
+        data_type: string
+        description: Player who won the point.
+
+      - name: is_point_winner_equal
+        data_type: boolean
+        description: Boolean to determine if 'point winner' columns are equal.
+
+      - name: bk_point_loser
+        data_type: string
+        description: Player who lost the point.

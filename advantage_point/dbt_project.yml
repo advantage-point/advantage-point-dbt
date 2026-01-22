@@ -51,6 +51,10 @@ models:
         +enabled: false
         base:
           +enabled: true
+        derived:
+          +enabled: false
+          int_tennisabstract__points_enriched:
+            +enabled: true
       int_match:
         +enabled: true
       int_player:
