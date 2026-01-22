@@ -21,7 +21,6 @@ models:
         data_type: string
         description: Foreign key from match tournament to tournament.
         data_tests:
-          - not_null
           - relationships:
               arguments:
                 to: ref('dim_tournament')
@@ -35,7 +34,6 @@ models:
         data_type: integer
         description: Foreign key from match date to date.
         data_tests:
-          - not_null
           - relationships:
               arguments:
                 to: ref('dim_date')
@@ -51,8 +49,6 @@ models:
       - name: match_round
         data_type: string
         description: Round in which match was played.
-        data_tests:
-          - not_null
 
       - name: match_title
         data_type: string

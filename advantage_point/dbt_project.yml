@@ -57,8 +57,6 @@ models:
             +enabled: true
           int_tennisabstract__shots:
             +enabled: true
-      int_match:
-        +enabled: true
       int_match_player:
         +enabled: true
       int_player:
