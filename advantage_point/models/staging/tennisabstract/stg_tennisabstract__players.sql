@@ -35,7 +35,7 @@ renamed as (
         parse_date(
             '%Y%m%d',
             case lastdate
-                when '0' then '23991231'
+                when '0' then null
                 else {{ remove_empty_string_from_source('lastdate') }}
             end
         ) as player_last_match_played_date,
