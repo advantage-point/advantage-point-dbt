@@ -59,6 +59,8 @@ models:
         +enabled: true
       int_player:
         +enabled: true
+      int_point:
+        +enabled: true
       int_tournament:
         +enabled: true
     warehouse:

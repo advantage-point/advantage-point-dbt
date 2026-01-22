@@ -7,6 +7,9 @@ models:
       - name: bk_point
         data_type: string
         description: Business key for the point.
+        data_tests:
+          - unique
+          - not_null
 
       - name: bk_match
         data_type: string
@@ -43,5 +46,3 @@ models:
       - name: point_side
         data_type: string
         description: Side of the court (ad or deuce) for the point.
-        data_tests:
-        - not_null
