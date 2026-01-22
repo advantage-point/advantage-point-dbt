@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: int_point_player
+    description: Intermediate model for point-player data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - bk_point
+              - bk_player
+    columns:
+      - name: bk_point
+        data_type: string
+        description: Unique identifier for points.
+        data_tests:
+          - not_null
+
+      - name: bk_player
+        data_type: string
+        description: Unique identifier for players.
+        data_tests:
+          - not_null
+
+      - name: player_is_winner
+        data_type: boolean
+        description: Boolean indicating if player won the point.
+
+      - name: player_is_server
+        data_type: boolean
+        description: Boolean indicating if player served the point.
+
+      - name: player_point_score_in_game
+        data_type: string
+        description: Point score in game from the player's point of view.
+
+      - name: player_point_score_in_game_int
+        data_type: integer
+        description: Point score in game (as an integer) from the player's point of view.
