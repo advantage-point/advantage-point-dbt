@@ -376,7 +376,6 @@ tennisabstract_points_point_winner as (
     from tennisabstract_points_next_point
 ),
 
-
 -- get point loser
 tennisabstract_points_point_loser as (
     select
@@ -389,6 +388,55 @@ tennisabstract_points_point_loser as (
         end as bk_point_loser,
 
     from tennisabstract_points_point_winner
+),
+
+-- get point number in <match unit>
+tennisabstract_points_point_number as (
+    select
+        *,
+
+        -- point number in set
+        row_number() over (
+            partition by bk_match, set_number_in_match
+            order by game_number_in_set, point_number_in_match
+        ) as point_number_in_set,
+
+        -- point number in game
+        row_number() over (
+            partition by bk_match, set_number_in_match, game_number_in_set
+            order by point_number_in_match
+        ) as point_number_in_game,
+
+    from tennisabstract_points_point_loser
+),
+
+-- get point side
+tennisabstract_points_point_side as (
+    select
+        *,
+
+        case
+            -- determine side based on non-tiebreaker scores
+            -- TODO: figure out if ad scoring is used when '40-40'
+            when point_score_in_game in (
+                '0-0', '0-30',
+                '15-15', '15-40',
+                '30-0', '30-30',
+                '40-40'
+            ) then 'deuce'
+            when point_score_in_game in (
+                '0-15', '0-40',
+                '15-0', '15-30',
+                '30-15', '30-40',
+                'AD-40', '40-AD'
+            ) then 'ad'
+            -- determine side based on tiebreak scores
+            when mod(point_score_in_game_server_int + point_score_in_game_receiver_int, 2) = 0 then 'deuce'
+            when mod(point_score_in_game_server_int + point_score_in_game_receiver_int, 2) != 0 then 'ad'
+            else null
+        end as point_side,
+
+    from tennisabstract_points_point_number
 ),
 
 final as (
@@ -454,8 +502,13 @@ final as (
         is_point_winner_equal,
         
         bk_point_loser,
+
+        point_number_in_set,
+        point_number_in_game,
+
+        point_side,
     
-    from tennisabstract_points_point_loser
+    from tennisabstract_points_point_side
 )
 
 select * from final

@@ -1,7 +1,12 @@
+-- NOTE:
+-- This model represents TennisAbstract-only point data.
+-- If additional point sources are added in the future,
+-- introduce an int_point_unified model to reconcile them.
+
 with
 
-points as (
-    select * from {{ ref('int_point') }}
+tennisabstract_points as (
+    select * from {{ ref('int_tennisabstract__points_enriched') }}
 ),
 
 -- create surrogate keys
@@ -17,7 +22,15 @@ points_sks as (
             bk_match_col='bk_match'
         )}} as sk_match,
 
-    from points
+        {{ generate_sk_set(
+            bk_set_col='bk_set'
+        )}} as sk_set,
+
+        {{ generate_sk_game(
+            bk_game_col='bk_game'
+        )}} as sk_game,
+
+    from tennisabstract_points
 ),
 
 final as (
@@ -28,7 +41,9 @@ final as (
 
         sk_match,
         bk_match,
+        sk_set,
         bk_set,
+        sk_game,
         bk_game,
 
         point_number_in_match,

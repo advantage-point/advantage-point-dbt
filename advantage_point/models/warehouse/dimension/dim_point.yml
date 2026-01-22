@@ -28,8 +28,16 @@ models:
       - name: bk_match
         description: Unique identifier for the match to which the point belongs.
 
+      - name: sk_set
+        data_type: string
+        description: Foreign key from point set to set.
+
       - name: bk_set
         description: Unique identifier for the set to which the point belongs.
+
+      - name: sk_game
+        data_type: string
+        description: Foreign key from point game to game.
 
       - name: bk_game
         description: Unique identifier for the game to which the point belongs.

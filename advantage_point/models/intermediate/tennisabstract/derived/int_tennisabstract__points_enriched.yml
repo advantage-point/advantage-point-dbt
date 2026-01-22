@@ -211,3 +211,19 @@ models:
       - name: bk_point_loser
         data_type: string
         description: Player who lost the point.
+
+      - name: point_number_in_set
+        data_type: integer
+        description: Ordinal number of the point within the set.
+        data_tests:
+          - not_null
+
+      - name: point_number_in_game
+        data_type: integer
+        description: Ordinal number of the point within the game.
+        data_tests:
+          - not_null
+
+      - name: point_side
+        data_type: string
+        description: Side of the court (ad or deuce) for the point.
