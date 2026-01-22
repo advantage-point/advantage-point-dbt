@@ -6,13 +6,24 @@ models:
 
     columns:
       - name: sk_point
+        data_type: string
         description: Surrogate key for the point.
         data_tests:
           - unique
           - not_null
 
       - name: bk_point
+        data_type: string
         description: Unique identifier for the point.
+
+      - name: sk_match
+        data_type: string
+        description: Foreign key from point match to match.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_match')
+                field: sk_match
 
       - name: bk_match
         description: Unique identifier for the match to which the point belongs.

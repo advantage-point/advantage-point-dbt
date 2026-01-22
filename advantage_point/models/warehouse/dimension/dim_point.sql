@@ -13,6 +13,10 @@ points_sks as (
             bk_point_col='bk_point'
         )}} as sk_point,
 
+        {{ generate_sk_match(
+            bk_match_col='bk_match'
+        )}} as sk_match,
+
     from points
 ),
 
@@ -22,6 +26,7 @@ final as (
         sk_point,
         bk_point,
 
+        sk_match,
         bk_match,
         bk_set,
         bk_game,
