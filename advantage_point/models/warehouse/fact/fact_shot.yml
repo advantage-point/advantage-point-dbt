@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: fact_shot
+    description: Fact model representing each shot (by definition, also each player's participation in a shot).
+    columns:
+      - name: sk_shot
+        description: Surrogate key for shot.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: bk_shot
+        data_type: string
+        description: Business key for the shot.
+      
+      - name: sk_point
+        description: Foreign key to point dimension.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_point')
+                field: sk_point
+
+      - name: bk_point
+        data_type: string
+        description: Business key for the point.
+
+      - name: shot_number_in_point
+        data_type: integer
+        description: Shot number within point (including 2nd serves).@@current_job_id()
+      
+      - name: sk_shot_player
+        description: Foreign key to player dimension.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_player')
+                field: sk_player
+      
+      - name: bk_shot_player
+        data_type: string
+        description: Unique identifer for player who hit shot.
+
+      - name: sk_game
+        data_type: string
+        description: Foreign key to game dimension.
+
+      - name: bk_game
+        data_type: string
+        description: Unique identifier for games.
+
+      - name: sk_set
+        data_type: string
+        description: Foreign key to set dimension.
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets.
+
+      - name: sk_match
+        description: Foreign key to match dimension.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_match')
+                field: sk_match
+        
+      - name: bk_match
+        data_type: string
+        description: Unique identifier for matches.
+
+
+      - name: point_number_in_match
+        data_type: integer
+        description: Sequential point number within the match.
+
+      - name: bk_game
+        data_type: string
+        description: Unique identifier for games (game number in match).
+
+      - name: bk_set
+        data_type: string
+        description: Unique identifier for sets (set number in match).
+
+      - name: shot_number
+        data_type: integer
+        description: Shot number within point (groups 1st and 2nd serve together).
+  
+      - name: shot_direction
+        data_type: string
+        description: Direction of the shot.
+
+      - name: shot_result
+        data_type: string
+        description: Outcome of the shot.
+        
+      - name: shot_type
+        data_type: string
+        description: Type of shot.

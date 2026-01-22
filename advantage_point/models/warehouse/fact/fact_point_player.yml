@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fact_point_player
-    description: Fact table representing each player's participation in a point.
+    description: Fact model representing each player's participation in a point.
     columns:
       - name: sk_point_player
         description: Surrogate key for point-player.

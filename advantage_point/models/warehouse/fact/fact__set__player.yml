@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fact__set__player
-    description: Fact table representing each player's participation in a set.
+    description: Fact model representing each player's participation in a set.
     columns:
       - name: sk_set_player
         description: Surrogate key for set-player.

@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fact_match_player
-    description: Fact table representing each player's participation in a match.
+    description: Fact model representing each player's participation in a match.
     columns:
       - name: sk_match_player
         description: Surrogate key for match-player.

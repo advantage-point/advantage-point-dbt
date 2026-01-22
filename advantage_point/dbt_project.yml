@@ -87,3 +87,5 @@ models:
           +enabled: true
         fact_point_player:
           +enabled: true
+        fact_shot:
+          +enabled: true
