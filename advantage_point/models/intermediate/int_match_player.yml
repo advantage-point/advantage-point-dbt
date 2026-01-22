@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int__match__player
+  - name: int_match_player
     description: Intermediate model for match-player data.
     data_tests:
       - dbt_utils.unique_combination_of_columns:

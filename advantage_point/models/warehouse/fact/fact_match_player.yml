@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: fact__match__player
+  - name: fact_match_player
     description: Fact table representing each player's participation in a match.
     columns:
       - name: sk_match_player
@@ -16,7 +16,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim__match')
+                to: ref('dim_match')
                 field: sk_match
 
       - name: sk_player
@@ -25,7 +25,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim__player')
+                to: ref('dim_player')
                 field: sk_player
 
       - name: bk_match
