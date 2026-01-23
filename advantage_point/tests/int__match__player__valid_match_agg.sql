@@ -16,7 +16,7 @@ match_agg as (
     select
         bk_match,
         count(*) as num_rows,
-        sum(cast(is_winner as int64)) as sum_rows,
+        sum(cast(is_point_won as int64)) as sum_rows,
     from match_player
     group by all
 )

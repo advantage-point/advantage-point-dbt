@@ -14,8 +14,8 @@ tennisabstract_match_player as (
             select
                 bk_match,
                 bk_match_winner as bk_player,
-                true as is_winner,
-                match_score as score,
+                true as is_match_winner,
+                match_score,
             from tennisabstract_matches
         )
         union all
@@ -23,10 +23,10 @@ tennisabstract_match_player as (
             select
                 bk_match,
                 bk_match_loser as bk_player,
-                false as is_winner,
+                false as is_match_winner,
                 {{ flip_score(
                     score_col='match_score'
-                ) }} as score,
+                ) }} as match_score,
             from tennisabstract_matches
         )
     ) as m
@@ -36,8 +36,8 @@ final as (
     select
         bk_match,
         bk_player,
-        is_winner,
-        score,
+        is_match_winner,
+        match_score,
     from tennisabstract_match_player
 )
 

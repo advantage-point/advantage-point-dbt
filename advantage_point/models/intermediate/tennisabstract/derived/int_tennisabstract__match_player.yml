@@ -22,10 +22,10 @@ models:
         data_tests:
           - not_null
 
-      - name: is_winner
+      - name: is_match_winner
         data_type: boolean
         description: Boolean indicating if player won the match.
 
-      - name: score
+      - name: match_score
         data_type: string
         description: Match score from the player's point of view (flipped for match loser).

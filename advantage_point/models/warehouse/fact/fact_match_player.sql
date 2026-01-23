@@ -29,21 +29,21 @@ final as (
     select
 
         -- surrogate key
-        mp.sk_match_player,
+        sk_match_player,
 
         -- foreign keys
-        mp.sk_match,
-        mp.sk_player,
+        sk_match,
+        sk_player,
 
         -- business keys
-        mp.bk_match,
-        mp.bk_player,
+        bk_match,
+        bk_player,
 
         -- attributes
-        mp.is_winner,
-        mp.score,
+        is_match_winner,
+        match_score,
 
-    from match_player_sks as mp
+    from match_player_sks
 )
 
 select * from final
