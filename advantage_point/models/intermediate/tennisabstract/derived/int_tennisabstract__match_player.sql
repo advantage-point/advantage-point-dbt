@@ -32,31 +32,13 @@ tennisabstract_match_player as (
     ) as m
 ),
 
--- union
-match_player_union as (
-    select distinct
-        *
-    from (
-        (
-            select
-                bk_match,
-                bk_player,
-            from tennisabstract_match_player
-        )
-    ) as mp
-        
-),
-
 final as (
     select
-        mp.bk_match,
-        mp.bk_player,
-        mp_ta.is_winner,
-        mp_ta.score,
-    from match_player_union as mp
-    left join tennisabstract_match_player as mp_ta on 1=1
-        and mp.bk_match = mp_ta.bk_match
-        and mp.bk_player = mp_ta.bk_player
+        bk_match,
+        bk_player,
+        is_winner,
+        score,
+    from tennisabstract_match_player
 )
 
 select * from final
