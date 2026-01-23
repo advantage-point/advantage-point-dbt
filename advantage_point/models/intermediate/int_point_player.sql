@@ -13,10 +13,10 @@ tennisabstract_point_player as (
             select
                 bk_point,
                 bk_point_player_one as bk_player,
-                bk_point_player_one = bk_point_winner as player_is_winner,
-                bk_point_player_one = bk_point_server as player_is_server,
-                point_score_in_game_player_one as player_point_score_in_game,
-                point_score_in_game_player_one_int as player_point_score_in_game_int,
+                bk_point_player_one = bk_point_winner as is_winner,
+                bk_point_player_one = bk_point_server as is_server,
+                point_score_in_game_player_one as score,
+                point_score_in_game_player_one_int as score_int,
                 
             from tennisabstract_points
         )
@@ -25,10 +25,10 @@ tennisabstract_point_player as (
             select
                 bk_point,
                 bk_point_player_two as bk_player,
-                bk_point_player_two = bk_point_winner as player_is_winner,
-                bk_point_player_two = bk_point_server as player_is_server,
-                point_score_in_game_player_two as player_point_score_in_game,
-                point_score_in_game_player_two_int as player_point_score_in_game_int,
+                bk_point_player_two = bk_point_winner as is_winner,
+                bk_point_player_two = bk_point_server as is_server,
+                point_score_in_game_player_two as score,
+                point_score_in_game_player_two_int as score_int,
                 
             from tennisabstract_points
         )
@@ -54,10 +54,10 @@ final as (
     select
         pp.bk_point,
         pp.bk_player,
-        pp_ta.player_is_winner,
-        pp_ta.player_is_server,
-        pp_ta.player_point_score_in_game,
-        pp_ta.player_point_score_in_game_int,
+        pp_ta.is_winner,
+        pp_ta.is_server,
+        pp_ta.score,
+        pp_ta.score_int,
     from point_player_union as pp
     left join tennisabstract_point_player as pp_ta on 1=1
         and pp.bk_point = pp_ta.bk_point

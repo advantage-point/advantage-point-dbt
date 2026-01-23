@@ -40,10 +40,10 @@ final as (
         bk_player,
 
         -- attributes
-        player_is_winner,
-        player_is_server,
-        player_point_score_in_game,
-        player_point_score_in_game_int,
+        is_winner,
+        is_server,
+        score,
+        score_int,
 
     from point_player_sks as pp
 )

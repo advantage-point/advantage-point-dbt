@@ -40,8 +40,8 @@ final as (
         mp.bk_player,
 
         -- attributes
-        mp.player_is_winner,
-        mp.player_score,
+        mp.is_winner,
+        mp.score,
 
     from match_player_sks as mp
 )

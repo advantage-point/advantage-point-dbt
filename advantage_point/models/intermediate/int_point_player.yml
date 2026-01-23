@@ -22,18 +22,18 @@ models:
         data_tests:
           - not_null
 
-      - name: player_is_winner
+      - name: is_winner
         data_type: boolean
         description: Boolean indicating if player won the point.
 
-      - name: player_is_server
+      - name: is_server
         data_type: boolean
         description: Boolean indicating if player served the point.
 
-      - name: player_point_score_in_game
+      - name: score
         data_type: string
         description: Point score in game from the player's point of view.
 
-      - name: player_point_score_in_game_int
+      - name: score_int
         data_type: integer
         description: Point score in game (as an integer) from the player's point of view.
