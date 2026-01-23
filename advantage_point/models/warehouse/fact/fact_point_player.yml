@@ -36,6 +36,14 @@ models:
         data_type: string
         description: Unique identifier for players.
 
+      - name: score
+        data_type: string
+        description: Point score in game from the player's point of view.
+
+      - name: score_int
+        data_type: integer
+        description: Point score in game (as an integer) from the player's point of view.
+
       - name: is_winner
         data_type: boolean
         description: Boolean indicating if player won the point.
@@ -44,10 +52,12 @@ models:
         data_type: boolean
         description: Boolean indicating if player served the point.
 
-      - name: score
-        data_type: string
-        description: Point score in game from the player's point of view.
+      - name: is_game_point
+        data_type: boolean
+        description: Boolean indicating if serving player has opportunity to win the game.
+      
+      - name: is_break_point
+        data_type: boolean
+        description: Boolean indicating if receiving player has opportunity to win the game.
 
-      - name: score_int
-        data_type: integer
-        description: Point score in game (as an integer) from the player's point of view.
+      

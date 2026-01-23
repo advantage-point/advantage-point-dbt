@@ -50,6 +50,7 @@ final as (
         point_number_in_set,
         point_number_in_game,
 
+        point_score_in_game,
         point_result,
         point_side,
         rally_length,
