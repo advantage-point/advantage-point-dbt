@@ -55,13 +55,13 @@ models:
           +enabled: false
           int_tennisabstract__match_player:
             +enabled: true
+          int_point_player:
+            +enabled: true
           int_tennisabstract__points_enriched:
             +enabled: true
           int_tennisabstract__shots:
             +enabled: true
       int_player:
-        +enabled: true
-      int_point_player:
         +enabled: true
       int_tournament:
         +enabled: true

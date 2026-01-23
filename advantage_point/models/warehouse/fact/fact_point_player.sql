@@ -1,7 +1,7 @@
 with
 
 point_players as (
-    select * from {{ ref('int_point_player') }}
+    select * from {{ ref('int_tennisabstract__point_player') }}
 ),
 
 -- generate surrogate key
