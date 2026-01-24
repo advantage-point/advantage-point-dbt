@@ -50,18 +50,34 @@ models:
 
       - name: is_service_point
         data_type: boolean
-        description: Boolean indicating if player served the point.
+        description: Boolean indicating if player is the server.
 
       - name: is_return_point
         data_type: boolean
-        description: Boolean indicating if player returned the point.
+        description: Boolean indicating if player is the returner.
 
       - name: is_game_point
         data_type: boolean
-        description: Boolean indicating if serving player has opportunity to win the game.
+        description: Boolean indicating if server has opportunity to win the game.
       
       - name: is_break_point
         data_type: boolean
-        description: Boolean indicating if receiving player has opportunity to win the game.
+        description: Boolean indicating if returner has opportunity to win the game.
+
+      - name: is_game_point_won
+        data_type: boolean
+        description: Boolean indicating if server won the game point.
+      
+      - name: is_break_point_won
+        data_type: boolean
+        description: Boolean indicating if returner won the break point.
+
+      - name: is_break_point_faced
+        data_type: boolean
+        description: Boolean indicating if server faced a break point.
+      
+      - name: is_break_point_saved
+        data_type: boolean
+        description: Boolean indicating if server faced a break point and won.
 
       

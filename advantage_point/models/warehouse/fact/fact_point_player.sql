@@ -45,11 +45,11 @@ point_player_joined as (
             else false
         end as is_game_point,
 
-        -- determine game point
+        -- determine break point
         -- TODO: figure out if ad scoring is used when '40-40'
         case
             when 1=1
-                and f_pp.is_service_point = false
+                and f_pp.is_return_point = true
                 and d_point.point_score_in_game in ('0-40', '15-40', '30-40', '40-AD')
             then true
             else false
@@ -85,6 +85,10 @@ final as (
         is_break_point,
 
         -- calculated stats
+        is_game_point and is_point_won as is_game_point_won,
+        is_break_point and is_point_won as is_break_point_won,
+        is_service_point and is_break_point as is_break_point_faced,
+        is_service_point and is_break_point and is_point_won as is_break_point_saved,
         
     from point_player_joined
 )
