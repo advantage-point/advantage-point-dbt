@@ -1,14 +1,15 @@
 {{
     config(
-        enabled=false
+        enabled=true
     )
 }}
 
 with
 
 points as (
-    select * 
-    from {{ ref('int__web__tennisabstract__matches__points') }}
+    select
+      *
+    from {{ ref('int_tennisabstract__points_enriched') }}
 ),
 
 -- create array of distinct, non-null winner values
@@ -26,6 +27,11 @@ winner_array as (
   from points as p
 )
 
-select *
-from winner_array as wa
-where array_length(wa.winner_array) > 1
+select
+  match_url,
+  point_number_in_match,
+  set_score_in_match,
+  game_score_in_set,
+  point_score_in_game
+from winner_array
+where array_length(winner_array) != 1

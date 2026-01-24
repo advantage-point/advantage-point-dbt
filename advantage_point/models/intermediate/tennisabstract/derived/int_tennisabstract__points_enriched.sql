@@ -443,6 +443,7 @@ final as (
     select
         bk_point,
         bk_match,
+        match_url,
         point_number_in_match,
         set_score_in_match,
         game_score_in_set,

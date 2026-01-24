@@ -461,6 +461,7 @@ final as (
         )}} as bk_point,
         point_server,
         bk_match,
+        match_url,
         point_number_in_match,
         set_score_in_match,
         game_score_in_set,

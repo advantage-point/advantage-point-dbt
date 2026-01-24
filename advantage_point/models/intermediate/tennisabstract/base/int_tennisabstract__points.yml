@@ -16,6 +16,10 @@ models:
         description: Unique identifier for matches.
         data_tests:
           - not_null
+
+      - name: match_url
+        data_type: string
+        description: Link to the match data.
           
       - name: point_number_in_match
         data_type: integer
