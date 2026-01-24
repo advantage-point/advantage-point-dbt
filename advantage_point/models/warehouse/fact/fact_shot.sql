@@ -41,6 +41,47 @@ shots_sks as (
     from tennisabstract_shots
 ),
 
+-- calculate initial stats
+shots_stats as (
+    select
+        *,
+
+        shot_number = 1 as is_serve,
+        shot_number = 1 and serve_sort = 1 as is_first_serve,
+        shot_number = 1 and serve_sort = 2 as is_second_serve,
+        shot_result = 'ace' as is_ace,
+        shot_result = 'service winner' as is_service_winner,
+        shot_result = 'double fault' as is_double_fault,
+        shot_result in ('fault', 'double fault') as is_fault,
+        shot_result = 'winner' as is_winner,
+        shot_result = 'unforced error' as is_unforced_error,
+        shot_result = 'forced error' as is_forced_error,
+        shot_result in (
+            'ace',
+            'double fault',
+            'winner',
+            'unforced error',
+            'forced error',
+            'service winner'
+        ) as is_point_ending_shot,
+
+        shot_type like '%volley%' or shot_type like '%overhead%' as is_net_shot,
+
+        shot_result in (
+            'ace',
+            'service winner',
+            'winner'
+        ) as is_hitter_winner,
+
+        shot_result in (
+            'double fault',
+            'forced error',
+            'unforced error'
+        ) as is_hitter_error,
+
+    from shots_sks
+),
+
 final as (
     select
         sk_shot,
@@ -64,27 +105,23 @@ final as (
         shot_result,
         shot_type,
 
-        -- calculated stats
-        shot_number = 1 as is_serve,
-        shot_number = 1 and serve_sort = 1 as is_first_serve,
-        shot_number = 1 and serve_sort = 2 as is_second_serve,
-        shot_result = 'ace' as is_ace,
-        shot_result = 'service winner' as is_service_winner,
-        shot_result = 'double fault' as is_double_fault,
-        shot_result in ('fault', 'double fault') as is_fault,
-        shot_result = 'winner' as is_winner,
-        shot_result = 'unforced error' as is_unforced_error,
-        shot_result = 'forced error' as is_forced_error,
-        shot_result in (
-            'ace',
-            'double fault',
-            'winner',
-            'unforced error',
-            'forced error',
-            'service winner'
-        ) as is_point_ending_shot,
+        -- stats
+        is_serve,
+        is_first_serve,
+        is_second_serve,
+        is_ace,
+        is_service_winner,
+        is_double_fault,
+        is_fault,
+        is_winner,
+        is_unforced_error,
+        is_forced_error,
+        is_point_ending_shot,
+        is_net_shot,
+        is_hitter_winner,
+        is_hitter_error,
     
-    from shots_sks
+    from shots_stats
 )
 
 select * from final

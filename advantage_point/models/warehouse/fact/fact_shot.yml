@@ -143,3 +143,11 @@ models:
       - name: is_point_ending_shot
         data_type: boolean
         description: Boolean indicating if the shot ended the point.
+
+      - name: is_hitter_winner
+        data_type: boolean
+        description: Boolean indicating if the shot directly resulted in the point being won by the shot hitter.
+
+      - name: is_hitter_error
+        data_type: boolean
+        description: Boolean indicating if the shot directly resulted in the point being lost by the shot hitter.
