@@ -99,3 +99,47 @@ models:
       - name: shot_type
         data_type: string
         description: Type of shot.
+
+      - name: is_serve
+        data_type: boolean
+        description: Boolean indicating if the shot is a serve (first or second serve).
+
+      - name: is_first_serve
+        data_type: boolean
+        description: Boolean indicating if the shot is a first serve.
+
+      - name: is_second_serve
+        data_type: boolean
+        description: Boolean indicating if the shot is a second serve.
+
+      - name: is_ace
+        data_type: boolean
+        description: Boolean indicating if the shot (serve) resulted in an ace.
+
+      - name: is_service_winner
+        data_type: boolean
+        description: Boolean indicating if the shot (serve) resulted in a service winner.
+
+      - name: is_fault
+        data_type: boolean
+        description: Boolean indicating if the shot (serve) resulted in a fault (including double fault).
+      
+      - name: is_double_fault
+        data_type: boolean
+        description: Boolean indicating if the shot (serve) resulted in a double fault.
+
+      - name: is_winner
+        data_type: boolean
+        description: Boolean indicating if the shot resulted in a winner (excluding service winners).
+
+      - name: is_unforced_error
+        data_type: boolean
+        description: Boolean indicating if the shot resulted in an unforced error.
+
+      - name: is_forced_error
+        data_type: boolean
+        description: Boolean indicating if the shot resulted in a forced error.
+
+      - name: is_point_ending_shot
+        data_type: boolean
+        description: Boolean indicating if the shot ended the point.

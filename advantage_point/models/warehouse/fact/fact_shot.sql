@@ -63,6 +63,26 @@ final as (
         shot_direction,
         shot_result,
         shot_type,
+
+        -- calculated stats
+        shot_number = 1 as is_serve,
+        shot_number = 1 and serve_sort = 1 as is_first_serve,
+        shot_number = 1 and serve_sort = 2 as is_second_serve,
+        shot_result = 'ace' as is_ace,
+        shot_result = 'service winner' as is_service_winner,
+        shot_result = 'double fault' as is_double_fault,
+        shot_result in ('fault', 'double fault') as is_fault,
+        shot_result = 'winner' as is_winner,
+        shot_result = 'unforced error' as is_unforced_error,
+        shot_result = 'forced error' as is_forced_error,
+        shot_result in (
+            'ace',
+            'double fault',
+            'winner',
+            'unforced error',
+            'forced error',
+            'service winner'
+        ) as is_point_ending_shot,
     
     from shots_sks
 )
