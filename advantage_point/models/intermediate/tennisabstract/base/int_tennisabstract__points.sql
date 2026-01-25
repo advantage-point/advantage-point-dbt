@@ -66,6 +66,7 @@ tennisabstract_matches_points as (
             ';'
         ) as point_shotlog,
 
+
     from tennisabstract_matches,
     unnest(tennisabstract_matches.match_pointlog) as point_dict
 ),

@@ -13,7 +13,7 @@ points as (
 ),
 
 -- create array of distinct, non-null winner values
-winner_array as (
+winners as (
   select
     p.*,
     (
@@ -32,6 +32,9 @@ select
   point_number_in_match,
   set_score_in_match,
   game_score_in_set,
-  point_score_in_game
-from winner_array
+  point_score_in_game,
+  array_to_string(point_shotlog, ';\n') as point_shotlog_string,
+  array_to_string(winner_array, ';\n') as winner_array_string,
+  bk_point_winner,
+from winners
 where array_length(winner_array) != 1

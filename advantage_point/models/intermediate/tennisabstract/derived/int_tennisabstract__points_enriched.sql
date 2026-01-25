@@ -352,8 +352,21 @@ tennisabstract_points_next_point as (
 
         -- calculate point winner based on next point score
         case
-            when p_next.point_score_in_match_full_player_one > p.point_score_in_match_full_player_one then p.bk_point_player_one
-            when p_next.point_score_in_match_full_player_two > p.point_score_in_match_full_player_two then p.bk_point_player_two
+            -- scenarios for player one
+            when 1=0
+                -- when player one's next point score > previous one
+                or p_next.point_score_in_match_full_player_one > p.point_score_in_match_full_player_one
+                -- when player two's next point score < previous one (could be the case when going from AD to 40)
+                or p_next.point_score_in_match_full_player_two < p.point_score_in_match_full_player_two
+            then p.bk_point_player_one
+
+             -- scenarios for player two
+            when 1=0
+                -- when player two's next point score > previous one
+                or p_next.point_score_in_match_full_player_two > p.point_score_in_match_full_player_two
+                -- when player one's next point score < previous one (could be the case when going from AD to 40)
+                or p_next.point_score_in_match_full_player_one < p.point_score_in_match_full_player_one
+            then p.bk_point_player_two
             else null
         end as bk_point_winner_next_point,
 
