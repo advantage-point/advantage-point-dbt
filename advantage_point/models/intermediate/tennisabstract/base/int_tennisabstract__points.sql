@@ -50,20 +50,44 @@ tennisabstract_matches_points as (
             '-'
         ) as point_score_in_game,
 
-        -- split by ';' (converts ';{any number of spaces}to ';')
+        -- -- split by ';' (converts ';{any number of spaces}to ';')
+        -- split(
+        --     regexp_replace(
+        --         -- replace mid-string result phrases (e.g., ',winner.' or ', service winner.')
+        --         regexp_replace(
+        --             lower(json_value(point_dict, '$.point_description')),  -- normalize casing
+        --             --  r',winner\.[A-Za-z]',
+        --             r',(service winner|winner|unforced error|forced error|double fault|ace)\.([a-z])',
+        --             ';\\2'
+        --         ),
+        --         r';\s*',
+        --         ';'
+        --     ),
+        --     ';'
+        -- ) as point_shotlog,
+
+        -- Split point_description into shots
+        -- IMPORTANT:
+        --   TennisAbstract sometimes includes outcome tokens mid-rally
+        --   (e.g. "service winner", "winner", "unforced error") followed by
+        --   non-authoritative narrative text.
+        --
+        --   The FIRST occurrence of an outcome token is the true end of the point.
+        --   Everything after must be discarded to avoid corrupting rally winner logic.
+
         split(
+        -- Step 2: normalize semicolon spacing for clean splitting
+        regexp_replace(
+            -- Step 1: truncate point_description at FIRST outcome token
             regexp_replace(
-                -- replace mid-string result phrases (e.g., ',winner.' or ', service winner.')
-                regexp_replace(
-                    lower(json_value(point_dict, '$.point_description')),  -- normalize casing
-                    --  r',winner\.[A-Za-z]',
-                    r',(service winner|winner|unforced error|forced error|double fault|ace)\.([a-z])',
-                    ';\\2'
-                ),
-                r';\s*',
-                ';'
+            lower(json_value(point_dict, '$.point_description')),  -- normalize case
+            r'(,?\s*(service winner|winner|unforced error|forced error|double fault|ace)\.).*$',
+            r'\1'
             ),
+            r';\s*',
             ';'
+        ),
+        ';'
         ) as point_shotlog,
 
 

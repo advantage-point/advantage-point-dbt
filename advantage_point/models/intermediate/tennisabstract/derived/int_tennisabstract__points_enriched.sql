@@ -382,10 +382,9 @@ tennisabstract_points_point_winner as (
         *,
 
         -- calculate point winner based on current winner columns
-        coalesce(bk_point_winner_result, bk_point_winner_next_point) as bk_point_winner,
-
-        coalesce(bk_point_winner_result, 'null') = coalesce(bk_point_winner_next_point, 'null') as is_point_winner_equal,
-    
+        -- coalesce(bk_point_winner_result, bk_point_winner_next_point) as bk_point_winner,
+        bk_point_winner_result as bk_point_winner,
+        
     from tennisabstract_points_next_point
 ),
 
@@ -513,7 +512,6 @@ final as (
         bk_point_winner_next_point,
 
         bk_point_winner,
-        is_point_winner_equal,
         
         bk_point_loser,
 

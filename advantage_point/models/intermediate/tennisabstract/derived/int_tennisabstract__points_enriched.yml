@@ -208,10 +208,6 @@ models:
         data_type: string
         description: Player who won the point.
 
-      - name: is_point_winner_equal
-        data_type: boolean
-        description: Boolean to determine if 'point winner' columns are equal.
-
       - name: bk_point_loser
         data_type: string
         description: Player who lost the point.
