@@ -5,6 +5,7 @@ models:
     description: Date spine
     columns:
       - name: date_day
+        data_type: date
         description: Date value
         data_tests:
           - unique
