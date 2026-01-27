@@ -61,6 +61,10 @@ models:
             +enabled: true
           int_tennisabstract__shots:
             +enabled: true
+        quality:
+          +enabled: false
+          int_tennisabstract__points_enriched_quality:
+            +enabled: true
       int_player:
         +enabled: true
       int_tournament:

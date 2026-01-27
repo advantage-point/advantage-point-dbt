@@ -227,3 +227,11 @@ models:
       - name: point_side
         data_type: string
         description: Side of the court (ad or deuce) for the point.
+
+      - name: bk_point_winner_array
+        data_type: array
+        description: Array of point winners.
+
+      - name: is_quality_point
+        data_type: boolean
+        description: Boolean indicating if point has quality data.

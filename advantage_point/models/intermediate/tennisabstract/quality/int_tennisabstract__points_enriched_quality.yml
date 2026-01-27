@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_tennisabstract__points_enriched_quality
+    description: Intermediate model for tennisabstract point data quality.

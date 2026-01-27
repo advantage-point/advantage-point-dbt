@@ -451,6 +451,39 @@ tennisabstract_points_point_side as (
     from tennisabstract_points_point_number
 ),
 
+-- create array of distinct, non-null winner values
+tennisabstract_points_winners as (
+  select
+    p.*,
+    (
+      select array_agg(x)
+      from (
+        select distinct x
+        from unnest([p.bk_point_winner_result, p.bk_point_winner_next_point]) as x
+        where x is not null
+      )
+    ) as bk_point_winner_array
+  from tennisabstract_points_point_side as p
+),
+
+-- calculate 'quality' flag
+tennisabstract_points_quality_flag as (
+    select
+        *,
+
+        case
+            when 1=0
+                or bk_point_winner is null
+                or array_length(bk_point_winner_array) != 1
+                or point_result is null
+                or point_result not in ('ace', 'double fault', 'forced error', 'service winner', 'unforced error', 'winner')
+            then false
+            else true
+        end as is_quality_point,
+
+    from tennisabstract_points_winners
+),
+
 final as (
     select
         bk_point,
@@ -519,8 +552,12 @@ final as (
         point_number_in_game,
 
         point_side,
+
+        bk_point_winner_array,
+
+        is_quality_point,
     
-    from tennisabstract_points_point_side
+    from tennisabstract_points_quality_flag
 )
 
 select * from final
